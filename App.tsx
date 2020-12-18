@@ -1,0 +1,40 @@
+/**
+ * Sample React Native App
+ * https://github.com/facebook/react-native
+ *
+ * Generated with the TypeScript template
+ * https://github.com/react-native-community/react-native-template-typescript
+ *
+ * @format
+ */
+
+import AppNavigator from './src/shared/routers/app-navigator'; // TODO @src
+import React from 'react';
+import {
+	Appodeal,
+	AppodealAdType,
+	AppodealRewardedEvent
+} from 'react-native-appodeal';
+
+import {
+	StyleSheet,
+	ScrollView,
+	View,
+	Text,
+	StatusBar,
+} from 'react-native';
+import SafeAreaView from 'react-native-safe-area-view';
+
+declare const global: { HermesInternal: null | {} };
+
+const adTypes = AppodealAdType.REWARDED_VIDEO;
+const consent = true;
+Appodeal.initialize('ca-app-pub-3940256099942544~3347511713', adTypes, consent);
+
+const App = () => {
+	return (
+		<AppNavigator />
+	);
+};
+
+export default App;
