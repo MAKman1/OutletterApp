@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react'
-import { Text, View, ScrollView, TouchableOpacity, Image, StyleSheet } from 'react-native'
+import { Text, View, ScrollView, TouchableOpacity, Image, StyleSheet, Alert } from 'react-native'
 import styles from './styles'
 
 import SafeAreaView from 'react-native-safe-area-view';
@@ -13,10 +13,9 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 
 function Home(): JSX.Element {
 	const cameraRef = useRef();
-	const [found, setFound] = useState(false);
+	const [found, setFound] = useState(true);
 
 	useEffect(() => {
-
 	}, [])
 
 
@@ -36,16 +35,20 @@ function Home(): JSX.Element {
 					buttonPositive: 'Ok',
 					buttonNegative: 'Cancel',
 				}}
-				androidRecordAudioPermissionOptions={{
-					title: 'Permission to use audio recording',
-					message: 'We need your permission to use your audio',
-					buttonPositive: 'Ok',
-					buttonNegative: 'Cancel',
-				}}
 			/>
+			<SafeAreaView style={styles.cameraOverlayOuter} >
+				<View style={styles.cameraOverlay}>
+					<TouchableOpacity style={styles.roundedButton} onPress={() => Alert.alert("Going......")}>
+						<Text style={styles.roundedButtonText}>Go!</Text>
+					</TouchableOpacity>
+					<TouchableOpacity onPress={() => setFound(true)}>
+						<Text style={{ color: 'white', textAlign: 'center' }}>Show Modal</Text>
+					</TouchableOpacity>
+				</View>
+			</SafeAreaView>
 
 
-			{/* <Modal
+			<Modal
 				animationIn="slideInUp"
 				isVisible={found}
 				coverScreen={true}
@@ -58,9 +61,6 @@ function Home(): JSX.Element {
 			>
 				<SafeAreaView style={styles.fullScreenView}>
 					<View style={styles.topView}>
-						<TouchableOpacity>
-							<Text style={styles.restore}>Restore</Text>
-						</TouchableOpacity>
 						<View style={{ flex: 1 }} />
 						<TouchableOpacity onPress={() => { setFound(false) }}>
 							<MaterialIcons color={'#959595'} size={19} name="close" />
@@ -69,19 +69,14 @@ function Home(): JSX.Element {
 
 					<ScrollView style={styles.popupScroll}>
 						<View style={styles.popupInner}>
-							<Text style={styles.popupTitle}>Go Further with <Text style={{ fontWeight: 'bold' }}>Pro version</Text></Text>
+							<Text style={[styles.popupTitle, {fontWeight: 'bold'}]}>Best product</Text>
 
-							<View style={styles.titleView}>
-								<MaterialIcons color={APP_COLORS.primary} size={20} name="chevron-right" />
-								<Text style={styles.textTitle}>15 scanning formats</Text>
-							</View>
-							<Text style={styles.textDesc}>Scan everything from QR Code to Barcode, Datamatrix, Google Auth, EAN-8 and more.</Text>
-
+					
 
 						</View>
 					</ScrollView>
 				</SafeAreaView>
-			</Modal> */}
+			</Modal>
 
 		</View>
 	)
