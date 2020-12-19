@@ -31,7 +31,8 @@ export default StyleSheet.create({
     flex: 1,
     backgroundColor: "white",
     justifyContent: "center",
-    alignItems: "center",
+	alignItems: "center",
+	flexDirection: "column"
   },
   card: {
     marginHorizontal: 10,
