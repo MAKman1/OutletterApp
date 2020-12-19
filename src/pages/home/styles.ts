@@ -100,12 +100,12 @@ export default StyleSheet.create({
     textAlign: "center",
   },
   fullScreenView: {
-	position: 'absolute',
-	bottom: 0,
+    position: "absolute",
+    bottom: 0,
     height: "70%",
-	width: "100%",
-	borderTopRightRadius: 10,
-	borderTopLeftRadius: 10,
+    width: "100%",
+    borderTopRightRadius: 10,
+    borderTopLeftRadius: 10,
     backgroundColor: "white",
   },
   topView: {
@@ -227,7 +227,7 @@ export default StyleSheet.create({
   contactView: {
     backgroundColor: "white",
     height: "93%",
-    width: "100%"
+    width: "100%",
   },
   contactTitle: {
     color: "white",
@@ -252,33 +252,45 @@ export default StyleSheet.create({
   },
   cameraView: {
     flex: 1,
-    justifyContent: 'flex-end',
-    alignItems: 'center',
+    justifyContent: "flex-end",
+    alignItems: "center",
   },
-  cameraOverlayOuter: {
-	position: 'absolute',
-	bottom: 0,
-	width: '100%',
+  cameraOverlayBottom: {
+    position: "absolute",
+    bottom: 0,
+    width: "100%",
+  },
+  cameraOverlayTop: {
+    position: "absolute",
+    bottom: 0,
+    width: "100%",
+  },
+  topOverlay: {
+    flex: 1,
+    paddingTop: 20,
+    paddingHorizontal: 10,
+    justifyContent: "flex-start",
+    alignItems: "center",
   },
   cameraOverlay: {
-	  flex: 1,
-	  paddingTop: 20,
-	  paddingHorizontal: 10,
-	  justifyContent: 'flex-end',
-	  alignItems: 'center'
+    flex: 1,
+    paddingTop: 20,
+    paddingHorizontal: 10,
+    justifyContent: "flex-end",
+    alignItems: "center",
   },
   roundedButton: {
-	width: '80%',
-	justifyContent: 'center',
-	alignItems: 'center',
-	paddingVertical: 15,
-	borderRadius: 50,
-	backgroundColor: "#04B3FF"
+    width: "80%",
+    justifyContent: "center",
+    alignItems: "center",
+    paddingVertical: 15,
+    borderRadius: 50,
+    backgroundColor: "#04B3FF",
   },
   roundedButtonText: {
-	  textAlign: 'center',
-	  fontSize: 16,
-	  fontWeight: 'bold',
-	  color: 'white'
-  }
+    textAlign: "center",
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "white",
+  },
 });

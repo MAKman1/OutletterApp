@@ -36,7 +36,13 @@ function Home(): JSX.Element {
 					buttonNegative: 'Cancel',
 				}}
 			/>
-			<SafeAreaView style={styles.cameraOverlayOuter} >
+			<SafeAreaView style={styles.cameraOverlayTop} >
+				<View style={styles.topOverlay}>
+
+				</View>
+			</SafeAreaView>
+			
+			<SafeAreaView style={styles.cameraOverlayBottom} >
 				<View style={styles.cameraOverlay}>
 					<TouchableOpacity style={styles.roundedButton} onPress={() => Alert.alert("Going......")}>
 						<Text style={styles.roundedButtonText}>Go!</Text>
@@ -69,9 +75,9 @@ function Home(): JSX.Element {
 
 					<ScrollView style={styles.popupScroll}>
 						<View style={styles.popupInner}>
-							<Text style={[styles.popupTitle, {fontWeight: 'bold'}]}>Best product</Text>
+							<Text style={[styles.popupTitle, { fontWeight: 'bold' }]}>Best product</Text>
 
-					
+
 
 						</View>
 					</ScrollView>
