@@ -246,4 +246,9 @@ export default StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  cameraView: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+  }
 });

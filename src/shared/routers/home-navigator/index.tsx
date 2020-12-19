@@ -1,31 +1,23 @@
 import React from 'react'
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+import { createStackNavigator } from '@react-navigation/stack';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import Feather from 'react-native-vector-icons/Feather'
-import Settings from '../../../pages/settings';
+import Settings from '../../../pages/home';
 import { APP_COLORS } from '../../styles/colors';
+import Home from '../../../pages/home';
 
-const Tab = createBottomTabNavigator();
+const Stack = createStackNavigator();
 function HomeNavigator(): JSX.Element {
 	return (
-		<Tab.Navigator
-			initialRouteName="Scanner" tabBarOptions={{
-				activeTintColor: APP_COLORS.primary,
-				style: {
-					paddingBottom: 4
-				}
-			}}>
-			<Tab.Screen
-				name="Settings"
-				component={Settings}
-				options={{
-					tabBarLabel: "Settings",
-					tabBarIcon: ({ color, size }) => (
-						<Feather color={color} size={size} name="settings" />
-					)
-				}}
-			/>
-		</Tab.Navigator>
+		<Stack.Navigator
+			initialRouteName="Home"
+			screenOptions={{
+				headerShown: false
+			}}
+		>
+			<Stack.Screen name="Home" component={Home} />
+		</Stack.Navigator>
+
 	)
 }
 export default HomeNavigator

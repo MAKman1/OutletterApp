@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { Text, View, ScrollView, TouchableOpacity, Image, StyleSheet } from 'react-native'
 import styles from './styles'
 
@@ -6,12 +6,13 @@ import SafeAreaView from 'react-native-safe-area-view';
 import { Switch } from 'react-native-gesture-handler';
 import { APP_COLORS } from '../../shared/styles/colors';
 import Modal from 'react-native-modal';
+import { RNCamera } from 'react-native-camera';
+
 
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 
-function Settings(): JSX.Element {
-
-
+function Home(): JSX.Element {
+	const cameraRef = useRef();
 	const [found, setFound] = useState(false);
 
 	useEffect(() => {
@@ -21,24 +22,30 @@ function Settings(): JSX.Element {
 
 
 	return (
-		<SafeAreaView style={styles.container}>
-			<Text style={styles.pageTitle}>Settings</Text>
-			<View style={styles.innerContainer}>
-				<ScrollView showsVerticalScrollIndicator={false} style={styles.scrollView}>
-					<View style={styles.scrollInner}>
-						<TouchableOpacity style={styles.card} onPress={() => { setFound(true) }}>
-							<View style={styles.procard}></View>
-							<View style={{ flex: 1 }}>
-								<Text style={styles.title}>Pro Offer</Text>
-								<Text style={styles.description}>Unlock all features in the application</Text>
-							</View>
-							<MaterialIcons color={'grey'} size={15} name="chevron-right" />
-						</TouchableOpacity>
-					</View>
-				</ScrollView>
-			</View>
 
-			<Modal
+		<View style={styles.rootContainer}>
+
+			<RNCamera
+				ref={() => cameraRef}
+				style={styles.cameraView}
+				type={RNCamera.Constants.Type.back}
+				flashMode={RNCamera.Constants.FlashMode.on}
+				androidCameraPermissionOptions={{
+					title: 'Permission to use camera',
+					message: 'We need your permission to use your camera',
+					buttonPositive: 'Ok',
+					buttonNegative: 'Cancel',
+				}}
+				androidRecordAudioPermissionOptions={{
+					title: 'Permission to use audio recording',
+					message: 'We need your permission to use your audio',
+					buttonPositive: 'Ok',
+					buttonNegative: 'Cancel',
+				}}
+			/>
+
+
+			{/* <Modal
 				animationIn="slideInUp"
 				isVisible={found}
 				coverScreen={true}
@@ -70,14 +77,14 @@ function Settings(): JSX.Element {
 							</View>
 							<Text style={styles.textDesc}>Scan everything from QR Code to Barcode, Datamatrix, Google Auth, EAN-8 and more.</Text>
 
-							
+
 						</View>
 					</ScrollView>
 				</SafeAreaView>
-			</Modal>
+			</Modal> */}
 
-		</SafeAreaView>
+		</View>
 	)
 }
 
-export default Settings;
+export default Home;
