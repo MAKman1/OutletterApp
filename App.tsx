@@ -10,11 +10,6 @@
 
 import AppNavigator from './src/shared/routers/app-navigator'; // TODO @src
 import React from 'react';
-import {
-	Appodeal,
-	AppodealAdType,
-	AppodealRewardedEvent
-} from 'react-native-appodeal';
 
 import {
 	StyleSheet,
@@ -26,10 +21,6 @@ import {
 import SafeAreaView from 'react-native-safe-area-view';
 
 declare const global: { HermesInternal: null | {} };
-
-const adTypes = AppodealAdType.REWARDED_VIDEO;
-const consent = true;
-Appodeal.initialize('ca-app-pub-3940256099942544~3347511713', adTypes, consent);
 
 const App = () => {
 	return (
