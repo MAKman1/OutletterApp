@@ -1,4 +1,5 @@
 import { StyleSheet, Dimensions } from "react-native";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { APP_COLORS } from "../../shared/styles/colors";
 
 export default StyleSheet.create({
@@ -31,8 +32,8 @@ export default StyleSheet.create({
     flex: 1,
     backgroundColor: "white",
     justifyContent: "center",
-	alignItems: "center",
-	flexDirection: "column"
+    alignItems: "center",
+    flexDirection: "column"
   },
   card: {
     marginHorizontal: 10,
@@ -263,7 +264,7 @@ export default StyleSheet.create({
   },
   cameraOverlayTop: {
     position: "absolute",
-    bottom: 0,
+    top: 0,
     width: "100%",
   },
   topOverlay: {
@@ -273,15 +274,34 @@ export default StyleSheet.create({
     justifyContent: "flex-start",
     alignItems: "center",
   },
+  topIcons: {
+    flex: 1,
+    paddingLeft: 20,
+    paddingTop: 10,
+    // justifyContent: "flex-start",
+    // alignItems: 'flex-start',
+  },
+  bottomIcon: {
+    borderRadius: 50,
+    backgroundColor: 'white',
+    padding: 15,
+    minWidth: 65,
+    minHeight: 65,
+  },
   cameraOverlay: {
     flex: 1,
     paddingTop: 20,
     paddingHorizontal: 10,
     justifyContent: "flex-end",
-    alignItems: "center",
+    // alignItems: "center",
+  },
+  storeText: {
+    fontSize: 25,
+    borderRadius: 50,
+    textAlign: 'center'
   },
   roundedButton: {
-    width: "80%",
+    width: "50%",
     justifyContent: "center",
     alignItems: "center",
     paddingVertical: 15,

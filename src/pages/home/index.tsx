@@ -1,17 +1,19 @@
 import React, { useEffect, useState, useRef } from 'react'
-import { Text, View, ScrollView, TouchableOpacity, Image, StyleSheet, Alert } from 'react-native'
+import { Text, View, ScrollView, TouchableOpacity, Image, Button, Alert } from 'react-native'
 import styles from './styles'
 
 import SafeAreaView from 'react-native-safe-area-view';
 import Modal from 'react-native-modal';
 import { RNCamera } from 'react-native-camera';
+import axios from 'axios';
 
 
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunity from 'react-native-vector-icons/MaterialCommunityIcons';
 
+
 function Home(): JSX.Element {
-	const cameraRef = useRef();
+	const cameraRef = useRef(null);
 
 	const genders = ["Male", "Female", "Other"];
 	const stores = ["None", "LCWaikiki", "Koton", "Defacto"];
@@ -26,17 +28,64 @@ function Home(): JSX.Element {
 	useEffect(() => {
 	}, [])
 
+	function toggleGender(gender: string) {
+		if (gender == "Male") {
+			setGender("Female");
+		}
+		else if (gender == "Female") {
+			setGender("Other");
+		}
+		else {
+			setGender("Male");
+		}
+	}
 
+	function switchStore(store: string) {
+		switch (store) {
+			case 'None':
+				return <MaterialCommunity color={'black'} size={35} name="shopping-outline" />;
+			case 'LCWaikiki':
+				return <Text style={styles.storeText} >L</Text>
+			case 'Koton':
+				return <Text style={styles.storeText} >K</Text>
+			case 'Defacto':
+				return <Text style={styles.storeText} >D</Text>
+			default:
+				return <MaterialCommunity color={'black'} size={35} name="shopping-outline" />;
+		}
+	}
+
+	async function takePicture() {
+		if (cameraRef.current) {
+			const options = { quality: 1.0, base64: true };
+			const data = await cameraRef.current.takePictureAsync(options);
+			uploadImage(data);
+		}
+	}
+
+	async function uploadImage(image) {
+		const data = {
+			"image": image.uri,
+			"store": store,
+			"gender": gender
+		};
+		axios.post('https://3e469808bbb103cc696680d7fa7d8482.m.pipedream.net/', data)
+			.then(function (response) {
+				console.warn( JSON.stringify( response));
+				setFound(true);
+			})
+			.catch(function (error) {
+				setFound(true);
+			});
+	}
 
 	return (
-
 		<View style={styles.rootContainer}>
-
 			<RNCamera
-				ref={() => cameraRef}
+				ref={cameraRef}
 				style={styles.cameraView}
 				type={RNCamera.Constants.Type.back}
-				flashMode={RNCamera.Constants.FlashMode.on}
+				flashMode={RNCamera.Constants.FlashMode.off}
 				androidCameraPermissionOptions={{
 					title: 'Permission to use camera',
 					message: 'We need your permission to use your camera',
@@ -46,31 +95,47 @@ function Home(): JSX.Element {
 			/>
 			<SafeAreaView style={styles.cameraOverlayTop} >
 				<View style={styles.topOverlay}>
-
+					<Image style={{ alignSelf: 'center' }}
+						source={
+							require('../../assets/outletterLogo.png')
+						}
+					/>
 				</View>
 			</SafeAreaView>
 
 			<SafeAreaView style={styles.cameraOverlayBottom} >
 				<View style={styles.cameraOverlay}>
-					<TouchableOpacity style={styles.roundedButton} onPress={() => Alert.alert("Going......")}>
-						<Text style={styles.roundedButtonText}>Go!</Text>
-					</TouchableOpacity>
-					<TouchableOpacity onPress={() => setGenderModal(true)}>
-						{
-							gender == "Male"
-								?
-								<MaterialCommunity color={'white'} size={25} name="face-profile" />
-								:
-								(
-									gender == "Female"
-										?
-										<MaterialCommunity color={'white'} size={25} name="face-profile-woman" />
-										:
-										<MaterialCommunity color={'white'} size={25} name="emoticon-happy-outline" />
-								)
-
-						}
-
+					<View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
+						<TouchableOpacity style={styles.bottomIcon} onPress={() => { toggleGender(gender); }}>
+							{
+								gender == "Male"
+									?
+									<MaterialCommunity color={'#38AAFE'} size={35} name="face" />
+									:
+									(
+										gender == "Female"
+											?
+											<MaterialCommunity color={'#F778A9'} size={35} name="face-woman" />
+											:
+											<Image style={{ position: 'absolute', top: '45%', bottom: 0, margin: 'auto', alignSelf: 'center', maxWidth: 35, maxHeight: 35, }}
+												source={
+													require('../../assets/genderless.png')
+												}
+											/>
+									)
+							}
+						</TouchableOpacity>
+						<TouchableOpacity style={styles.roundedButton} onPress={() => takePicture()}>
+							<Text style={styles.roundedButtonText}>Go!</Text>
+						</TouchableOpacity>
+						<TouchableOpacity style={styles.bottomIcon} onPress={() => { setStoreModal(true) }}>
+							{
+								switchStore(store)
+							}
+						</TouchableOpacity>
+					</View>
+					<TouchableOpacity onPress={() => setFound(true)}>
+						<Text style={styles.roundedButtonText}>Show Modal</Text>
 					</TouchableOpacity>
 				</View>
 			</SafeAreaView>
@@ -87,21 +152,21 @@ function Home(): JSX.Element {
 				useNativeDriver={true}
 				style={{ margin: 0 }}
 			>
+
 				<SafeAreaView style={styles.fullScreenView}>
 					<View style={styles.topView}>
-						<View style={{ flex: 1 }} />
+						{/* <View style={{ flex: 1 }} /> */}
+						
 						<TouchableOpacity onPress={() => { setFound(false) }}>
 							<MaterialIcons color={'#959595'} size={19} name="close" />
 						</TouchableOpacity>
 					</View>
+					<View style={styles.popupInner}>
+
+					</View>
 
 					<ScrollView style={styles.popupScroll}>
-						<View style={styles.popupInner}>
-							<Text style={[styles.popupTitle, { fontWeight: 'bold' }]}>Best product</Text>
 
-
-
-						</View>
 					</ScrollView>
 				</SafeAreaView>
 			</Modal>
@@ -109,10 +174,10 @@ function Home(): JSX.Element {
 			{/* Gender Modal */}
 			<Modal
 				animationIn="slideInUp"
-				isVisible={genderModal}
+				isVisible={storeModal}
 				coverScreen={true}
 				onSwipeComplete={() => {
-					setGenderModal(false);
+					setStoreModal(false);
 				}}
 				swipeDirection="down"
 				useNativeDriver={true}
@@ -121,7 +186,7 @@ function Home(): JSX.Element {
 				<SafeAreaView style={styles.fullScreenView}>
 					<View style={styles.topView}>
 						<View style={{ flex: 1 }} />
-						<TouchableOpacity onPress={() => { setGenderModal(false) }}>
+						<TouchableOpacity onPress={() => { setStoreModal(false) }}>
 							<MaterialIcons color={'#959595'} size={19} name="close" />
 						</TouchableOpacity>
 					</View>
@@ -129,13 +194,15 @@ function Home(): JSX.Element {
 					<ScrollView style={styles.popupScroll}>
 						<View style={styles.popupInner}>
 							{
-								genders.map(g => {
-									return (<TouchableOpacity style={{ flexDirection: 'row' }} disabled={gender == g} onPress={() => {
-										setGender(g);
-										setGenderModal(false);
+								stores.map(s => {
+									return (<TouchableOpacity key="{s}" style={{ marginTop: 10, flex: 1, flexDirection: 'row', justifyContent: 'center', minWidth: 300, borderRadius: 10, borderBottomWidth: 1, borderColor: '#04B3FF' }} disabled={store == s} onPress={() => {
+										setStore(s);
+										setStoreModal(false);
 									}}>
-										{gender == g ? <MaterialIcons color={'#04B3FF'} size={19} name="check" /> : null}
-										<Text style={{ color: 'black' }}>{g}</Text>
+										<Text key="{s}" style={{ textAlign: 'center', fontSize: 35, color: 'black' }}>
+											{s}
+										</Text>
+										{store == s ? <MaterialIcons key="{s}" style={{ textAlignVertical: 'center' }} color={'#04B3FF'} size={30} name="check" /> : null}
 									</TouchableOpacity>)
 								})
 							}
@@ -143,7 +210,6 @@ function Home(): JSX.Element {
 					</ScrollView>
 				</SafeAreaView>
 			</Modal>
-
 		</View>
 	)
 }
