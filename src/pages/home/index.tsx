@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react'
-import { Text, View, ScrollView, TouchableOpacity, Image, Button, Alert } from 'react-native'
+import { Text, View, TouchableOpacity, Image, Button, Alert, ScrollView } from 'react-native'
 import styles from './styles'
 
 import SafeAreaView from 'react-native-safe-area-view';
@@ -21,7 +21,7 @@ function Home(): JSX.Element {
 	const [gender, setGender] = useState("Male");
 	const [store, setStore] = useState("None");
 
-	const [found, setFound] = useState(false);
+	const [found, setFound] = useState(true);
 	const [genderModal, setGenderModal] = useState(false);
 	const [storeModal, setStoreModal] = useState(false);
 
@@ -63,7 +63,7 @@ function Home(): JSX.Element {
 		}
 	}
 
-	async function uploadImage(image) {
+	async function uploadImage(image: any) {
 		const data = {
 			"image": image.uri,
 			"store": store,
@@ -71,11 +71,11 @@ function Home(): JSX.Element {
 		};
 		axios.post('https://3e469808bbb103cc696680d7fa7d8482.m.pipedream.net/', data)
 			.then(function (response) {
-				console.warn( JSON.stringify( response));
+				console.warn(JSON.stringify(response));
 				setFound(true);
 			})
 			.catch(function (error) {
-				setFound(true);
+				Alert.alert("Request failed");
 			});
 	}
 
@@ -144,6 +144,7 @@ function Home(): JSX.Element {
 			<Modal
 				animationIn="slideInUp"
 				isVisible={found}
+				propagateSwipe={true}
 				coverScreen={true}
 				onSwipeComplete={() => {
 					setFound(false);
@@ -156,16 +157,95 @@ function Home(): JSX.Element {
 				<SafeAreaView style={styles.fullScreenView}>
 					<View style={styles.topView}>
 						{/* <View style={{ flex: 1 }} /> */}
-						
+
 						<TouchableOpacity onPress={() => { setFound(false) }}>
 							<MaterialIcons color={'#959595'} size={19} name="close" />
 						</TouchableOpacity>
 					</View>
-					<View style={styles.popupInner}>
-
-					</View>
-
 					<ScrollView style={styles.popupScroll}>
+						<View style={styles.popupInner}>
+							<ScrollView
+								style={styles.horizontalScroll}
+								horizontal
+								scrollEnabled={true}
+								showsHorizontalScrollIndicator={false}
+							>
+								<View style={styles.horizontalInner}>
+									<View style={styles.horizontalCard}>
+										<Text>Ajeeb</Text>
+									</View>
+									<View style={styles.horizontalCard}>
+										<Text>Ajeeb</Text>
+									</View>
+									<View style={styles.horizontalCard}>
+										<Text>Ajeeb</Text>
+									</View>
+									<View style={styles.horizontalCard}>
+										<Text>Ajeeb</Text>
+									</View>
+									<View style={styles.horizontalCard}>
+										<Text>Ajeeb</Text>
+									</View>
+
+								</View>
+							</ScrollView>
+
+							<ScrollView
+								style={styles.horizontalScroll}
+								horizontal
+								scrollEnabled={true}
+								showsHorizontalScrollIndicator={false}
+							>
+								<View style={styles.horizontalInner}>
+									<View style={styles.horizontalCard}>
+										<Text>Ajeeb</Text>
+									</View>
+									<View style={styles.horizontalCard}>
+										<Text>Ajeeb</Text>
+									</View>
+									<View style={styles.horizontalCard}>
+										<Text>Ajeeb</Text>
+									</View>
+									<View style={styles.horizontalCard}>
+										<Text>Ajeeb</Text>
+									</View>
+									<View style={styles.horizontalCard}>
+										<Text>Ajeeb</Text>
+									</View>
+
+								</View>
+
+							</ScrollView>
+
+							<ScrollView
+								style={styles.horizontalScroll}
+								horizontal
+								scrollEnabled={true}
+								showsHorizontalScrollIndicator={false}
+							>
+								<View style={styles.horizontalInner}>
+									<View style={styles.horizontalCard}>
+										<Text>Ajeeb</Text>
+									</View>
+									<View style={styles.horizontalCard}>
+										<Text>Ajeeb</Text>
+									</View>
+									<View style={styles.horizontalCard}>
+										<Text>Ajeeb</Text>
+									</View>
+									<View style={styles.horizontalCard}>
+										<Text>Ajeeb</Text>
+									</View>
+									<View style={styles.horizontalCard}>
+										<Text>Ajeeb</Text>
+									</View>
+
+								</View>
+
+							</ScrollView>
+
+
+						</View>
 
 					</ScrollView>
 				</SafeAreaView>

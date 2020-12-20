@@ -33,7 +33,7 @@ export default StyleSheet.create({
     backgroundColor: "white",
     justifyContent: "center",
     alignItems: "center",
-    flexDirection: "column"
+    flexDirection: "column",
   },
   card: {
     marginHorizontal: 10,
@@ -130,12 +130,12 @@ export default StyleSheet.create({
     fontWeight: "bold",
   },
   popupScroll: {
-    flex: 1,
   },
   popupInner: {
-    flex: 1,
+	flex: 1,
     paddingBottom: 100,
-    alignItems: "center",
+	alignItems: "center",
+	
   },
   popupTitle: {
     color: APP_COLORS.primary,
@@ -283,7 +283,7 @@ export default StyleSheet.create({
   },
   bottomIcon: {
     borderRadius: 50,
-    backgroundColor: 'white',
+    backgroundColor: "white",
     padding: 15,
     minWidth: 65,
     minHeight: 65,
@@ -298,7 +298,7 @@ export default StyleSheet.create({
   storeText: {
     fontSize: 25,
     borderRadius: 50,
-    textAlign: 'center'
+    textAlign: "center",
   },
   roundedButton: {
     width: "50%",
@@ -313,5 +313,32 @@ export default StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
     color: "white",
+  },
+  horizontalCard: {
+    width: 100,
+    height: 100,
+    borderRadius: 10,
+    padding: 10,
+    margin: 5,
+    backgroundColor: "white",
+    justifyContent: "center",
+    alignItems: "center",
+
+    shadowColor: "black",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+
+    elevation: 5,
+  },
+  horizontalScroll: {
+	backgroundColor: "grey",
+	marginBottom: 200
+  },
+  horizontalInner: {
+	  flexDirection: 'row',
   },
 });
