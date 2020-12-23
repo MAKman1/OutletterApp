@@ -164,8 +164,9 @@ function Home(): JSX.Element {
 		}
 
 		// console.warn(JSON.stringify(data));
-		axios.post('http://139.179.206.43:8000/api/v1/similarItems/', data, config)
+		axios.post('http://139.179.203.186:8000/api/v1/similarItems/', data, config)
 			.then(function (response) {
+				// console.warn(JSON.stringify(response));
 				setStates(response.data);
 				setFound(true);
 				setLoading(false);
@@ -321,7 +322,7 @@ function Home(): JSX.Element {
 								</TouchableOpacity>
 							</ScrollView>
 
-							<View style={{ alignContent: 'flex-start', paddingLeft: 20 }}>
+							{/* <View style={{ alignContent: 'flex-start', paddingLeft: 20 }}>
 								<Text style={styles.popupTitle}>Recommended Items</Text>
 							</View>
 
@@ -346,10 +347,14 @@ function Home(): JSX.Element {
 
 									</View>
 								</TouchableOpacity>
-							</ScrollView>
+							</ScrollView> */}
 
 							{debugModal &&
 								<View>
+
+									<View style={{ alignContent: 'flex-start', paddingHorizontal: 20 }}>
+										<Text style={styles.popupTitle}>---Debugging---</Text>
+									</View>
 
 									<View style={{ alignContent: 'flex-start', paddingHorizontal: 20 }}>
 										<Text style={styles.popupTitle}>Tags</Text>
