@@ -91,6 +91,12 @@ function Home(): JSX.Element {
 				return <Text style={styles.storeText} >K</Text>
 			case 'Defacto':
 				return <Text style={styles.storeText} >D</Text>
+			case 'Boyner':
+				return <Text style={styles.storeText} >B</Text>
+			case 'H&M':
+				return <Text style={styles.storeText} >H</Text>
+			case 'Trendyol':
+				return <Text style={styles.storeText} >T</Text>
 			default:
 				return <MaterialCommunity color={'black'} size={35} name="shopping-outline" />;
 		}
