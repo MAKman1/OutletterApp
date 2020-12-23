@@ -130,19 +130,21 @@ export default StyleSheet.create({
     fontWeight: "bold",
   },
   popupScroll: {
+    // paddingTop: 20
   },
   popupInner: {
-	flex: 1,
-    paddingBottom: 100,
-	alignItems: "center",
-	
+    flex: 1,
+    // paddingBottom: 100,
+    alignItems: "center",
+
   },
   popupTitle: {
     color: APP_COLORS.primary,
     fontSize: 22,
-    textAlign: "center",
-    marginTop: 40,
-    marginBottom: 60,
+    fontWeight: 'bold',
+    // textAlign: 'left',
+    // marginTop: 40,
+    marginBottom: 10,
   },
   titleView: {
     flexDirection: "row",
@@ -335,10 +337,10 @@ export default StyleSheet.create({
     elevation: 5,
   },
   horizontalScroll: {
-	backgroundColor: "grey",
-	marginBottom: 200
+    // backgroundColor: "grey",
+    marginBottom: 20
   },
   horizontalInner: {
-	  flexDirection: 'row',
+    flexDirection: 'row',
   },
 });

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react'
-import { Text, View, TouchableOpacity, Image, Button, Alert, ScrollView } from 'react-native'
+import { Text, View, TouchableOpacity, Image, Button, Switch, Alert, ScrollView, Platform, ActivityIndicator, Linking } from 'react-native'
 import styles from './styles'
 
 import SafeAreaView from 'react-native-safe-area-view';
@@ -16,17 +16,46 @@ function Home(): JSX.Element {
 	const cameraRef = useRef(null);
 
 	const genders = ["Male", "Female", "Other"];
-	const stores = ["None", "LCWaikiki", "Koton", "Defacto"];
+	const stores = ["None", "Koton", "LCWaikiki", "Boyner", "Defacto", "Trendyol", "H&M"];
 
 	const [gender, setGender] = useState("Male");
 	const [store, setStore] = useState("None");
 
-	const [found, setFound] = useState(true);
-	const [genderModal, setGenderModal] = useState(false);
+	const [found, setFound] = useState(false);
 	const [storeModal, setStoreModal] = useState(false);
+	const [debugModal, setDebugModal] = useState(true);
+
+	const [links, setLinks] = useState([]);
+	const [images, setImages] = useState([]);
+	const [segImg, setSegImg] = useState(null);
+	const [tags, setTags] = useState([]);
+	const [text, setText] = useState([]);
+	const [colors, setColors] = useState([]);
+
+	const [loading, setLoading] = useState(false);
 
 	useEffect(() => {
 	}, [])
+
+	function resetStates() {
+		setImages([]);
+		setLinks([]);
+		setSegImg(null);
+		setText([]);
+		setTags([]);
+		setColors([]);
+	}
+
+	function setStates(data: any) {
+		setLinks(data.links);
+		setImages(data.imageLinks);
+		if (debugModal) {
+			setSegImg(data.segmented_image);
+			setText(data.text);
+			setTags(data.tags);
+			setColors(data.colors);
+		}
+	}
 
 	function toggleGender(gender: string) {
 		if (gender == "Male") {
@@ -38,6 +67,10 @@ function Home(): JSX.Element {
 		else {
 			setGender("Male");
 		}
+	}
+
+	function toggleDebug(debugModal: boolean) {
+		setDebugModal(!debugModal);
 	}
 
 	function switchStore(store: string) {
@@ -57,25 +90,90 @@ function Home(): JSX.Element {
 
 	async function takePicture() {
 		if (cameraRef.current) {
-			const options = { quality: 1.0, base64: true };
+			const options = { quality: 0.5, base64: true };
 			const data = await cameraRef.current.takePictureAsync(options);
 			uploadImage(data);
 		}
 	}
 
 	async function uploadImage(image: any) {
-		const data = {
-			"image": image.uri,
-			"store": store,
-			"gender": gender
-		};
-		axios.post('https://3e469808bbb103cc696680d7fa7d8482.m.pipedream.net/', data)
+		setLoading(true);
+		// POST localhost: 8000 / api / v1 / similarItems
+		// image = (image file)
+		// gender = 'm' / 'f'
+		// shop = '0/1/2/3/4/5/6'(need more discussion on this)
+		// debug = true / false
+		let postGender;
+		switch (gender) {
+			case 'Male':
+				postGender = 'm';
+				break;
+			case 'Female':
+				postGender = 'f';
+				break;
+			case 'Other':
+				postGender = 'm';
+				break;
+			default:
+				postGender = 'm';
+				break;
+		}
+
+		let shop;
+		switch (store) {
+			case 'Koton':
+				shop = 0;
+				break;
+			case 'LCWaikiki':
+				shop = 1;
+				break;
+			case 'Boyner':
+				shop = 2;
+				break;
+			case 'Defacto':
+				shop = 3;
+				break;
+			case 'Trendyol':
+				shop = 4;
+				break;
+			case 'H&M':
+				shop = 5;
+				break;
+			case 'None':
+				shop = 0;
+				break;
+			default:
+				shop = 0;
+				break;
+		}
+
+		var data = new FormData();
+		data.append("image", {
+			uri: Platform.OS === "android" ? image.uri : image.uri.replace("file://", ""),
+			name: 'uploaded_image_' + Date.now() + '.jpg',
+			type: 'image/*'
+		})
+		data.append("gender", postGender);
+		data.append("debug", debugModal);
+		data.append("shop", shop);
+
+		const config = {
+			headers: {
+				'Content-Type': 'multipart/form-data'
+			}
+		}
+
+		// console.warn(JSON.stringify(data));
+		axios.post('http://139.179.206.43:8000/api/v1/similarItems/', data, config)
 			.then(function (response) {
-				console.warn(JSON.stringify(response));
+				setStates(response.data);
 				setFound(true);
+				setLoading(false);
 			})
 			.catch(function (error) {
-				Alert.alert("Request failed");
+				resetStates();
+				console.warn("Error: " + JSON.stringify(error));
+				setLoading(false);
 			});
 	}
 
@@ -94,13 +192,27 @@ function Home(): JSX.Element {
 				}}
 			/>
 			<SafeAreaView style={styles.cameraOverlayTop} >
-				<View style={styles.topOverlay}>
-					<Image style={{ alignSelf: 'center' }}
-						source={
-							require('../../assets/outletterLogo.png')
-						}
+				<View style={{ flex: 1, flexDirection: 'row' }}>
+					<View style={styles.topOverlay}>
+						<Image style={{ alignSelf: 'center' }}
+							source={
+								require('../../assets/outletterLogo.png')
+							}
+						/>
+					</View>
+				</View>
+				<View style={{ alignContent: 'center', backgroundColor: 'white', borderRadius: 30, maxWidth: 90, height: 65, opacity: 0.5 }}>
+					<Text style={{ paddingTop: 10, color: 'black', textAlign: 'center', fontWeight: "bold", }}>Debug</Text>
+					<Switch
+						style={{ alignSelf: 'center' }}
+						trackColor={{ false: "#767577", true: "#8DCC43" }}
+						thumbColor={debugModal ? "white" : "white"}
+						ios_backgroundColor="#3e3e3e"
+						onValueChange={() => toggleDebug(debugModal)}
+						value={debugModal}
 					/>
 				</View>
+				{loading && <ActivityIndicator color={"white"} size={35} style={{ marginTop: '50%' }} />}
 			</SafeAreaView>
 
 			<SafeAreaView style={styles.cameraOverlayBottom} >
@@ -125,7 +237,7 @@ function Home(): JSX.Element {
 									)
 							}
 						</TouchableOpacity>
-						<TouchableOpacity style={styles.roundedButton} onPress={() => takePicture()}>
+						<TouchableOpacity disabled={loading} style={styles.roundedButton} onPress={() => takePicture()}>
 							<Text style={styles.roundedButtonText}>Go!</Text>
 						</TouchableOpacity>
 						<TouchableOpacity style={styles.bottomIcon} onPress={() => { setStoreModal(true) }}>
@@ -139,7 +251,6 @@ function Home(): JSX.Element {
 					</TouchableOpacity>
 				</View>
 			</SafeAreaView>
-
 
 			<Modal
 				animationIn="slideInUp"
@@ -156,66 +267,36 @@ function Home(): JSX.Element {
 
 				<SafeAreaView style={styles.fullScreenView}>
 					<View style={styles.topView}>
-						{/* <View style={{ flex: 1 }} /> */}
-
+						<View style={{ flex: 1 }} />
 						<TouchableOpacity onPress={() => { setFound(false) }}>
 							<MaterialIcons color={'#959595'} size={19} name="close" />
 						</TouchableOpacity>
 					</View>
 					<ScrollView style={styles.popupScroll}>
-						<View style={styles.popupInner}>
+						<TouchableOpacity activeOpacity={1}>
+							<View style={{ alignContent: 'flex-start', paddingLeft: 20 }}>
+								<Text style={styles.popupTitle}>Best product</Text>
+							</View>
+
+							{/* <View style={styles.popupInner}> */}
 							<ScrollView
 								style={styles.horizontalScroll}
 								horizontal
 								scrollEnabled={true}
 								showsHorizontalScrollIndicator={false}
 							>
-								<View style={styles.horizontalInner}>
-									<View style={styles.horizontalCard}>
-										<Text>Ajeeb</Text>
-									</View>
-									<View style={styles.horizontalCard}>
-										<Text>Ajeeb</Text>
-									</View>
-									<View style={styles.horizontalCard}>
-										<Text>Ajeeb</Text>
-									</View>
-									<View style={styles.horizontalCard}>
-										<Text>Ajeeb</Text>
-									</View>
-									<View style={styles.horizontalCard}>
-										<Text>Ajeeb</Text>
-									</View>
-
-								</View>
+								{images.length &&
+									<TouchableOpacity activeOpacity={1} style={styles.horizontalInner} onPress={() => Linking.openURL(links[0])}>
+										<View style={styles.horizontalCard}>
+											<Image style={{ width: 90, height: 90, borderRadius: 5 }} source={{ uri: images[0] }} />
+										</View>
+									</TouchableOpacity>
+								}
 							</ScrollView>
 
-							<ScrollView
-								style={styles.horizontalScroll}
-								horizontal
-								scrollEnabled={true}
-								showsHorizontalScrollIndicator={false}
-							>
-								<View style={styles.horizontalInner}>
-									<View style={styles.horizontalCard}>
-										<Text>Ajeeb</Text>
-									</View>
-									<View style={styles.horizontalCard}>
-										<Text>Ajeeb</Text>
-									</View>
-									<View style={styles.horizontalCard}>
-										<Text>Ajeeb</Text>
-									</View>
-									<View style={styles.horizontalCard}>
-										<Text>Ajeeb</Text>
-									</View>
-									<View style={styles.horizontalCard}>
-										<Text>Ajeeb</Text>
-									</View>
-
-								</View>
-
-							</ScrollView>
+							<View style={{ alignContent: 'flex-start', paddingLeft: 20 }}>
+								<Text style={styles.popupTitle}>Top Items</Text>
+							</View>
 
 							<ScrollView
 								style={styles.horizontalScroll}
@@ -223,35 +304,83 @@ function Home(): JSX.Element {
 								scrollEnabled={true}
 								showsHorizontalScrollIndicator={false}
 							>
-								<View style={styles.horizontalInner}>
-									<View style={styles.horizontalCard}>
-										<Text>Ajeeb</Text>
-									</View>
-									<View style={styles.horizontalCard}>
-										<Text>Ajeeb</Text>
-									</View>
-									<View style={styles.horizontalCard}>
-										<Text>Ajeeb</Text>
-									</View>
-									<View style={styles.horizontalCard}>
-										<Text>Ajeeb</Text>
-									</View>
-									<View style={styles.horizontalCard}>
-										<Text>Ajeeb</Text>
-									</View>
+								<TouchableOpacity activeOpacity={1}>
 
-								</View>
+									<View style={styles.horizontalInner}>
+										{images.map((i, index) => {
+											if (index != 0) {
+												return (<TouchableOpacity activeOpacity={1} style={styles.horizontalInner} onPress={() => Linking.openURL(links[index])}>
+													<View style={styles.horizontalCard}>
+														<Image style={{ width: 90, height: 90, borderRadius: 5 }} source={{ uri: images[index] }} />
+													</View>
+												</TouchableOpacity>)
+											}
+										})}
 
+									</View>
+								</TouchableOpacity>
 							</ScrollView>
 
+							<View style={{ alignContent: 'flex-start', paddingLeft: 20 }}>
+								<Text style={styles.popupTitle}>Recommended Items</Text>
+							</View>
 
-						</View>
+							<ScrollView
+								style={styles.horizontalScroll}
+								horizontal
+								scrollEnabled={true}
+								showsHorizontalScrollIndicator={false}
+							>
+								<TouchableOpacity activeOpacity={1}>
 
+									<View style={styles.horizontalInner}>
+										{images.map((i, index) => {
+											if (index != 0) {
+												return (<TouchableOpacity activeOpacity={1} style={styles.horizontalInner} onPress={() => Linking.openURL(links[index])}>
+													<View style={styles.horizontalCard}>
+														<Image style={{ width: 90, height: 90, borderRadius: 5 }} source={{ uri: images[index] }} />
+													</View>
+												</TouchableOpacity>)
+											}
+										})}
+
+									</View>
+								</TouchableOpacity>
+							</ScrollView>
+
+							{debugModal &&
+								<View>
+
+									<View style={{ alignContent: 'flex-start', paddingHorizontal: 20 }}>
+										<Text style={styles.popupTitle}>Tags</Text>
+										<Text style={{ color: 'black' }}>{JSON.stringify(tags)}</Text>
+									</View>
+
+									<View style={{ alignContent: 'flex-start', paddingHorizontal: 20 }}>
+										<Text style={styles.popupTitle}>Text</Text>
+										<Text style={{ color: 'black' }}>{JSON.stringify(text)}</Text>
+									</View>
+
+									<View style={{ alignContent: 'flex-start', paddingHorizontal: 20 }}>
+										<Text style={styles.popupTitle}>Colors</Text>
+										<Text style={{ color: 'black' }}>{JSON.stringify(colors)}</Text>
+									</View>
+									<View style={{ alignContent: 'flex-start', paddingHorizontal: 20 }}>
+										<Text style={styles.popupTitle}>Segmented image</Text>
+									</View>
+									<Image style={{ height: 400, width: 400 }} source={{ uri: 'data:image/jpeg;base64,' + segImg }} resizeMode={'contain'} />
+
+								</View>
+							}
+
+
+							{/* </View> */}
+						</TouchableOpacity>
 					</ScrollView>
 				</SafeAreaView>
 			</Modal>
 
-			{/* Gender Modal */}
+
 			<Modal
 				animationIn="slideInUp"
 				isVisible={storeModal}
