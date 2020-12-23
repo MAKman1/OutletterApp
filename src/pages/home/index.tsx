@@ -34,6 +34,10 @@ function Home(): JSX.Element {
 
 	const [loading, setLoading] = useState(false);
 
+	const [queryLabel, setQueryLabel] = useState(null);
+	const [resultLabels, setResultLabels] = useState([]);
+
+
 	useEffect(() => {
 	}, [])
 
@@ -44,6 +48,8 @@ function Home(): JSX.Element {
 		setText([]);
 		setTags([]);
 		setColors([]);
+		setQueryLabel(null);
+		setResultLabels([]);
 	}
 
 	function setStates(data: any) {
@@ -54,6 +60,8 @@ function Home(): JSX.Element {
 			setText(data.text);
 			setTags(data.tags);
 			setColors(data.colors);
+			setQueryLabel(data.queryLabel);
+			setResultLabels(data.resultLabels);
 		}
 	}
 
@@ -364,6 +372,16 @@ function Home(): JSX.Element {
 									<View style={{ alignContent: 'flex-start', paddingHorizontal: 20 }}>
 										<Text style={styles.popupTitle}>Colors</Text>
 										<Text style={{ color: 'black' }}>{JSON.stringify(colors)}</Text>
+									</View>
+
+									<View style={{ alignContent: 'flex-start', paddingHorizontal: 20 }}>
+										<Text style={styles.popupTitle}>Query label</Text>
+										<Text style={{ color: 'black' }}>{JSON.stringify(queryLabel)}</Text>
+									</View>
+
+									<View style={{ alignContent: 'flex-start', paddingHorizontal: 20 }}>
+										<Text style={styles.popupTitle}>Result labels</Text>
+										<Text style={{ color: 'black' }}>{JSON.stringify(resultLabels)}</Text>
 									</View>
 									<View style={{ alignContent: 'flex-start', paddingHorizontal: 20 }}>
 										<Text style={styles.popupTitle}>Segmented image</Text>
