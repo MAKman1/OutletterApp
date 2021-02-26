@@ -12,7 +12,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunity from 'react-native-vector-icons/MaterialCommunityIcons';
 
 
-function Home(): JSX.Element {
+function Home({ navigation }): JSX.Element {
 	const cameraRef = useRef(null);
 
 	const genders = ["Male", "Female", "Other"];
@@ -178,7 +178,7 @@ function Home(): JSX.Element {
 		}
 
 		// console.warn(JSON.stringify(data));
-		axios.post('http://139.179.203.186:8000/api/v1/similarItems/', data, config)
+		axios.post('http://139.179.203.87:8000/api/v1/similarItems/', data, config)
 			.then(function (response) {
 				// console.warn(JSON.stringify(response));
 				setStates(response.data);
@@ -218,14 +218,14 @@ function Home(): JSX.Element {
 				</View>
 				<View style={{ alignContent: 'center', backgroundColor: 'white', borderRadius: 30, maxWidth: 90, height: 65, opacity: 0.5 }}>
 					<Text style={{ paddingTop: 10, color: 'black', textAlign: 'center', fontWeight: "bold", }}>Debug</Text>
-					<Switch
+					{/* <Switch
 						style={{ alignSelf: 'center' }}
 						trackColor={{ false: "#767577", true: "#8DCC43" }}
 						thumbColor={debugModal ? "white" : "white"}
 						ios_backgroundColor="#3e3e3e"
 						onValueChange={() => toggleDebug(debugModal)}
 						value={debugModal}
-					/>
+					/> */}
 				</View>
 				{loading && <ActivityIndicator color={"white"} size={35} style={{ marginTop: '50%' }} />}
 			</SafeAreaView>
@@ -261,8 +261,8 @@ function Home(): JSX.Element {
 							}
 						</TouchableOpacity>
 					</View>
-					<TouchableOpacity onPress={() => setFound(true)}>
-						<Text style={styles.roundedButtonText}>Show Modal</Text>
+					<TouchableOpacity onPress={() => navigation.navigate('ARHomeScreen')}>
+						<Text style={styles.roundedButtonText}>Show AR Home</Text>
 					</TouchableOpacity>
 				</View>
 			</SafeAreaView>

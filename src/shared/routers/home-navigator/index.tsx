@@ -5,6 +5,7 @@ import Feather from 'react-native-vector-icons/Feather'
 import Settings from '../../../pages/home';
 import { APP_COLORS } from '../../styles/colors';
 import Home from '../../../pages/home';
+import ARHomeScreen from '../../ARComponents/ARHome';
 
 const Stack = createStackNavigator();
 function HomeNavigator(): JSX.Element {
@@ -16,6 +17,7 @@ function HomeNavigator(): JSX.Element {
 			}}
 		>
 			<Stack.Screen name="Home" component={Home} />
+			<Stack.Screen name="ARHomeScreen" component={ARHomeScreen} />
 		</Stack.Navigator>
 
 	)
