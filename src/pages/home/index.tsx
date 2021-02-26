@@ -19,6 +19,8 @@ import {
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunity from 'react-native-vector-icons/MaterialCommunityIcons';
 
+import HelloWorldSceneAR from './arcomponent/index'
+
 
 function Home(): JSX.Element {
 	const cameraRef = useRef(null);
@@ -210,7 +212,8 @@ function Home(): JSX.Element {
 
 	return (
 		<View style={styles.rootContainer}>
-			<RNCamera
+			
+			{/* <RNCamera
 				ref={cameraRef}
 				style={styles.cameraView}
 				type={RNCamera.Constants.Type.back}
@@ -221,6 +224,13 @@ function Home(): JSX.Element {
 					buttonPositive: 'Ok',
 					buttonNegative: 'Cancel',
 				}}
+			/> */}
+			<ViroARSceneNavigator
+				autofocus={true}
+				initialScene={{
+					scene: HelloWorldSceneAR,
+				}}
+				style={{ flex: 1 }}
 			/>
 			<SafeAreaView style={styles.cameraOverlayTop} >
 				<View style={{ flex: 1, flexDirection: 'row' }}>
