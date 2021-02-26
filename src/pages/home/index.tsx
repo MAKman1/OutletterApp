@@ -7,6 +7,14 @@ import Modal from 'react-native-modal';
 import { RNCamera } from 'react-native-camera';
 import axios from 'axios';
 
+// @ts-ignore
+import {
+	ViroARScene,
+	ViroText,
+	ViroConstants,
+	ViroARSceneNavigator
+} from '@viro-community/react-viro';
+
 
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunity from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -190,6 +198,14 @@ function Home(): JSX.Element {
 				console.warn("Error: " + JSON.stringify(error));
 				setLoading(false);
 			});
+	}
+
+	function _onInitialized(state: any, reason: any) {
+		if (state == ViroConstants.TRACKING_NORMAL) {
+			console.log('g')
+		} else if (state == ViroConstants.TRACKING_NONE) {
+			// Handle loss of tracking
+		}
 	}
 
 	return (

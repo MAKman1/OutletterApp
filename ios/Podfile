@@ -6,6 +6,9 @@ platform :ios, '10.0'
 target 'Outletter' do
   config = use_native_modules!
 
+  pod 'ViroReact', :path => '../node_modules/react-viro/ios/'
+  pod 'ViroKit_static_lib', :path => '../node_modules/react-viro/ios/dist/ViroRenderer/static_lib'
+  
   use_react_native!(:path => config["reactNativePath"])
 
   permissions_path = '../node_modules/react-native-permissions/ios'

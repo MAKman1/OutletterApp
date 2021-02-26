@@ -15,6 +15,7 @@
     "@react-navigation/bottom-tabs": "^5.11.2",
     "@react-navigation/native": "^5.8.10",
     "@react-navigation/stack": "^5.12.8",
+    "@viro-community/react-viro": "git+https://github.com/virocommunity/viro.git",
     "axios": "^0.21.0",
     "buffer": "^6.0.3",
     "react": "16.13.1",
