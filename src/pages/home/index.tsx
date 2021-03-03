@@ -19,11 +19,13 @@ import {
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunity from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import HelloWorldSceneAR from './arcomponent/index'
+import ARDisplay from './arcomponent/index'
 
 
-function Home(): JSX.Element {
+function Home(props: any): JSX.Element {
 	const cameraRef = useRef(null);
+	const arScene = useRef(null);
+
 
 	const genders = ["Male", "Female", "Other"];
 	const stores = ["None", "Koton", "LCWaikiki", "Boyner", "Defacto", "Trendyol", "H&M"];
@@ -31,6 +33,7 @@ function Home(): JSX.Element {
 	const [gender, setGender] = useState("Male");
 	const [store, setStore] = useState("None");
 
+	const [arfound, setAr] = useState(true);
 	const [found, setFound] = useState(false);
 	const [storeModal, setStoreModal] = useState(false);
 	const [debugModal, setDebugModal] = useState(true);
@@ -113,11 +116,13 @@ function Home(): JSX.Element {
 	}
 
 	async function takePicture() {
-		if (cameraRef.current) {
-			const options = { quality: 0.5, base64: true };
-			const data = await cameraRef.current.takePictureAsync(options);
-			uploadImage(data);
-		}
+		arScene.current.replace({ scene: ARDisplay, passProps: { arfound } })
+		setAr(!arfound);
+		// if (cameraRef.current) {
+		// 	const options = { quality: 0.5, base64: true };
+		// 	const data = await cameraRef.current.takePictureAsync(options);
+		// 	uploadImage(data);
+		// }
 	}
 
 	async function uploadImage(image: any) {
@@ -226,10 +231,14 @@ function Home(): JSX.Element {
 				}}
 			/> */}
 			<ViroARSceneNavigator
+				ref={arScene}
 				autofocus={true}
 				initialScene={{
-					scene: HelloWorldSceneAR,
+					scene: ARDisplay,
 				}}
+				viroAppProps={ 
+					{arfound}
+				}
 				style={{ flex: 1 }}
 			/>
 			<SafeAreaView style={styles.cameraOverlayTop} >
