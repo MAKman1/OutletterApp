@@ -253,14 +253,14 @@ function Home(props: any): JSX.Element {
 				</View>
 				<View style={{ alignContent: 'center', backgroundColor: 'white', borderRadius: 30, maxWidth: 90, height: 65, opacity: 0.5 }}>
 					<Text style={{ paddingTop: 10, color: 'black', textAlign: 'center', fontWeight: "bold", }}>Debug</Text>
-					<Switch
+					{/* <Switch
 						style={{ alignSelf: 'center' }}
 						trackColor={{ false: "#767577", true: "#8DCC43" }}
 						thumbColor={debugModal ? "white" : "white"}
 						ios_backgroundColor="#3e3e3e"
 						onValueChange={() => toggleDebug(debugModal)}
 						value={debugModal}
-					/>
+					/> */}
 				</View>
 				{loading && <ActivityIndicator color={"white"} size={35} style={{ marginTop: '50%' }} />}
 			</SafeAreaView>
