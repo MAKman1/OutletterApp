@@ -11,7 +11,7 @@ function ARDisplay(props: any): JSX.Element {
   const scene = useRef(null);
 
   useEffect(() => {
-    calculateMarkerPositions();
+    // calculateMarkerPositions();
   }, [props.arSceneNavigator.viroAppProps.arfound])
 
 
@@ -44,7 +44,7 @@ function ARDisplay(props: any): JSX.Element {
 
   function _onInitialized(state: any, reason: any) {
     if (state == ViroConstants.TRACKING_NORMAL) {
-      setText('Hello World');
+      setText('Price: 105.3 TL');
     } else if (state == ViroConstants.TRACKING_NONE) {
       setText('');
     }

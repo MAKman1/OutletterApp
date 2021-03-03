@@ -116,7 +116,8 @@ function Home(props: any): JSX.Element {
 	}
 
 	async function takePicture() {
-		arScene.current.replace({ scene: ARDisplay, passProps: { arfound } })
+		arScene.current._resetARSession( true, true);
+		// arScene.current.replace({ scene: ARDisplay, passProps: { arfound } })
 		setAr(!arfound);
 		// if (cameraRef.current) {
 		// 	const options = { quality: 0.5, base64: true };
