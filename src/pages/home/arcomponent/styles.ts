@@ -4,9 +4,10 @@ import { APP_COLORS } from "../../../shared/styles/colors";
 
 export default StyleSheet.create({
 ARComponentStyle: {
-    fontFamily: 'Arial',
-    fontSize: 30,
-    color: '#ffffff',
+    fontFamily: 'Roboto',
+    fontSize: 10,
+    fontWeight: '900',
+    color: '#26A2FB',
     textAlignVertical: 'center',
     textAlign: 'center',
   },

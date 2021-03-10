@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { ViroARScene, ViroText, ViroConstants } from '@viro-community/react-viro';
+import { ViroARScene, ViroText, ViroConstants, ViroImage } from '@viro-community/react-viro';
 
 import styles from './styles'
 
@@ -11,7 +11,7 @@ function ARDisplay(props: any): JSX.Element {
   const scene = useRef(null);
 
   useEffect(() => {
-    calculateMarkerPositions();
+    // calculateMarkerPositions();
   }, [props.arSceneNavigator.viroAppProps.arfound])
 
 
@@ -22,29 +22,39 @@ function ARDisplay(props: any): JSX.Element {
         console.log(cameraRotation);
         let cameraPosition = orientation.position;
 
-        cameraPosition[0] -= Math.sin(cameraRotation[1]);
-        cameraPosition[2] -=  Math.cos(cameraPosition[1])
-        
+        // cameraPosition[0] += Math.sin(cameraRotation[1]);
+        // cameraPosition[2] -=  Math.cos(cameraPosition[1])
+
         setPos([cameraPosition[0], cameraPosition[1], cameraPosition[2]]); // ADD OFFSET +30 or smt
         setRot(cameraRotation);
-        // console.log(markerPosition);
+        console.log(markerPosition);
       }
     );
   }
-
+  // rotation={markerRotation}
   return (
     <ViroARScene ref={scene} onTrackingUpdated={_onInitialized} >
-        {/* { props.arSceneNavigator.viroAppProps.arfound ? */}
-        <ViroText text={text} scale={[.5, .5, .5]} position={markerPosition}  style={styles.ARComponentStyle} /> 
-        {/* : */}
-        {/* null */}
-        {/* } */}
+      <ViroText
+        text={text}
+        scale={[0.5,0.5,0.5]}
+        extrusionDepth={0.1}
+        // outerStroke={{type:"Outline", width: 0.3, color:'#000000'}}
+        position={markerPosition}
+        style={styles.ARComponentStyle}
+      />
+      <ViroImage
+        height={0.1}
+        width={0.5}
+        position={[0, 0.02, -1.001]}
+        placeholderSource={require("../../../assets/popupbg.png")}
+        source={require("../../../assets/popupbg.png")}
+      />
     </ViroARScene>
   );
 
   function _onInitialized(state: any, reason: any) {
     if (state == ViroConstants.TRACKING_NORMAL) {
-      setText('Hello World');
+      setText('Price: 300 TRY');
     } else if (state == ViroConstants.TRACKING_NONE) {
       setText('');
     }
