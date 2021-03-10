@@ -116,6 +116,7 @@ function Home(props: any): JSX.Element {
 	}
 
 	async function takePicture() {
+<<<<<<< HEAD
 		// arScene.current.replace({ scene: ARDisplay, passProps: { arfound } })
 		// setAr(!arfound);
 		if (cameraRef.current) {
@@ -123,6 +124,16 @@ function Home(props: any): JSX.Element {
 			const data = await cameraRef.current.takePictureAsync(options);
 			uploadImage(data);
 		}
+=======
+		arScene.current._resetARSession( true, true);
+		// arScene.current.replace({ scene: ARDisplay, passProps: { arfound } })
+		setAr(!arfound);
+		// if (cameraRef.current) {
+		// 	const options = { quality: 0.5, base64: true };
+		// 	const data = await cameraRef.current.takePictureAsync(options);
+		// 	uploadImage(data);
+		// }
+>>>>>>> 1a3b6b34fb31e9fa1e599b629a3c967f66ed2154
 	}
 
 	async function uploadImage(image: any) {
@@ -248,14 +259,14 @@ function Home(props: any): JSX.Element {
 				</View>
 				<View style={{ alignContent: 'center', backgroundColor: 'white', borderRadius: 30, maxWidth: 90, height: 65, opacity: 0.5 }}>
 					<Text style={{ paddingTop: 10, color: 'black', textAlign: 'center', fontWeight: "bold", }}>Debug</Text>
-					<Switch
+					{/* <Switch
 						style={{ alignSelf: 'center' }}
 						trackColor={{ false: "#767577", true: "#8DCC43" }}
 						thumbColor={debugModal ? "white" : "white"}
 						ios_backgroundColor="#3e3e3e"
 						onValueChange={() => toggleDebug(debugModal)}
 						value={debugModal}
-					/>
+					/> */}
 				</View>
 				{loading && <ActivityIndicator color={"white"} size={35} style={{ marginTop: '50%' }} />}
 			</SafeAreaView>

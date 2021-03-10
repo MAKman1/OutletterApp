@@ -54,7 +54,11 @@ function ARDisplay(props: any): JSX.Element {
 
   function _onInitialized(state: any, reason: any) {
     if (state == ViroConstants.TRACKING_NORMAL) {
+<<<<<<< HEAD
       setText('Price: 300 TRY');
+=======
+      setText('Price: 105.3 TL');
+>>>>>>> 1a3b6b34fb31e9fa1e599b629a3c967f66ed2154
     } else if (state == ViroConstants.TRACKING_NONE) {
       setText('');
     }
