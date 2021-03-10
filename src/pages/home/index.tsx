@@ -116,7 +116,6 @@ function Home(props: any): JSX.Element {
 	}
 
 	async function takePicture() {
-<<<<<<< HEAD
 		// arScene.current.replace({ scene: ARDisplay, passProps: { arfound } })
 		// setAr(!arfound);
 		if (cameraRef.current) {
@@ -124,16 +123,6 @@ function Home(props: any): JSX.Element {
 			const data = await cameraRef.current.takePictureAsync(options);
 			uploadImage(data);
 		}
-=======
-		arScene.current._resetARSession( true, true);
-		// arScene.current.replace({ scene: ARDisplay, passProps: { arfound } })
-		setAr(!arfound);
-		// if (cameraRef.current) {
-		// 	const options = { quality: 0.5, base64: true };
-		// 	const data = await cameraRef.current.takePictureAsync(options);
-		// 	uploadImage(data);
-		// }
->>>>>>> 1a3b6b34fb31e9fa1e599b629a3c967f66ed2154
 	}
 
 	async function uploadImage(image: any) {
