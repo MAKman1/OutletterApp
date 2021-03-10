@@ -4,7 +4,6 @@ import styles from './styles'
 
 import SafeAreaView from 'react-native-safe-area-view';
 import Modal from 'react-native-modal';
-import { RNCamera } from 'react-native-camera';
 import axios from 'axios';
 
 // @ts-ignore
@@ -33,49 +32,30 @@ function Home(props: any): JSX.Element {
 	const [gender, setGender] = useState("Male");
 	const [store, setStore] = useState("None");
 
-	const [arfound, setAr] = useState(true);
+	const [arfound, setAr] = useState(false);
 	const [found, setFound] = useState(false);
 	const [storeModal, setStoreModal] = useState(false);
 	const [debugModal, setDebugModal] = useState(true);
 
-	const [links, setLinks] = useState([]);
-	const [images, setImages] = useState([]);
-	const [segImg, setSegImg] = useState(null);
-	const [tags, setTags] = useState([]);
-	const [text, setText] = useState([]);
-	const [colors, setColors] = useState([]);
+	const [queryItem, setQueryItem] = useState<any>({});
+	const [similarItems, setSimilarItems] = useState<any[]>([]);
+	const [bestItem, setBestItem] = useState<any>({});
 
 	const [loading, setLoading] = useState(false);
-
-	const [queryLabel, setQueryLabel] = useState(null);
-	const [resultLabels, setResultLabels] = useState([]);
-
 
 	useEffect(() => {
 	}, [])
 
 	function resetStates() {
-		setImages([]);
-		setLinks([]);
-		setSegImg(null);
-		setText([]);
-		setTags([]);
-		setColors([]);
-		setQueryLabel(null);
-		setResultLabels([]);
+		setQueryItem([]);
+		setSimilarItems([]);
+		setBestItem({});
 	}
 
 	function setStates(data: any) {
-		setLinks(data.links);
-		setImages(data.imageLinks);
-		if (debugModal) {
-			setSegImg(data.segmented_image);
-			setText(data.text);
-			setTags(data.tags);
-			setColors(data.colors);
-			setQueryLabel(data.queryLabel);
-			setResultLabels(data.resultLabels);
-		}
+		setQueryItem(data.query_item);
+		setSimilarItems(data.similar_items);
+		setBestItem(data.similar_items[0]);
 	}
 
 	function toggleGender(gender: string) {
@@ -117,12 +97,20 @@ function Home(props: any): JSX.Element {
 
 	async function takePicture() {
 		// arScene.current.replace({ scene: ARDisplay, passProps: { arfound } })
-		// setAr(!arfound);
-		if (cameraRef.current) {
-			const options = { quality: 0.5, base64: true };
-			const data = await cameraRef.current.takePictureAsync(options);
+		// if (cameraRef.current) {
+		// 	const options = { quality: 0.5, base64: true };
+		// 	const data = await cameraRef.current.takePictureAsync(options);
+		// 	uploadImage(data);
+		// }
+		setAr(false);
+		arScene.current._resetARSession( true, true);
+		arScene.current._takeScreenshot('outletter_' + Date.now() + '_img', false).then((data: any) => {
+			console.log(data.success, data.url, data.errorCode);
 			uploadImage(data);
-		}
+		})
+			.catch((error: any) => {
+				console.log('error' + JSON.stringify(error));
+			});
 	}
 
 	async function uploadImage(image: any) {
@@ -135,59 +123,63 @@ function Home(props: any): JSX.Element {
 		let postGender;
 		switch (gender) {
 			case 'Male':
-				postGender = 'Male';
+				postGender = 'male';
 				break;
 			case 'Female':
-				postGender = 'Female';
+				postGender = 'female';
 				break;
 			case 'Other':
-				postGender = 'Male';
+				postGender = 'male';
 				break;
 			default:
-				postGender = 'Male';
+				postGender = 'male';
 				break;
 		}
 
 		let shop;
-		if (store == 'None') {
-			shop = 'Trendyol';
+		switch (store) {
+			case 'Koton':
+				shop = 'www.koton.com';
+				break;
+			case 'LCWaikiki':
+				shop = 'www.lcwaikiki.com';
+				break;
+			case 'Boyner':
+				shop = 'www.boyner.com.tr';
+				break;
+			case 'Defacto':
+				shop = 'www.defacto.com.tr';
+				break;
+			case 'Koton':
+				shop = 'www.koton.com';
+				break;
+			case 'Trendyol':
+				shop = 'www.trendyol.com';
+				break;
+			case 'H&M':
+				shop = 'www2.hm.com/tr_tr';
+				break;
+			case 'None':
+				shop = 'www.trendyol.com';;
+				break;
+			default:
+				shop = 'www.trendyol.com';;
+				break;
 		}
-		else {
-			shop = store;
-		}
-		// switch (store) {
-		// 	case 'Koton':
-		// 	case 'LCWaikiki':
-		// 	case 'Boyner':
-		// 	case 'Defacto':
-		// 		shop = 3;
-		// 		break;
-		// 	case 'Trendyol':
-		// 		shop = 4;
-		// 		break;
-		// 	case 'H&M':
-		// 		shop = 5;
-		// 		break;
-		// 	case 'None':
-		// 		shop = 'Trendyol';
-		// 		break;
-		// 	default:
-		// 		shop = 'Trendyol';
-		// 		break;
-		// }
 
 		var data = new FormData();
 		data.append("picture", {
-			uri: Platform.OS === "android" ? image.uri : image.uri.replace("file://", ""),
+			uri: 'file://' + image.url,
 			name: 'uploaded_image_' + Date.now() + '.jpg',
 			type: 'image/*'
 		})
+		// data.append("picture", 'file://' + image.url)
 		// data.append("picture", Platform.OS === "android" ? image.uri : image.uri.replace("file://", ""));
 		// data.append("picture", image.uri.replace("file:///", "file://"));
 		data.append("gender", postGender);
 		data.append("shop", shop);
 		data.append("debug", debugModal);
-		
+
 
 		const config = {
 			headers: {
@@ -196,12 +188,13 @@ function Home(props: any): JSX.Element {
 		}
 
 		// console.log(JSON.stringify(data));
-		axios.post('https://84e3831062a8.ngrok.io/api/v1/items/', data, config)
+		axios.post('https://019c7684f8fc.ngrok.io/api/v1/items/', data, config)
 			.then(function (response) {
 				console.warn(JSON.stringify(response));
 				setStates(response.data);
 				setFound(true);
 				setLoading(false);
+				setAr(!arfound);
 			})
 			.catch(function (error) {
 				resetStates();
@@ -212,30 +205,17 @@ function Home(props: any): JSX.Element {
 
 	return (
 		<View style={styles.rootContainer}>
-			
-			<RNCamera
-				ref={cameraRef}
-				style={styles.cameraView}
-				type={RNCamera.Constants.Type.back}
-				flashMode={RNCamera.Constants.FlashMode.off}
-				androidCameraPermissionOptions={{
-					title: 'Permission to use camera',
-					message: 'We need your permission to use your camera',
-					buttonPositive: 'Ok',
-					buttonNegative: 'Cancel',
-				}}
-			/>
-			{/* <ViroARSceneNavigator
+			<ViroARSceneNavigator
 				ref={arScene}
 				autofocus={true}
 				initialScene={{
 					scene: ARDisplay,
 				}}
-				viroAppProps={ 
-					{arfound}
+				viroAppProps={
+					{ arfound, bestItem }
 				}
 				style={{ flex: 1 }}
-			/> */}
+			/>
 			<SafeAreaView style={styles.cameraOverlayTop} >
 				<View style={{ flex: 1, flexDirection: 'row' }}>
 					<View style={styles.topOverlay}>
@@ -330,10 +310,10 @@ function Home(props: any): JSX.Element {
 								scrollEnabled={true}
 								showsHorizontalScrollIndicator={false}
 							>
-								{images.length &&
-									<TouchableOpacity activeOpacity={1} style={styles.horizontalInner} onPress={() => Linking.openURL(links[0])}>
+								{bestItem &&
+									<TouchableOpacity activeOpacity={1} style={styles.horizontalInner} onPress={() => Linking.openURL(bestItem.url)}>
 										<View style={styles.horizontalCard}>
-											<Image style={{ width: 90, height: 90, borderRadius: 5 }} source={{ uri: images[0] }} />
+											<Image style={{ width: 90, height: 90, borderRadius: 5 }} source={{ uri: bestItem.image_url }} />
 										</View>
 									</TouchableOpacity>
 								}
@@ -352,11 +332,11 @@ function Home(props: any): JSX.Element {
 								<TouchableOpacity activeOpacity={1}>
 
 									<View style={styles.horizontalInner}>
-										{images.map((i, index) => {
-											if (index != 0) {
-												return (<TouchableOpacity activeOpacity={1} style={styles.horizontalInner} onPress={() => Linking.openURL(links[index])}>
+										{similarItems.map((item, index) => {
+											if (index != 0 && item != null) {
+												return (<TouchableOpacity activeOpacity={1} style={styles.horizontalInner} onPress={() => Linking.openURL(item[index].url)} key={index}>
 													<View style={styles.horizontalCard}>
-														<Image style={{ width: 90, height: 90, borderRadius: 5 }} source={{ uri: images[index] }} />
+														<Image style={{ width: 90, height: 90, borderRadius: 5 }} source={{ uri: item.image_url }} />
 													</View>
 												</TouchableOpacity>)
 											}
@@ -393,7 +373,7 @@ function Home(props: any): JSX.Element {
 								</TouchableOpacity>
 							</ScrollView> */}
 
-							{debugModal &&
+							{debugModal && queryItem &&
 								<View>
 
 									<View style={{ alignContent: 'flex-start', paddingHorizontal: 20 }}>
@@ -401,33 +381,24 @@ function Home(props: any): JSX.Element {
 									</View>
 
 									<View style={{ alignContent: 'flex-start', paddingHorizontal: 20 }}>
-										<Text style={styles.popupTitle}>Tags</Text>
-										<Text style={{ color: 'black' }}>{JSON.stringify(tags)}</Text>
+										<Text style={styles.popupTitle}>Labels</Text>
+										<Text style={{ color: 'black' }}>{JSON.stringify(queryItem.label)}</Text>
 									</View>
 
 									<View style={{ alignContent: 'flex-start', paddingHorizontal: 20 }}>
 										<Text style={styles.popupTitle}>Text</Text>
-										<Text style={{ color: 'black' }}>{JSON.stringify(text)}</Text>
+										<Text style={{ color: 'black' }}>{JSON.stringify(queryItem.texts)}</Text>
 									</View>
 
 									<View style={{ alignContent: 'flex-start', paddingHorizontal: 20 }}>
 										<Text style={styles.popupTitle}>Colors</Text>
-										<Text style={{ color: 'black' }}>{JSON.stringify(colors)}</Text>
+										<Text style={{ color: 'black' }}>{JSON.stringify(queryItem.color)}</Text>
 									</View>
 
-									<View style={{ alignContent: 'flex-start', paddingHorizontal: 20 }}>
-										<Text style={styles.popupTitle}>Query label</Text>
-										<Text style={{ color: 'black' }}>{JSON.stringify(queryLabel)}</Text>
-									</View>
-
-									<View style={{ alignContent: 'flex-start', paddingHorizontal: 20 }}>
-										<Text style={styles.popupTitle}>Result labels</Text>
-										<Text style={{ color: 'black' }}>{JSON.stringify(resultLabels)}</Text>
-									</View>
 									<View style={{ alignContent: 'flex-start', paddingHorizontal: 20 }}>
 										<Text style={styles.popupTitle}>Segmented image</Text>
 									</View>
-									<Image style={{ height: 400, width: 400 }} source={{ uri: 'data:image/jpeg;base64,' + segImg }} resizeMode={'contain'} />
+									<Image style={{ height: 400, width: 400 }} source={{ uri: 'https://019c7684f8fc.ngrok.io' + queryItem.picture }} resizeMode={'contain'} />
 
 								</View>
 							}
@@ -462,15 +433,15 @@ function Home(props: any): JSX.Element {
 					<ScrollView style={styles.popupScroll}>
 						<View style={styles.popupInner}>
 							{
-								stores.map(s => {
-									return (<TouchableOpacity key="{s}" style={{ marginTop: 10, flex: 1, flexDirection: 'row', justifyContent: 'center', minWidth: 300, borderRadius: 10, borderBottomWidth: 1, borderColor: '#04B3FF' }} disabled={store == s} onPress={() => {
-										setStore(s);
-										setStoreModal(false);
-									}}>
-										<Text key="{s}" style={{ textAlign: 'center', fontSize: 35, color: 'black' }}>
-											{s}
-										</Text>
-										{store == s ? <MaterialIcons key="{s}" style={{ textAlignVertical: 'center' }} color={'#04B3FF'} size={30} name="check" /> : null}
+								stores.map( (s, index) => {
+									return (<TouchableOpacity key={index} style={{ marginTop: 10, flex: 1, flexDirection: 'row', justifyContent: 'center', minWidth: 300, borderRadius: 10, borderBottomWidth: 1, borderColor: '#04B3FF' }} disabled={store == s} onPress={() => {
+													setStore(s);
+													setStoreModal(false);
+												}}>
+											<Text style={{ textAlign: 'center', fontSize: 35, color: 'black' }}>
+												{s}
+											</Text>
+										{store == s ? <MaterialIcons style={{ textAlignVertical: 'center' }} color={'#04B3FF'} size={30} name="check" /> : null}
 									</TouchableOpacity>)
 								})
 							}

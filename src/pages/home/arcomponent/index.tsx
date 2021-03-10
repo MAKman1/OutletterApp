@@ -11,7 +11,7 @@ function ARDisplay(props: any): JSX.Element {
   const scene = useRef(null);
 
   useEffect(() => {
-    // calculateMarkerPositions();
+    setText('Price: ' + props.arSceneNavigator.viroAppProps.bestItem.price + 'TRY');
   }, [props.arSceneNavigator.viroAppProps.arfound])
 
 
@@ -33,28 +33,34 @@ function ARDisplay(props: any): JSX.Element {
   }
   // rotation={markerRotation}
   return (
-    <ViroARScene ref={scene} onTrackingUpdated={_onInitialized} >
-      <ViroText
-        text={text}
-        scale={[0.5,0.5,0.5]}
-        extrusionDepth={0.1}
-        // outerStroke={{type:"Outline", width: 0.3, color:'#000000'}}
-        position={markerPosition}
-        style={styles.ARComponentStyle}
-      />
-      <ViroImage
-        height={0.1}
-        width={0.5}
-        position={[0, 0.02, -1.001]}
-        placeholderSource={require("../../../assets/popupbg.png")}
-        source={require("../../../assets/popupbg.png")}
-      />
+    <ViroARScene ref={scene} onTrackingUpdated={_onInitialized}>
+      {props.arSceneNavigator.viroAppProps.arfound ?
+        <>
+          <ViroText
+            text={text}
+            scale={[0.5, 0.5, 0.5]}
+            extrusionDepth={0.1}
+            // outerStroke={{type:"Outline", width: 0.3, color:'#000000'}}
+            position={markerPosition}
+            style={styles.ARComponentStyle}
+          />
+          <ViroImage
+            height={0.1}
+            width={0.5}
+            position={[0, 0.02, -1.001]}
+            placeholderSource={require("../../../assets/popupbg.png")}
+            source={require("../../../assets/popupbg.png")}
+          />
+        </>
+      :
+      null
+    }
     </ViroARScene>
   );
 
   function _onInitialized(state: any, reason: any) {
     if (state == ViroConstants.TRACKING_NORMAL) {
-      setText('Price: 300 TRY');
+      setText('Price: TRY');
     } else if (state == ViroConstants.TRACKING_NONE) {
       setText('');
     }
