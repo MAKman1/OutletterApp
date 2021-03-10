@@ -116,75 +116,78 @@ function Home(props: any): JSX.Element {
 	}
 
 	async function takePicture() {
-		arScene.current.replace({ scene: ARDisplay, passProps: { arfound } })
-		setAr(!arfound);
-		// if (cameraRef.current) {
-		// 	const options = { quality: 0.5, base64: true };
-		// 	const data = await cameraRef.current.takePictureAsync(options);
-		// 	uploadImage(data);
-		// }
+		// arScene.current.replace({ scene: ARDisplay, passProps: { arfound } })
+		// setAr(!arfound);
+		if (cameraRef.current) {
+			const options = { quality: 0.5, base64: true };
+			const data = await cameraRef.current.takePictureAsync(options);
+			uploadImage(data);
+		}
 	}
 
 	async function uploadImage(image: any) {
 		setLoading(true);
 		// POST localhost: 8000 / api / v1 / similarItems
 		// image = (image file)
-		// gender = 'm' / 'f'
-		// shop = '0/1/2/3/4/5/6'(need more discussion on this)
+		// gender = 'Male' / 'Female'
+		// shop = 'Name of Shop'(need more discussion on this)
 		// debug = true / false
 		let postGender;
 		switch (gender) {
 			case 'Male':
-				postGender = 'm';
+				postGender = 'Male';
 				break;
 			case 'Female':
-				postGender = 'f';
+				postGender = 'Female';
 				break;
 			case 'Other':
-				postGender = 'm';
+				postGender = 'Male';
 				break;
 			default:
-				postGender = 'm';
+				postGender = 'Male';
 				break;
 		}
 
 		let shop;
-		switch (store) {
-			case 'Koton':
-				shop = 0;
-				break;
-			case 'LCWaikiki':
-				shop = 1;
-				break;
-			case 'Boyner':
-				shop = 2;
-				break;
-			case 'Defacto':
-				shop = 3;
-				break;
-			case 'Trendyol':
-				shop = 4;
-				break;
-			case 'H&M':
-				shop = 5;
-				break;
-			case 'None':
-				shop = 0;
-				break;
-			default:
-				shop = 0;
-				break;
+		if (store == 'None') {
+			shop = 'Trendyol';
 		}
+		else {
+			shop = store;
+		}
+		// switch (store) {
+		// 	case 'Koton':
+		// 	case 'LCWaikiki':
+		// 	case 'Boyner':
+		// 	case 'Defacto':
+		// 		shop = 3;
+		// 		break;
+		// 	case 'Trendyol':
+		// 		shop = 4;
+		// 		break;
+		// 	case 'H&M':
+		// 		shop = 5;
+		// 		break;
+		// 	case 'None':
+		// 		shop = 'Trendyol';
+		// 		break;
+		// 	default:
+		// 		shop = 'Trendyol';
+		// 		break;
+		// }
 
 		var data = new FormData();
-		data.append("image", {
+		data.append("picture", {
 			uri: Platform.OS === "android" ? image.uri : image.uri.replace("file://", ""),
 			name: 'uploaded_image_' + Date.now() + '.jpg',
 			type: 'image/*'
 		})
+		// data.append("picture", Platform.OS === "android" ? image.uri : image.uri.replace("file://", ""));
+		// data.append("picture", image.uri.replace("file:///", "file://"));
 		data.append("gender", postGender);
-		data.append("debug", debugModal);
 		data.append("shop", shop);
+		data.append("debug", debugModal);
+		
 
 		const config = {
 			headers: {
@@ -192,10 +195,10 @@ function Home(props: any): JSX.Element {
 			}
 		}
 
-		// console.warn(JSON.stringify(data));
-		axios.post('http://139.179.203.186:8000/api/v1/similarItems/', data, config)
+		// console.log(JSON.stringify(data));
+		axios.post('https://84e3831062a8.ngrok.io/api/v1/items/', data, config)
 			.then(function (response) {
-				// console.warn(JSON.stringify(response));
+				console.warn(JSON.stringify(response));
 				setStates(response.data);
 				setFound(true);
 				setLoading(false);
@@ -207,18 +210,10 @@ function Home(props: any): JSX.Element {
 			});
 	}
 
-	function _onInitialized(state: any, reason: any) {
-		if (state == ViroConstants.TRACKING_NORMAL) {
-			console.log('g')
-		} else if (state == ViroConstants.TRACKING_NONE) {
-			// Handle loss of tracking
-		}
-	}
-
 	return (
 		<View style={styles.rootContainer}>
 			
-			{/* <RNCamera
+			<RNCamera
 				ref={cameraRef}
 				style={styles.cameraView}
 				type={RNCamera.Constants.Type.back}
@@ -229,8 +224,8 @@ function Home(props: any): JSX.Element {
 					buttonPositive: 'Ok',
 					buttonNegative: 'Cancel',
 				}}
-			/> */}
-			<ViroARSceneNavigator
+			/>
+			{/* <ViroARSceneNavigator
 				ref={arScene}
 				autofocus={true}
 				initialScene={{
@@ -240,7 +235,7 @@ function Home(props: any): JSX.Element {
 					{arfound}
 				}
 				style={{ flex: 1 }}
-			/>
+			/> */}
 			<SafeAreaView style={styles.cameraOverlayTop} >
 				<View style={{ flex: 1, flexDirection: 'row' }}>
 					<View style={styles.topOverlay}>
