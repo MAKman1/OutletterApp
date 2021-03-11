@@ -188,7 +188,7 @@ function Home(props: any): JSX.Element {
 		}
 
 		// console.log(JSON.stringify(data));
-		axios.post('https://019c7684f8fc.ngrok.io/api/v1/items/', data, config)
+		axios.post('https://867229285c17.ngrok.io/api/v1/items/', data, config)
 			.then(function (response) {
 				console.warn(JSON.stringify(response));
 				setStates(response.data);
@@ -398,7 +398,7 @@ function Home(props: any): JSX.Element {
 									<View style={{ alignContent: 'flex-start', paddingHorizontal: 20 }}>
 										<Text style={styles.popupTitle}>Segmented image</Text>
 									</View>
-									<Image style={{ height: 400, width: 400 }} source={{ uri: 'https://019c7684f8fc.ngrok.io' + queryItem.picture }} resizeMode={'contain'} />
+									<Image style={{ height: 400, width: 400 }} source={{ uri: 'https://867229285c17.ngrok.io' + queryItem.picture }} resizeMode={'contain'} />
 
 								</View>
 							}
