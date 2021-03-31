@@ -287,8 +287,8 @@ export default StyleSheet.create({
     borderRadius: 50,
     backgroundColor: "white",
     padding: 15,
-    minWidth: 65,
-    minHeight: 65,
+    maxWidth: 65,
+    maxHeight: 65,
   },
   cameraOverlay: {
     flex: 1,
@@ -301,6 +301,11 @@ export default StyleSheet.create({
     fontSize: 25,
     borderRadius: 50,
     textAlign: "center",
+  },
+  storeLogo: {
+    flex: 1,
+    resizeMode: 'center',
+    alignSelf: 'center' 
   },
   roundedButton: {
     width: "50%",

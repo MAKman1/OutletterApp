@@ -13,13 +13,11 @@ function Splash({ navigation }): JSX.Element {
 	}, []);
 	return (
 		<SafeAreaView style={styles.container}>
-			<View style={{backgroundColor: '#92CCF9', borderRadius: 10,}}> 
-				<Image style={{ alignSelf: 'center' }}
+				<Image style={styles.backgroundImage}
 					source={
-						require('../../assets/outletterLogo.png')
+						require('../../assets/splash.png')
 					}
 				/>
-			</View>
 		</SafeAreaView>
 	)
 }

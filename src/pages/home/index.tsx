@@ -79,17 +79,17 @@ function Home(props: any): JSX.Element {
 			case 'None':
 				return <MaterialCommunity color={'black'} size={35} name="shopping-outline" />;
 			case 'LCWaikiki':
-				return <Text style={styles.storeText} >L</Text>
+				return <Image style={styles.storeLogo} source={require('../../assets/lcLogo.png')}/>
 			case 'Koton':
-				return <Text style={styles.storeText} >K</Text>
+				return <Image style={styles.storeLogo} source={require('../../assets/kotonLogo.png')}/> //<Text style={styles.storeText} >K</Text>
 			case 'Defacto':
-				return <Text style={styles.storeText} >D</Text>
+				return <Image style={styles.storeLogo} source={require('../../assets/defactoLogo.jpg')}/>
 			case 'Boyner':
-				return <Text style={styles.storeText} >B</Text>
+				return <Image style={styles.storeLogo} source={require('../../assets/boynerLogo.jpg')}/>
 			case 'H&M':
-				return <Text style={styles.storeText} >H</Text>
+				return <Image style={styles.storeLogo} source={require('../../assets/hmLogo.png')}/>
 			case 'Trendyol':
-				return <Text style={styles.storeText} >T</Text>
+				return <Image style={{flex: 1, resizeMode: 'center', alignSelf: 'center'}} source={require('../../assets/trendyolLogo.png')}/>
 			default:
 				return <MaterialCommunity color={'black'} size={35} name="shopping-outline" />;
 		}
@@ -188,13 +188,13 @@ function Home(props: any): JSX.Element {
 		}
 
 		// console.log(JSON.stringify(data));
-		axios.post('https://867229285c17.ngrok.io/api/v1/items/', data, config)
+		axios.post('https://6461348afde3.ngrok.io/api/v1/items/', data, config)
 			.then(function (response) {
 				console.warn(JSON.stringify(response));
 				setStates(response.data);
 				setFound(true);
 				setLoading(false);
-				setAr(!arfound);
+				setAr(true);
 			})
 			.catch(function (error) {
 				resetStates();

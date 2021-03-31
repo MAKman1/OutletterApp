@@ -10,9 +10,11 @@ function ARDisplay(props: any): JSX.Element {
   const [markerRotation, setRot] = useState([0, 0, 0]);
   const scene = useRef(null);
 
+  let newProps = props.arSceneNavigator.viroAppProps;
+
   useEffect(() => {
-    setText('Price: ' + props.arSceneNavigator.viroAppProps.bestItem.price + 'TRY');
-  }, [props.arSceneNavigator.viroAppProps.arfound])
+    setText('Price: ' + newProps.bestItem.price + 'TRY');
+  }, [newProps.arfound])
 
 
   function calculateMarkerPositions() {
@@ -36,17 +38,24 @@ function ARDisplay(props: any): JSX.Element {
     <ViroARScene ref={scene} onTrackingUpdated={_onInitialized}>
       {props.arSceneNavigator.viroAppProps.arfound ?
         <>
+          <ViroImage
+              height={0.1}
+              width={0.1}
+              position={[-0.25, 0.03, -0.9]}
+              placeholderSource={{ uri: newProps.bestItem.image_url }}
+              source={{ uri: newProps.bestItem.image_url }}
+            />
           <ViroText
             text={text}
             scale={[0.5, 0.5, 0.5]}
             extrusionDepth={0.1}
             // outerStroke={{type:"Outline", width: 0.3, color:'#000000'}}
-            position={markerPosition}
+            position={[0, 0, -1]}
             style={styles.ARComponentStyle}
           />
           <ViroImage
-            height={0.1}
-            width={0.5}
+            height={0.18}
+            width={0.8}
             position={[0, 0.02, -1.001]}
             placeholderSource={require("../../../assets/popupbg.png")}
             source={require("../../../assets/popupbg.png")}
