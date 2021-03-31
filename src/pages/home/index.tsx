@@ -218,6 +218,7 @@ function Home(props: any): JSX.Element {
 			/>
 			<SafeAreaView style={styles.cameraOverlayTop} >
 				<View style={{ flex: 1, flexDirection: 'row' }}>
+					
 					<View style={styles.topOverlay}>
 						<Image style={{ alignSelf: 'center' }}
 							source={
