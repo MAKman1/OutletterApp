@@ -304,8 +304,8 @@ export default StyleSheet.create({
   },
   storeLogo: {
     flex: 1,
-    resizeMode: 'center',
-    alignSelf: 'center' 
+	alignSelf: 'center',
+	maxWidth: 65
   },
   roundedButton: {
     width: "50%",

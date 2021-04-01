@@ -79,17 +79,17 @@ function Home(props: any): JSX.Element {
 			case 'None':
 				return <MaterialCommunity color={'black'} size={35} name="shopping-outline" />;
 			case 'LCWaikiki':
-				return <Image style={styles.storeLogo} source={require('../../assets/lcLogo.png')}/>
+				return <Image style={styles.storeLogo} resizeMode={"contain"} source={require('../../assets/lcLogo.png')}/>
 			case 'Koton':
-				return <Image style={styles.storeLogo} source={require('../../assets/kotonLogo.png')}/> //<Text style={styles.storeText} >K</Text>
+				return <Image style={styles.storeLogo} resizeMode={"contain"} source={require('../../assets/kotonLogo.png')}/> //<Text style={styles.storeText} >K</Text>
 			case 'Defacto':
-				return <Image style={styles.storeLogo} source={require('../../assets/defactoLogo.jpg')}/>
+				return <Image style={styles.storeLogo} resizeMode={"contain"} source={require('../../assets/defactoLogo.jpg')}/>
 			case 'Boyner':
-				return <Image style={styles.storeLogo} source={require('../../assets/boynerLogo.jpg')}/>
+				return <Image style={styles.storeLogo} resizeMode={"contain"} source={require('../../assets/boynerLogo.jpg')}/>
 			case 'H&M':
-				return <Image style={styles.storeLogo} source={require('../../assets/hmLogo.png')}/>
+				return <Image style={styles.storeLogo} resizeMode={"contain"} source={require('../../assets/hmLogo.png')}/>
 			case 'Trendyol':
-				return <Image style={{flex: 1, resizeMode: 'center', alignSelf: 'center'}} source={require('../../assets/trendyolLogo.png')}/>
+				return <Image style={styles.storeLogo} resizeMode={"contain"} source={require('../../assets/trendyolLogo.png')}/>
 			default:
 				return <MaterialCommunity color={'black'} size={35} name="shopping-outline" />;
 		}
@@ -218,7 +218,7 @@ function Home(props: any): JSX.Element {
 			/>
 			<SafeAreaView style={styles.cameraOverlayTop} >
 				<View style={{ flex: 1, flexDirection: 'row' }}>
-					
+
 					<View style={styles.topOverlay}>
 						<Image style={{ alignSelf: 'center' }}
 							source={
