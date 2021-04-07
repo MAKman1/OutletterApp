@@ -6,5 +6,6 @@ export const APP_COLORS = {
     backgroundGray:'#D3D3D3',
     borderGray: '#ECE9EC',
     labelGray: '#99969C',
-    cancelRed:'#cd0033'
+    cancelRed:'#cd0033',
+    lightBlue:'#46BFE7'
 }

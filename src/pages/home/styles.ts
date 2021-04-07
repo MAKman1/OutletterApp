@@ -358,7 +358,7 @@ export default StyleSheet.create({
     width: 0,
     height: 0,
     backgroundColor: "#21004B",
-    position: "absolute",
+    // position: "absolute",
     top: 0,
     borderBottomRightRadius: 200,
     zIndex: 100,
