@@ -136,12 +136,11 @@ export default StyleSheet.create({
     flex: 1,
     // paddingBottom: 100,
     alignItems: "center",
-
   },
   popupTitle: {
     color: APP_COLORS.primary,
     fontSize: 22,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     // textAlign: 'left',
     // marginTop: 40,
     marginBottom: 10,
@@ -272,7 +271,8 @@ export default StyleSheet.create({
   topOverlay: {
     flex: 1,
     paddingTop: 20,
-    paddingHorizontal: 10,
+    paddingLeft: 10,
+    paddingRight: 50,
     justifyContent: "flex-start",
     alignItems: "center",
   },
@@ -287,8 +287,8 @@ export default StyleSheet.create({
     borderRadius: 50,
     backgroundColor: "white",
     padding: 15,
-    minWidth: 65,
-    minHeight: 65,
+    maxWidth: 65,
+    maxHeight: 65,
   },
   cameraOverlay: {
     flex: 1,
@@ -301,6 +301,11 @@ export default StyleSheet.create({
     fontSize: 25,
     borderRadius: 50,
     textAlign: "center",
+  },
+  storeLogo: {
+    flex: 1,
+    alignSelf: "center",
+    maxWidth: 65,
   },
   roundedButton: {
     width: "50%",
@@ -338,9 +343,58 @@ export default StyleSheet.create({
   },
   horizontalScroll: {
     // backgroundColor: "grey",
-    marginBottom: 20
+    marginBottom: 20,
   },
   horizontalInner: {
-    flexDirection: 'row',
+    flexDirection: "row",
+  },
+  menuInner: {
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "column",
+    flex: 1,
+  },
+  menuOverlay: {
+    width: 0,
+    height: 0,
+    backgroundColor: "#21004B",
+    position: "absolute",
+    top: 0,
+    borderBottomRightRadius: 200,
+    zIndex: 100,
+
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 10,
+    elevation: 5,
+  },
+  menuItem: {
+    padding: 10,
+    marginVertical: 10,
+  },
+  menuText: {
+    color: "white",
+    fontSize: 40,
+    textAlign: "center",
+  },
+  menuBottom: {
+    flexDirection: "row",
+    marginTop: 50,
+    justifyContent: "center",
+    alignItems: "center",
+    overflow: "hidden",
+  },
+  circleButton: {
+    borderWidth: 3,
+    borderColor: "white",
+    width: 55,
+    height: 55,
+    borderRadius: 55,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

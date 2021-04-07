@@ -5,5 +5,9 @@ export default StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center'
+    },
+    backgroundImage: {
+        flex: 1,
+        resizeMode: 'contain', // or 'stretch'
     }
 })

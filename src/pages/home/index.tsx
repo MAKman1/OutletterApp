@@ -1,19 +1,30 @@
 import React, { useEffect, useState, useRef } from 'react'
-import { Text, View, TouchableOpacity, Image, Button, Switch, Alert, ScrollView, Platform, ActivityIndicator, Linking } from 'react-native'
+import { Text, View, TouchableOpacity, Image, ScrollView, ActivityIndicator, Linking, Dimensions, Animated } from 'react-native'
 import styles from './styles'
 
 import SafeAreaView from 'react-native-safe-area-view';
 import Modal from 'react-native-modal';
-import { RNCamera } from 'react-native-camera';
 import axios from 'axios';
+
+// @ts-ignore
+import {
+	ViroARSceneNavigator
+} from '@viro-community/react-viro';
 
 
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunity from 'react-native-vector-icons/MaterialCommunityIcons';
+import Feather from 'react-native-vector-icons/Feather';
+
+import Hamburger from 'react-native-hamburger';
+
+import ARDisplay from './arcomponent/index'
 
 
-function Home({ navigation }): JSX.Element {
+function Home(props: any): JSX.Element {
 	const cameraRef = useRef(null);
+	const arScene = useRef(null);
+
 
 	const genders = ["Male", "Female", "Other"];
 	const stores = ["None", "Koton", "LCWaikiki", "Boyner", "Defacto", "Trendyol", "H&M"];
@@ -21,48 +32,71 @@ function Home({ navigation }): JSX.Element {
 	const [gender, setGender] = useState("Male");
 	const [store, setStore] = useState("None");
 
+	const [arfound, setAr] = useState(false);
 	const [found, setFound] = useState(false);
 	const [storeModal, setStoreModal] = useState(false);
 	const [debugModal, setDebugModal] = useState(true);
+	const [menuActive, setMenuActive] = useState(false);
 
-	const [links, setLinks] = useState([]);
-	const [images, setImages] = useState([]);
-	const [segImg, setSegImg] = useState(null);
-	const [tags, setTags] = useState([]);
-	const [text, setText] = useState([]);
-	const [colors, setColors] = useState([]);
+	const [queryItem, setQueryItem] = useState<any>({});
+	const [similarItems, setSimilarItems] = useState<any[]>([]);
+	const [bestItem, setBestItem] = useState<any>({});
 
 	const [loading, setLoading] = useState(false);
 
-	const [queryLabel, setQueryLabel] = useState(null);
-	const [resultLabels, setResultLabels] = useState([]);
+
+	//Animations
+	const widthAnim = useRef(new Animated.Value(0)).current;
+	const heightAnim = useRef(new Animated.Value(0)).current;
 
 
 	useEffect(() => {
 	}, [])
 
+	useEffect(() => {
+		if (menuActive) {
+			Animated.spring(
+				widthAnim,
+				{
+					toValue: Dimensions.get('window').width,
+					duration: 1500
+				}
+			).start();
+			Animated.spring(
+				heightAnim,
+				{
+					toValue: (Dimensions.get('window').height * 0.8),
+					duration: 1500
+				}
+			).start();
+		} else {
+			Animated.spring(
+				widthAnim,
+				{
+					toValue: 0,
+					duration: 1500
+				}
+			).start();
+			Animated.spring(
+				heightAnim,
+				{
+					toValue: 0,
+					duration: 1500
+				}
+			).start();
+		}
+	}, [menuActive])
+
 	function resetStates() {
-		setImages([]);
-		setLinks([]);
-		setSegImg(null);
-		setText([]);
-		setTags([]);
-		setColors([]);
-		setQueryLabel(null);
-		setResultLabels([]);
+		setQueryItem([]);
+		setSimilarItems([]);
+		setBestItem({});
 	}
 
 	function setStates(data: any) {
-		setLinks(data.links);
-		setImages(data.imageLinks);
-		if (debugModal) {
-			setSegImg(data.segmented_image);
-			setText(data.text);
-			setTags(data.tags);
-			setColors(data.colors);
-			setQueryLabel(data.queryLabel);
-			setResultLabels(data.resultLabels);
-		}
+		setQueryItem(data.query_item);
+		setSimilarItems(data.similar_items);
+		setBestItem(data.similar_items[0]);
 	}
 
 	function toggleGender(gender: string) {
@@ -86,90 +120,107 @@ function Home({ navigation }): JSX.Element {
 			case 'None':
 				return <MaterialCommunity color={'black'} size={35} name="shopping-outline" />;
 			case 'LCWaikiki':
-				return <Text style={styles.storeText} >L</Text>
+				return <Image style={styles.storeLogo} resizeMode={"contain"} source={require('../../assets/lcLogo.png')} />
 			case 'Koton':
-				return <Text style={styles.storeText} >K</Text>
+				return <Image style={styles.storeLogo} resizeMode={"contain"} source={require('../../assets/kotonLogo.png')} /> //<Text style={styles.storeText} >K</Text>
 			case 'Defacto':
-				return <Text style={styles.storeText} >D</Text>
+				return <Image style={styles.storeLogo} resizeMode={"contain"} source={require('../../assets/defactoLogo.jpg')} />
 			case 'Boyner':
-				return <Text style={styles.storeText} >B</Text>
+				return <Image style={styles.storeLogo} resizeMode={"contain"} source={require('../../assets/boynerLogo.jpg')} />
 			case 'H&M':
-				return <Text style={styles.storeText} >H</Text>
+				return <Image style={styles.storeLogo} resizeMode={"contain"} source={require('../../assets/hmLogo.png')} />
 			case 'Trendyol':
-				return <Text style={styles.storeText} >T</Text>
+				return <Image style={styles.storeLogo} resizeMode={"contain"} source={require('../../assets/trendyolLogo.png')} />
 			default:
 				return <MaterialCommunity color={'black'} size={35} name="shopping-outline" />;
 		}
 	}
 
 	async function takePicture() {
-		if (cameraRef.current) {
-			const options = { quality: 0.5, base64: true };
-			const data = await cameraRef.current.takePictureAsync(options);
+		// arScene.current.replace({ scene: ARDisplay, passProps: { arfound } })
+		// if (cameraRef.current) {
+		// 	const options = { quality: 0.5, base64: true };
+		// 	const data = await cameraRef.current.takePictureAsync(options);
+		// 	uploadImage(data);
+		// }
+		setAr(false);
+		arScene.current._resetARSession(true, true);
+		arScene.current._takeScreenshot('outletter_' + Date.now() + '_img', false).then((data: any) => {
+			console.log(data.success, data.url, data.errorCode);
 			uploadImage(data);
-		}
+		})
+			.catch((error: any) => {
+				console.log('error' + JSON.stringify(error));
+			});
 	}
 
 	async function uploadImage(image: any) {
 		setLoading(true);
 		// POST localhost: 8000 / api / v1 / similarItems
 		// image = (image file)
-		// gender = 'm' / 'f'
-		// shop = '0/1/2/3/4/5/6'(need more discussion on this)
+		// gender = 'Male' / 'Female'
+		// shop = 'Name of Shop'(need more discussion on this)
 		// debug = true / false
 		let postGender;
 		switch (gender) {
 			case 'Male':
-				postGender = 'm';
+				postGender = 'male';
 				break;
 			case 'Female':
-				postGender = 'f';
+				postGender = 'female';
 				break;
 			case 'Other':
-				postGender = 'm';
+				postGender = 'male';
 				break;
 			default:
-				postGender = 'm';
+				postGender = 'male';
 				break;
 		}
 
 		let shop;
 		switch (store) {
 			case 'Koton':
-				shop = 0;
+				shop = 'www.koton.com';
 				break;
 			case 'LCWaikiki':
-				shop = 1;
+				shop = 'www.lcwaikiki.com';
 				break;
 			case 'Boyner':
-				shop = 2;
+				shop = 'www.boyner.com.tr';
 				break;
 			case 'Defacto':
-				shop = 3;
+				shop = 'www.defacto.com.tr';
+				break;
+			case 'Koton':
+				shop = 'www.koton.com';
 				break;
 			case 'Trendyol':
-				shop = 4;
+				shop = 'www.trendyol.com';
 				break;
 			case 'H&M':
-				shop = 5;
+				shop = 'www2.hm.com/tr_tr';
 				break;
 			case 'None':
-				shop = 0;
+				shop = 'www.trendyol.com';;
 				break;
 			default:
-				shop = 0;
+				shop = 'www.trendyol.com';;
 				break;
 		}
 
 		var data = new FormData();
-		data.append("image", {
-			uri: Platform.OS === "android" ? image.uri : image.uri.replace("file://", ""),
+		data.append("picture", {
+			uri: 'file://' + image.url,
 			name: 'uploaded_image_' + Date.now() + '.jpg',
 			type: 'image/*'
 		})
+		// data.append("picture", 'file://' + image.url)
+		// data.append("picture", Platform.OS === "android" ? image.uri : image.uri.replace("file://", ""));
+		// data.append("picture", image.uri.replace("file:///", "file://"));
 		data.append("gender", postGender);
-		data.append("debug", debugModal);
 		data.append("shop", shop);
+		data.append("debug", debugModal);
+
 
 		const config = {
 			headers: {
@@ -177,13 +228,14 @@ function Home({ navigation }): JSX.Element {
 			}
 		}
 
-		// console.warn(JSON.stringify(data));
-		axios.post('http://139.179.203.87:8000/api/v1/similarItems/', data, config)
+		// console.log(JSON.stringify(data));
+		axios.post('https://6461348afde3.ngrok.io/api/v1/items/', data, config)
 			.then(function (response) {
-				// console.warn(JSON.stringify(response));
+				console.warn(JSON.stringify(response));
 				setStates(response.data);
 				setFound(true);
 				setLoading(false);
+				setAr(true);
 			})
 			.catch(function (error) {
 				resetStates();
@@ -194,20 +246,27 @@ function Home({ navigation }): JSX.Element {
 
 	return (
 		<View style={styles.rootContainer}>
-			<RNCamera
-				ref={cameraRef}
-				style={styles.cameraView}
-				type={RNCamera.Constants.Type.back}
-				flashMode={RNCamera.Constants.FlashMode.off}
-				androidCameraPermissionOptions={{
-					title: 'Permission to use camera',
-					message: 'We need your permission to use your camera',
-					buttonPositive: 'Ok',
-					buttonNegative: 'Cancel',
+			<ViroARSceneNavigator
+				ref={arScene}
+				autofocus={true}
+				initialScene={{
+					scene: ARDisplay,
 				}}
+				viroAppProps={
+					{ arfound, bestItem }
+				}
+				style={{ flex: 1 }}
 			/>
 			<SafeAreaView style={styles.cameraOverlayTop} >
-				<View style={{ flex: 1, flexDirection: 'row' }}>
+				<View style={{ flex: 1, flexDirection: 'row', zIndex: 999 }}>
+					<View style={{ paddingHorizontal: 10, paddingTop: 20 }}>
+						<Hamburger
+							active={menuActive}
+							type="spinCross"
+							onPress={() => menuActive ? setMenuActive(false) : setMenuActive(true)}
+							color={"white"}
+						/>
+					</View>
 					<View style={styles.topOverlay}>
 						<Image style={{ alignSelf: 'center' }}
 							source={
@@ -216,7 +275,7 @@ function Home({ navigation }): JSX.Element {
 						/>
 					</View>
 				</View>
-				<View style={{ alignContent: 'center', backgroundColor: 'white', borderRadius: 30, maxWidth: 90, height: 65, opacity: 0.5 }}>
+				<View style={{ alignContent: 'center', backgroundColor: 'white', borderRadius: 30, maxWidth: 90, height: 65, opacity: 0.5, marginTop: 10 }}>
 					<Text style={{ paddingTop: 10, color: 'black', textAlign: 'center', fontWeight: "bold", }}>Debug</Text>
 					{/* <Switch
 						style={{ alignSelf: 'center' }}
@@ -228,6 +287,33 @@ function Home({ navigation }): JSX.Element {
 					/> */}
 				</View>
 				{loading && <ActivityIndicator color={"white"} size={35} style={{ marginTop: '50%' }} />}
+
+
+				{/* Menu */}
+				<Animated.View style={[styles.menuOverlay, { width: widthAnim, height: heightAnim }]}>
+					{menuActive ?
+						<View style={styles.menuInner}>
+							<TouchableOpacity style={styles.menuItem}>
+								<Text style={styles.menuText}>{"Wishlist"}</Text>
+							</TouchableOpacity>
+							<TouchableOpacity style={styles.menuItem}>
+								<Text style={styles.menuText}>{"Reviews"}</Text>
+							</TouchableOpacity>
+							<TouchableOpacity style={styles.menuItem}>
+								<Text style={styles.menuText}>{"Liked Items"}</Text>
+							</TouchableOpacity>
+							<View style={styles.menuBottom}>
+								<TouchableOpacity style={[styles.circleButton, { marginRight: 30 }]}>
+									<Feather color={'#FFF'} size={30} name="settings" />
+								</TouchableOpacity>
+								<TouchableOpacity style={styles.circleButton}>
+									<Feather color={'#FF5858'} size={30} name="power" />
+								</TouchableOpacity>
+							</View>
+						</View>
+						: null}
+
+				</Animated.View>
 			</SafeAreaView>
 
 			<SafeAreaView style={styles.cameraOverlayBottom} >
@@ -300,10 +386,10 @@ function Home({ navigation }): JSX.Element {
 								scrollEnabled={true}
 								showsHorizontalScrollIndicator={false}
 							>
-								{images.length &&
-									<TouchableOpacity activeOpacity={1} style={styles.horizontalInner} onPress={() => Linking.openURL(links[0])}>
+								{bestItem &&
+									<TouchableOpacity activeOpacity={1} style={styles.horizontalInner} onPress={() => Linking.openURL(bestItem.url)}>
 										<View style={styles.horizontalCard}>
-											<Image style={{ width: 90, height: 90, borderRadius: 5 }} source={{ uri: images[0] }} />
+											<Image style={{ width: 90, height: 90, borderRadius: 5 }} source={{ uri: bestItem.image_url }} />
 										</View>
 									</TouchableOpacity>
 								}
@@ -322,11 +408,11 @@ function Home({ navigation }): JSX.Element {
 								<TouchableOpacity activeOpacity={1}>
 
 									<View style={styles.horizontalInner}>
-										{images.map((i, index) => {
-											if (index != 0) {
-												return (<TouchableOpacity activeOpacity={1} style={styles.horizontalInner} onPress={() => Linking.openURL(links[index])}>
+										{similarItems.map((item, index) => {
+											if (index != 0 && item != null) {
+												return (<TouchableOpacity activeOpacity={1} style={styles.horizontalInner} onPress={() => Linking.openURL(item[index].url)} key={index}>
 													<View style={styles.horizontalCard}>
-														<Image style={{ width: 90, height: 90, borderRadius: 5 }} source={{ uri: images[index] }} />
+														<Image style={{ width: 90, height: 90, borderRadius: 5 }} source={{ uri: item.image_url }} />
 													</View>
 												</TouchableOpacity>)
 											}
@@ -363,7 +449,7 @@ function Home({ navigation }): JSX.Element {
 								</TouchableOpacity>
 							</ScrollView> */}
 
-							{debugModal &&
+							{debugModal && queryItem &&
 								<View>
 
 									<View style={{ alignContent: 'flex-start', paddingHorizontal: 20 }}>
@@ -371,33 +457,24 @@ function Home({ navigation }): JSX.Element {
 									</View>
 
 									<View style={{ alignContent: 'flex-start', paddingHorizontal: 20 }}>
-										<Text style={styles.popupTitle}>Tags</Text>
-										<Text style={{ color: 'black' }}>{JSON.stringify(tags)}</Text>
+										<Text style={styles.popupTitle}>Labels</Text>
+										<Text style={{ color: 'black' }}>{JSON.stringify(queryItem.label)}</Text>
 									</View>
 
 									<View style={{ alignContent: 'flex-start', paddingHorizontal: 20 }}>
 										<Text style={styles.popupTitle}>Text</Text>
-										<Text style={{ color: 'black' }}>{JSON.stringify(text)}</Text>
+										<Text style={{ color: 'black' }}>{JSON.stringify(queryItem.texts)}</Text>
 									</View>
 
 									<View style={{ alignContent: 'flex-start', paddingHorizontal: 20 }}>
 										<Text style={styles.popupTitle}>Colors</Text>
-										<Text style={{ color: 'black' }}>{JSON.stringify(colors)}</Text>
+										<Text style={{ color: 'black' }}>{JSON.stringify(queryItem.color)}</Text>
 									</View>
 
-									<View style={{ alignContent: 'flex-start', paddingHorizontal: 20 }}>
-										<Text style={styles.popupTitle}>Query label</Text>
-										<Text style={{ color: 'black' }}>{JSON.stringify(queryLabel)}</Text>
-									</View>
-
-									<View style={{ alignContent: 'flex-start', paddingHorizontal: 20 }}>
-										<Text style={styles.popupTitle}>Result labels</Text>
-										<Text style={{ color: 'black' }}>{JSON.stringify(resultLabels)}</Text>
-									</View>
 									<View style={{ alignContent: 'flex-start', paddingHorizontal: 20 }}>
 										<Text style={styles.popupTitle}>Segmented image</Text>
 									</View>
-									<Image style={{ height: 400, width: 400 }} source={{ uri: 'data:image/jpeg;base64,' + segImg }} resizeMode={'contain'} />
+									<Image style={{ height: 400, width: 400 }} source={{ uri: 'https://867229285c17.ngrok.io' + queryItem.picture }} resizeMode={'contain'} />
 
 								</View>
 							}
@@ -432,15 +509,15 @@ function Home({ navigation }): JSX.Element {
 					<ScrollView style={styles.popupScroll}>
 						<View style={styles.popupInner}>
 							{
-								stores.map(s => {
-									return (<TouchableOpacity key="{s}" style={{ marginTop: 10, flex: 1, flexDirection: 'row', justifyContent: 'center', minWidth: 300, borderRadius: 10, borderBottomWidth: 1, borderColor: '#04B3FF' }} disabled={store == s} onPress={() => {
+								stores.map((s, index) => {
+									return (<TouchableOpacity key={index} style={{ marginTop: 10, flex: 1, flexDirection: 'row', justifyContent: 'center', minWidth: 300, borderRadius: 10, borderBottomWidth: 1, borderColor: '#04B3FF' }} disabled={store == s} onPress={() => {
 										setStore(s);
 										setStoreModal(false);
 									}}>
-										<Text key="{s}" style={{ textAlign: 'center', fontSize: 35, color: 'black' }}>
+										<Text style={{ textAlign: 'center', fontSize: 35, color: 'black' }}>
 											{s}
 										</Text>
-										{store == s ? <MaterialIcons key="{s}" style={{ textAlignVertical: 'center' }} color={'#04B3FF'} size={30} name="check" /> : null}
+										{store == s ? <MaterialIcons style={{ textAlignVertical: 'center' }} color={'#04B3FF'} size={30} name="check" /> : null}
 									</TouchableOpacity>)
 								})
 							}

@@ -209,7 +209,7 @@
 				00E356EB1AD99517003FC87E /* Frameworks */,
 				00E356EC1AD99517003FC87E /* Resources */,
 				7E9C8E1441FA278BCB284FAB /* [CP] Copy Pods Resources */,
-				25BFB711B0C37A2F58100FBE /* [CP] Embed Pods Frameworks */,
+				A1DBD8C2139DDF25EADA7E92 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -232,7 +232,7 @@
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				F80FCC9F57E5D13ED38BCDF1 /* [CP] Copy Pods Resources */,
-				3E2B130C6340377A47751577 /* [CP] Embed Pods Frameworks */,
+				AA6E474A89C1B3A725A50B67 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -523,6 +523,24 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Outletter-OutletterTests/Pods-Outletter-OutletterTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		A1DBD8C2139DDF25EADA7E92 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Outletter-OutletterTests/Pods-Outletter-OutletterTests-frameworks.sh",
+				"${PODS_ROOT}/../../node_modules/@viro-community/react-viro/ios/dist/ViroRenderer/static_lib/ViroKit_static_lib.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ViroKit_static_lib.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Outletter-OutletterTests/Pods-Outletter-OutletterTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		AA586605AF7F35B21387868E /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -543,6 +561,24 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		AA6E474A89C1B3A725A50B67 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Outletter/Pods-Outletter-frameworks.sh",
+				"${PODS_ROOT}/../../node_modules/@viro-community/react-viro/ios/dist/ViroRenderer/static_lib/ViroKit_static_lib.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ViroKit_static_lib.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Outletter/Pods-Outletter-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		EF3689A59853CE950749137F /* [CP] Check Pods Manifest.lock */ = {
@@ -783,7 +819,6 @@
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = W8DLXKA7SS;
-				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Outletter/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (

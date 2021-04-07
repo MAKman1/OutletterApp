@@ -8,19 +8,17 @@ function Splash({ navigation }): JSX.Element {
 
 	useEffect(() => {
 		setTimeout(() => {
-			navigation.replace("Home");
+			navigation.replace("Reviews");
 		}, 1000);
 	}, []);
 	return (
-		<SafeAreaView style={styles.container}>
-			<View style={{backgroundColor: '#92CCF9', borderRadius: 10,}}> 
-				<Image style={{ alignSelf: 'center' }}
+		<View style={styles.container}>
+				<Image style={styles.backgroundImage}
 					source={
-						require('../../assets/outletterLogo.png')
+						require('../../assets/splash.png')
 					}
 				/>
-			</View>
-		</SafeAreaView>
+		</View>
 	)
 }
 
