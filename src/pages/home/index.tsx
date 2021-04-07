@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react'
-import { Text, View, TouchableOpacity, Image, Button, Switch, Alert, ScrollView, Platform, ActivityIndicator, Linking } from 'react-native'
+import { Text, View, TouchableOpacity, Image, Button, Switch, Alert, ScrollView, Platform, ActivityIndicator, Linking, Dimensions, Animated } from 'react-native'
 import styles from './styles'
 
 import SafeAreaView from 'react-native-safe-area-view';
@@ -17,6 +17,9 @@ import {
 
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunity from 'react-native-vector-icons/MaterialCommunityIcons';
+import Feather from 'react-native-vector-icons/Feather';
+
+import Hamburger from 'react-native-hamburger';
 
 import ARDisplay from './arcomponent/index'
 
@@ -36,6 +39,7 @@ function Home(props: any): JSX.Element {
 	const [found, setFound] = useState(false);
 	const [storeModal, setStoreModal] = useState(false);
 	const [debugModal, setDebugModal] = useState(true);
+	const [menuActive, setMenuActive] = useState(false);
 
 	const [queryItem, setQueryItem] = useState<any>({});
 	const [similarItems, setSimilarItems] = useState<any[]>([]);
@@ -43,8 +47,48 @@ function Home(props: any): JSX.Element {
 
 	const [loading, setLoading] = useState(false);
 
+
+	//Animations
+	const widthAnim = useRef(new Animated.Value(0)).current;
+	const heightAnim = useRef(new Animated.Value(0)).current;
+
+
 	useEffect(() => {
 	}, [])
+
+	useEffect(() => {
+		if (menuActive) {
+			Animated.spring(
+				widthAnim,
+				{
+					toValue: Dimensions.get('window').width,
+					duration: 1500
+				}
+			).start();
+			Animated.spring(
+				heightAnim,
+				{
+					toValue: (Dimensions.get('window').height * 0.8),
+					duration: 1500
+				}
+			).start();
+		} else {
+			Animated.spring(
+				widthAnim,
+				{
+					toValue: 0,
+					duration: 1500
+				}
+			).start();
+			Animated.spring(
+				heightAnim,
+				{
+					toValue: 0,
+					duration: 1500
+				}
+			).start();
+		}
+	}, [menuActive])
 
 	function resetStates() {
 		setQueryItem([]);
@@ -79,17 +123,17 @@ function Home(props: any): JSX.Element {
 			case 'None':
 				return <MaterialCommunity color={'black'} size={35} name="shopping-outline" />;
 			case 'LCWaikiki':
-				return <Image style={styles.storeLogo} resizeMode={"contain"} source={require('../../assets/lcLogo.png')}/>
+				return <Image style={styles.storeLogo} resizeMode={"contain"} source={require('../../assets/lcLogo.png')} />
 			case 'Koton':
-				return <Image style={styles.storeLogo} resizeMode={"contain"} source={require('../../assets/kotonLogo.png')}/> //<Text style={styles.storeText} >K</Text>
+				return <Image style={styles.storeLogo} resizeMode={"contain"} source={require('../../assets/kotonLogo.png')} /> //<Text style={styles.storeText} >K</Text>
 			case 'Defacto':
-				return <Image style={styles.storeLogo} resizeMode={"contain"} source={require('../../assets/defactoLogo.jpg')}/>
+				return <Image style={styles.storeLogo} resizeMode={"contain"} source={require('../../assets/defactoLogo.jpg')} />
 			case 'Boyner':
-				return <Image style={styles.storeLogo} resizeMode={"contain"} source={require('../../assets/boynerLogo.jpg')}/>
+				return <Image style={styles.storeLogo} resizeMode={"contain"} source={require('../../assets/boynerLogo.jpg')} />
 			case 'H&M':
-				return <Image style={styles.storeLogo} resizeMode={"contain"} source={require('../../assets/hmLogo.png')}/>
+				return <Image style={styles.storeLogo} resizeMode={"contain"} source={require('../../assets/hmLogo.png')} />
 			case 'Trendyol':
-				return <Image style={styles.storeLogo} resizeMode={"contain"} source={require('../../assets/trendyolLogo.png')}/>
+				return <Image style={styles.storeLogo} resizeMode={"contain"} source={require('../../assets/trendyolLogo.png')} />
 			default:
 				return <MaterialCommunity color={'black'} size={35} name="shopping-outline" />;
 		}
@@ -103,7 +147,7 @@ function Home(props: any): JSX.Element {
 		// 	uploadImage(data);
 		// }
 		setAr(false);
-		arScene.current._resetARSession( true, true);
+		arScene.current._resetARSession(true, true);
 		arScene.current._takeScreenshot('outletter_' + Date.now() + '_img', false).then((data: any) => {
 			console.log(data.success, data.url, data.errorCode);
 			uploadImage(data);
@@ -217,8 +261,15 @@ function Home(props: any): JSX.Element {
 				style={{ flex: 1 }}
 			/>
 			<SafeAreaView style={styles.cameraOverlayTop} >
-				<View style={{ flex: 1, flexDirection: 'row' }}>
-
+				<View style={{ flex: 1, flexDirection: 'row', zIndex: 999 }}>
+					<View style={{ paddingHorizontal: 10, paddingTop: 20 }}>
+						<Hamburger
+							active={menuActive}
+							type="spinCross"
+							onPress={() => menuActive ? setMenuActive(false) : setMenuActive(true)}
+							color={"white"}
+						/>
+					</View>
 					<View style={styles.topOverlay}>
 						<Image style={{ alignSelf: 'center' }}
 							source={
@@ -227,7 +278,7 @@ function Home(props: any): JSX.Element {
 						/>
 					</View>
 				</View>
-				<View style={{ alignContent: 'center', backgroundColor: 'white', borderRadius: 30, maxWidth: 90, height: 65, opacity: 0.5 }}>
+				<View style={{ alignContent: 'center', backgroundColor: 'white', borderRadius: 30, maxWidth: 90, height: 65, opacity: 0.5, marginTop: 10 }}>
 					<Text style={{ paddingTop: 10, color: 'black', textAlign: 'center', fontWeight: "bold", }}>Debug</Text>
 					{/* <Switch
 						style={{ alignSelf: 'center' }}
@@ -239,6 +290,33 @@ function Home(props: any): JSX.Element {
 					/> */}
 				</View>
 				{loading && <ActivityIndicator color={"white"} size={35} style={{ marginTop: '50%' }} />}
+
+
+				{/* Menu */}
+				<Animated.View style={[styles.menuOverlay, { width: widthAnim, height: heightAnim }]}>
+					{menuActive ?
+						<View style={styles.menuInner}>
+							<TouchableOpacity style={styles.menuItem}>
+								<Text style={styles.menuText}>{"Wishlist"}</Text>
+							</TouchableOpacity>
+							<TouchableOpacity style={styles.menuItem}>
+								<Text style={styles.menuText}>{"Reviews"}</Text>
+							</TouchableOpacity>
+							<TouchableOpacity style={styles.menuItem}>
+								<Text style={styles.menuText}>{"Liked Items"}</Text>
+							</TouchableOpacity>
+							<View style={styles.menuBottom}>
+								<TouchableOpacity style={[styles.circleButton, { marginRight: 30 }]}>
+									<Feather color={'#FFF'} size={30} name="settings" />
+								</TouchableOpacity>
+								<TouchableOpacity style={styles.circleButton}>
+									<Feather color={'#FF5858'} size={30} name="power" />
+								</TouchableOpacity>
+							</View>
+						</View>
+						: null}
+
+				</Animated.View>
 			</SafeAreaView>
 
 			<SafeAreaView style={styles.cameraOverlayBottom} >
@@ -434,14 +512,14 @@ function Home(props: any): JSX.Element {
 					<ScrollView style={styles.popupScroll}>
 						<View style={styles.popupInner}>
 							{
-								stores.map( (s, index) => {
+								stores.map((s, index) => {
 									return (<TouchableOpacity key={index} style={{ marginTop: 10, flex: 1, flexDirection: 'row', justifyContent: 'center', minWidth: 300, borderRadius: 10, borderBottomWidth: 1, borderColor: '#04B3FF' }} disabled={store == s} onPress={() => {
-													setStore(s);
-													setStoreModal(false);
-												}}>
-											<Text style={{ textAlign: 'center', fontSize: 35, color: 'black' }}>
-												{s}
-											</Text>
+										setStore(s);
+										setStoreModal(false);
+									}}>
+										<Text style={{ textAlign: 'center', fontSize: 35, color: 'black' }}>
+											{s}
+										</Text>
 										{store == s ? <MaterialIcons style={{ textAlignVertical: 'center' }} color={'#04B3FF'} size={30} name="check" /> : null}
 									</TouchableOpacity>)
 								})
