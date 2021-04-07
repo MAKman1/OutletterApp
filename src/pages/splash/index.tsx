@@ -8,7 +8,7 @@ function Splash({ navigation }): JSX.Element {
 
 	useEffect(() => {
 		setTimeout(() => {
-			navigation.replace("Home");
+			navigation.replace("Reviews");
 		}, 1000);
 	}, []);
 	return (
