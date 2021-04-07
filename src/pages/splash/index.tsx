@@ -12,13 +12,13 @@ function Splash({ navigation }): JSX.Element {
 		}, 1000);
 	}, []);
 	return (
-		<SafeAreaView style={styles.container}>
+		<View style={styles.container}>
 				<Image style={styles.backgroundImage}
 					source={
 						require('../../assets/splash.png')
 					}
 				/>
-		</SafeAreaView>
+		</View>
 	)
 }
 
