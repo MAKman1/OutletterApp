@@ -1,9 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react'
-<<<<<<< HEAD
 import { Text, View, TouchableOpacity, Image, ScrollView, ActivityIndicator, Linking } from 'react-native'
-=======
-import { Text, View, TouchableOpacity, Image, Button, Switch, Alert, ScrollView, Platform, ActivityIndicator, Linking, Dimensions, Animated } from 'react-native'
->>>>>>> 7bbebe82bc11671de98e70bb0bcea177ca19b879
 import styles from './styles'
 
 import SafeAreaView from 'react-native-safe-area-view';
