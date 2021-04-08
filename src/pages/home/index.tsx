@@ -244,6 +244,11 @@ function Home(props: any): JSX.Element {
 			});
 	}
 
+	function openMenuItem(pageName: any) {
+		console.log(pageName);
+		props.navigation.replace(pageName);
+	}
+	
 	return (
 		<View style={styles.rootContainer}>
 			<ViroARSceneNavigator
@@ -296,7 +301,7 @@ function Home(props: any): JSX.Element {
 							<TouchableOpacity style={styles.menuItem}>
 								<Text style={styles.menuText}>{"Wishlist"}</Text>
 							</TouchableOpacity>
-							<TouchableOpacity style={styles.menuItem}>
+							<TouchableOpacity style={styles.menuItem} onPress={() => openMenuItem("Reviews")}>
 								<Text style={styles.menuText}>{"Reviews"}</Text>
 							</TouchableOpacity>
 							<TouchableOpacity style={styles.menuItem}>
