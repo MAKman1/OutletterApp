@@ -26,7 +26,7 @@ function Reviews(props: any): JSX.Element {
 
                 <View style={styles.topOverlay}>
                     <View style={{flexDirection: 'row'}}>
-                        {/* <MaterialIcons color={'white'} size={30} name="arrow-back" /> */}
+                        <MaterialIcons color={'white'} size={30} name="arrow-back" />
                         <Image
                             source={
                                 require('../../assets/outletterLogo.png')
