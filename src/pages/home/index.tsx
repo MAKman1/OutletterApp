@@ -248,7 +248,7 @@ function Home(props: any): JSX.Element {
 		<View style={styles.rootContainer}>
 			<ViroARSceneNavigator
 				ref={arScene}
-				autofocus={true}
+				autofocus={false}
 				initialScene={{
 					scene: ARDisplay,
 				}}
