@@ -14,8 +14,8 @@ target 'Outletter' do
   permissions_path = '../node_modules/react-native-permissions/ios'
   pod 'Permission-Camera', :path => "#{permissions_path}/Camera"
 
-  pod 'ViroReact', :path => '../node_modules/react-viro/ios/'
-  pod 'ViroKit_static_lib', :path => '../node_modules/react-viro/ios/dist/ViroRenderer/static_lib'
+#   pod 'ViroReact', :path => '../node_modules/react-viro/ios/'
+#   pod 'ViroKit_static_lib', :path => '../node_modules/react-viro/ios/dist/ViroRenderer/static_lib'
 
   target 'OutletterTests' do
     inherit! :complete

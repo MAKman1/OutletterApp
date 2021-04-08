@@ -15,7 +15,7 @@
     "@react-navigation/bottom-tabs": "^5.11.2",
     "@react-navigation/native": "^5.8.10",
     "@react-navigation/stack": "^5.12.8",
-    "@viro-community/react-viro": "git+https://github.com/virocommunity/viro.git",
+    "@viro-community/react-viro": "^2.20.2",
     "axios": "^0.21.0",
     "buffer": "^6.0.3",
     "create-react-class": "^15.7.0",
@@ -32,8 +32,7 @@
     "react-native-screens": "^2.15.0",
     "react-native-vector-icons": "^7.1.0",
     "react-navigation": "^4.4.3",
-    "react-navigation-stack": "^2.10.2",
-    "react-viro": "^2.17.0"
+    "react-navigation-stack": "^2.10.2"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

@@ -4,7 +4,7 @@ import {
 	ViroARScene,
 	ViroText,
 	ViroConstants,
-} from 'react-viro';
+} from '@viro-community/react-viro';
 
 import SafeAreaView from 'react-native-safe-area-view';
 import style from './style';
