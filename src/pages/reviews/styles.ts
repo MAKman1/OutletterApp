@@ -10,14 +10,14 @@ export default StyleSheet.create({
   title: {
     padding: 20,
     fontSize: 32,
-    textAlign: 'center',
-    color: 'white'
+    textAlign: "center",
+    color: "white",
   },
   horizontalInner: {
     flex: 1,
   },
   horizontalCard: {
-    alignSelf: 'center',
+    alignSelf: "center",
     borderRadius: 20,
     padding: 15,
     margin: 15,
@@ -39,7 +39,7 @@ export default StyleSheet.create({
   },
   cardTop: {
     flexDirection: "row",
-    justifyContent: 'space-between',
+    justifyContent: "space-between",
   },
   rating: {
     flexDirection: "row",
@@ -65,13 +65,23 @@ export default StyleSheet.create({
   cameraOverlayTop: {
     top: 0,
     width: "100%",
+
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+
+    elevation: 5,
   },
   productName: {
-    fontSize: 25, 
+    fontSize: 25,
     paddingTop: 10,
   },
   productPrice: {
-    color: APP_COLORS.lightBlue, 
+    color: APP_COLORS.lightBlue,
     fontSize: 20,
   },
   menuInner: {

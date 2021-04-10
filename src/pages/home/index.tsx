@@ -10,6 +10,7 @@ import axios from 'axios';
 import {
 	ViroARSceneNavigator
 } from '@viro-community/react-viro';
+import LinearGradient from 'react-native-linear-gradient';
 
 
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -19,9 +20,11 @@ import Feather from 'react-native-vector-icons/Feather';
 import Hamburger from 'react-native-hamburger';
 
 import ARDisplay from './arcomponent/index'
+import BottomSwipeableModal from '../../shared/components/modals/bottom-swipeable-modal';
+import ProductFoundModal from '../../shared/components/modals/product-found-modal';
 
 
-function Home(props: any): JSX.Element {
+function Home(props: any, { navigation }: any): JSX.Element {
 	const cameraRef = useRef(null);
 	const arScene = useRef(null);
 
@@ -65,7 +68,7 @@ function Home(props: any): JSX.Element {
 			Animated.spring(
 				heightAnim,
 				{
-					toValue: (Dimensions.get('window').height * 0.8),
+					toValue: (Dimensions.get('window').height * 0.5),
 					duration: 1500
 				}
 			).start();
@@ -118,7 +121,7 @@ function Home(props: any): JSX.Element {
 	function switchStore(store: string) {
 		switch (store) {
 			case 'None':
-				return <MaterialCommunity color={'black'} size={35} name="shopping-outline" />;
+				return <MaterialCommunity color={'black'} size={23} name="shopping-outline" />;
 			case 'LCWaikiki':
 				return <Image style={styles.storeLogo} resizeMode={"contain"} source={require('../../assets/lcLogo.png')} />
 			case 'Koton':
@@ -132,7 +135,7 @@ function Home(props: any): JSX.Element {
 			case 'Trendyol':
 				return <Image style={styles.storeLogo} resizeMode={"contain"} source={require('../../assets/trendyolLogo.png')} />
 			default:
-				return <MaterialCommunity color={'black'} size={35} name="shopping-outline" />;
+				return <MaterialCommunity color={'black'} size={23} name="shopping-outline" />;
 		}
 	}
 
@@ -245,13 +248,12 @@ function Home(props: any): JSX.Element {
 	}
 
 	function openMenuItem(pageName: any) {
-		console.log(pageName);
-		props.navigation.replace(pageName);
+		props.navigation.push(pageName);
 	}
-	
+
 	return (
-		<View style={styles.rootContainer}>
-			<ViroARSceneNavigator
+		<View style={[styles.rootContainer, { backgroundColor: '#000' }]}>
+			{/* <ViroARSceneNavigator
 				ref={arScene}
 				autofocus={false}
 				initialScene={{
@@ -261,7 +263,7 @@ function Home(props: any): JSX.Element {
 					{ arfound, bestItem }
 				}
 				style={{ flex: 1 }}
-			/>
+			/> */}
 			<SafeAreaView style={styles.cameraOverlayTop} >
 				<View style={{ flex: 1, flexDirection: 'row', zIndex: 999 }}>
 					<View style={{ paddingHorizontal: 10, paddingTop: 20 }}>
@@ -280,8 +282,8 @@ function Home(props: any): JSX.Element {
 						/>
 					</View>
 				</View>
-				<View style={{ alignContent: 'center', backgroundColor: 'white', borderRadius: 30, maxWidth: 90, height: 65, opacity: 0.5, marginTop: 10 }}>
-					<Text style={{ paddingTop: 10, color: 'black', textAlign: 'center', fontWeight: "bold", }}>Debug</Text>
+				<View style={{ width: '40%', borderRadius: 30, marginTop: 10 }}>
+					<Text style={{ paddingTop: 10, color: 'black', textAlign: 'left', fontWeight: "bold", }}>Debug</Text>
 					{/* <Switch
 						style={{ alignSelf: 'center' }}
 						trackColor={{ false: "#767577", true: "#8DCC43" }}
@@ -290,6 +292,9 @@ function Home(props: any): JSX.Element {
 						onValueChange={() => toggleDebug(debugModal)}
 						value={debugModal}
 					/> */}
+					<TouchableOpacity onPress={() => setFound(true)}>
+						<Text style={styles.roundedButtonText}>Show Popup</Text>
+					</TouchableOpacity>
 				</View>
 				{loading && <ActivityIndicator color={"white"} size={35} style={{ marginTop: '50%' }} />}
 
@@ -297,7 +302,7 @@ function Home(props: any): JSX.Element {
 				{/* Menu */}
 				<Animated.View style={[styles.menuOverlay, { width: widthAnim, height: heightAnim }]}>
 					{menuActive ?
-						<View style={styles.menuInner}>
+						<LinearGradient style={styles.menuInner} useAngle={true} angle={45} colors={['#00E9D8', '#009ED9']} >
 							<TouchableOpacity style={styles.menuItem}>
 								<Text style={styles.menuText}>{"Wishlist"}</Text>
 							</TouchableOpacity>
@@ -309,13 +314,13 @@ function Home(props: any): JSX.Element {
 							</TouchableOpacity>
 							<View style={styles.menuBottom}>
 								<TouchableOpacity style={[styles.circleButton, { marginRight: 30 }]}>
-									<Feather color={'#FFF'} size={30} name="settings" />
+									<Feather color={'#FFF'} size={25} name="settings" />
 								</TouchableOpacity>
 								<TouchableOpacity style={styles.circleButton}>
-									<Feather color={'#FF5858'} size={30} name="power" />
+									<Feather color={'#FFF'} size={25} name="power" />
 								</TouchableOpacity>
 							</View>
-						</View>
+						</LinearGradient>
 						: null}
 
 				</Animated.View>
@@ -323,19 +328,19 @@ function Home(props: any): JSX.Element {
 
 			<SafeAreaView style={styles.cameraOverlayBottom} >
 				<View style={styles.cameraOverlay}>
-					<View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
+					<View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
 						<TouchableOpacity style={styles.bottomIcon} onPress={() => { toggleGender(gender); }}>
 							{
 								gender == "Male"
 									?
-									<MaterialCommunity color={'#38AAFE'} size={35} name="face" />
+									<MaterialCommunity color={'#38AAFE'} size={23} name="face" />
 									:
 									(
 										gender == "Female"
 											?
-											<MaterialCommunity color={'#F778A9'} size={35} name="face-woman" />
+											<MaterialCommunity color={'#F778A9'} size={23} name="face-woman" />
 											:
-											<Image style={{ position: 'absolute', top: '45%', bottom: 0, margin: 'auto', alignSelf: 'center', maxWidth: 35, maxHeight: 35, }}
+											<Image style={{ margin: 'auto', alignSelf: 'center', maxWidth: 23, maxHeight: 23, }}
 												source={
 													require('../../assets/genderless.png')
 												}
@@ -343,8 +348,11 @@ function Home(props: any): JSX.Element {
 									)
 							}
 						</TouchableOpacity>
-						<TouchableOpacity disabled={loading} style={styles.roundedButton} onPress={() => takePicture()}>
-							<Text style={styles.roundedButtonText}>Go!</Text>
+						<TouchableOpacity disabled={loading} style={styles.roundedButtonView} onPress={() => takePicture()}>
+							<LinearGradient useAngle={true} angle={45} colors={['#00E9D8', '#009ED9']} style={styles.roundedButton}>
+								<Text style={styles.roundedButtonText}>Go!</Text>
+							</LinearGradient>
+
 						</TouchableOpacity>
 						<TouchableOpacity style={styles.bottomIcon} onPress={() => { setStoreModal(true) }}>
 							{
@@ -352,184 +360,41 @@ function Home(props: any): JSX.Element {
 							}
 						</TouchableOpacity>
 					</View>
-					<TouchableOpacity onPress={() => navigation.navigate('ARHomeScreen')}>
-						<Text style={styles.roundedButtonText}>Show AR Home</Text>
-					</TouchableOpacity>
 				</View>
 			</SafeAreaView>
 
-			<Modal
-				animationIn="slideInUp"
-				isVisible={found}
-				propagateSwipe={true}
-				coverScreen={true}
-				onSwipeComplete={() => {
-					setFound(false);
+
+			<BottomSwipeableModal
+				onCollapse={() => {
+					if (found)
+						setFound(false)
+					if (storeModal)
+						setStoreModal(false)
 				}}
-				swipeDirection="down"
-				useNativeDriver={true}
-				style={{ margin: 0 }}
-			>
+				show={found || storeModal}
+				navigation={props.navigation}
+				height="70%">
 
-				<SafeAreaView style={styles.fullScreenView}>
-					<View style={styles.topView}>
-						<View style={{ flex: 1 }} />
-						<TouchableOpacity onPress={() => { setFound(false) }}>
-							<MaterialIcons color={'#959595'} size={19} name="close" />
-						</TouchableOpacity>
-					</View>
-					<ScrollView style={styles.popupScroll}>
-						<TouchableOpacity activeOpacity={1}>
-							<View style={{ alignContent: 'flex-start', paddingLeft: 20 }}>
-								<Text style={styles.popupTitle}>Best product</Text>
-							</View>
+				{storeModal ?
 
-							{/* <View style={styles.popupInner}> */}
-							<ScrollView
-								style={styles.horizontalScroll}
-								horizontal
-								scrollEnabled={true}
-								showsHorizontalScrollIndicator={false}
-							>
-								{bestItem &&
-									<TouchableOpacity activeOpacity={1} style={styles.horizontalInner} onPress={() => Linking.openURL(bestItem.url)}>
-										<View style={styles.horizontalCard}>
-											<Image style={{ width: 90, height: 90, borderRadius: 5 }} source={{ uri: bestItem.image_url }} />
-										</View>
-									</TouchableOpacity>
-								}
-							</ScrollView>
+					stores.map((s, index) => {
+						return (<TouchableOpacity key={index} style={{ marginTop: 10, flex: 1, flexDirection: 'row', justifyContent: 'center', minWidth: 300, borderRadius: 10, borderBottomWidth: 1, borderColor: '#04B3FF' }} disabled={store == s} onPress={() => {
+							setStore(s);
+							setStoreModal(false);
+						}}>
+							<Text style={{ textAlign: 'center', fontSize: 35, color: 'black' }}>
+								{s}
+							</Text>
+							{store == s ? <MaterialIcons style={{ textAlignVertical: 'center' }} color={'#04B3FF'} size={30} name="check" /> : null}
+						</TouchableOpacity>)
+					})
 
-							<View style={{ alignContent: 'flex-start', paddingLeft: 20 }}>
-								<Text style={styles.popupTitle}>Top Items</Text>
-							</View>
-
-							<ScrollView
-								style={styles.horizontalScroll}
-								horizontal
-								scrollEnabled={true}
-								showsHorizontalScrollIndicator={false}
-							>
-								<TouchableOpacity activeOpacity={1}>
-
-									<View style={styles.horizontalInner}>
-										{similarItems.map((item, index) => {
-											if (index != 0 && item != null) {
-												return (<TouchableOpacity activeOpacity={1} style={styles.horizontalInner} onPress={() => Linking.openURL(item[index].url)} key={index}>
-													<View style={styles.horizontalCard}>
-														<Image style={{ width: 90, height: 90, borderRadius: 5 }} source={{ uri: item.image_url }} />
-													</View>
-												</TouchableOpacity>)
-											}
-										})}
-
-									</View>
-								</TouchableOpacity>
-							</ScrollView>
-
-							{/* <View style={{ alignContent: 'flex-start', paddingLeft: 20 }}>
-								<Text style={styles.popupTitle}>Recommended Items</Text>
-							</View>
-
-							<ScrollView
-								style={styles.horizontalScroll}
-								horizontal
-								scrollEnabled={true}
-								showsHorizontalScrollIndicator={false}
-							>
-								<TouchableOpacity activeOpacity={1}>
-
-									<View style={styles.horizontalInner}>
-										{images.map((i, index) => {
-											if (index != 0) {
-												return (<TouchableOpacity activeOpacity={1} style={styles.horizontalInner} onPress={() => Linking.openURL(links[index])}>
-													<View style={styles.horizontalCard}>
-														<Image style={{ width: 90, height: 90, borderRadius: 5 }} source={{ uri: images[index] }} />
-													</View>
-												</TouchableOpacity>)
-											}
-										})}
-
-									</View>
-								</TouchableOpacity>
-							</ScrollView> */}
-
-							{debugModal && queryItem &&
-								<View>
-
-									<View style={{ alignContent: 'flex-start', paddingHorizontal: 20 }}>
-										<Text style={styles.popupTitle}>---Debugging---</Text>
-									</View>
-
-									<View style={{ alignContent: 'flex-start', paddingHorizontal: 20 }}>
-										<Text style={styles.popupTitle}>Labels</Text>
-										<Text style={{ color: 'black' }}>{JSON.stringify(queryItem.label)}</Text>
-									</View>
-
-									<View style={{ alignContent: 'flex-start', paddingHorizontal: 20 }}>
-										<Text style={styles.popupTitle}>Text</Text>
-										<Text style={{ color: 'black' }}>{JSON.stringify(queryItem.texts)}</Text>
-									</View>
-
-									<View style={{ alignContent: 'flex-start', paddingHorizontal: 20 }}>
-										<Text style={styles.popupTitle}>Colors</Text>
-										<Text style={{ color: 'black' }}>{JSON.stringify(queryItem.color)}</Text>
-									</View>
-
-									<View style={{ alignContent: 'flex-start', paddingHorizontal: 20 }}>
-										<Text style={styles.popupTitle}>Segmented image</Text>
-									</View>
-									<Image style={{ height: 400, width: 400 }} source={{ uri: 'https://867229285c17.ngrok.io' + queryItem.picture }} resizeMode={'contain'} />
-
-								</View>
-							}
+					:
+					<ProductFoundModal bestItem={bestItem} similarItems={similarItems} />
+				}
 
 
-							{/* </View> */}
-						</TouchableOpacity>
-					</ScrollView>
-				</SafeAreaView>
-			</Modal>
-
-
-			<Modal
-				animationIn="slideInUp"
-				isVisible={storeModal}
-				coverScreen={true}
-				onSwipeComplete={() => {
-					setStoreModal(false);
-				}}
-				swipeDirection="down"
-				useNativeDriver={true}
-				style={{ margin: 0 }}
-			>
-				<SafeAreaView style={styles.fullScreenView}>
-					<View style={styles.topView}>
-						<View style={{ flex: 1 }} />
-						<TouchableOpacity onPress={() => { setStoreModal(false) }}>
-							<MaterialIcons color={'#959595'} size={19} name="close" />
-						</TouchableOpacity>
-					</View>
-
-					<ScrollView style={styles.popupScroll}>
-						<View style={styles.popupInner}>
-							{
-								stores.map((s, index) => {
-									return (<TouchableOpacity key={index} style={{ marginTop: 10, flex: 1, flexDirection: 'row', justifyContent: 'center', minWidth: 300, borderRadius: 10, borderBottomWidth: 1, borderColor: '#04B3FF' }} disabled={store == s} onPress={() => {
-										setStore(s);
-										setStoreModal(false);
-									}}>
-										<Text style={{ textAlign: 'center', fontSize: 35, color: 'black' }}>
-											{s}
-										</Text>
-										{store == s ? <MaterialIcons style={{ textAlignVertical: 'center' }} color={'#04B3FF'} size={30} name="check" /> : null}
-									</TouchableOpacity>)
-								})
-							}
-						</View>
-					</ScrollView>
-				</SafeAreaView>
-			</Modal>
+			</BottomSwipeableModal>
 		</View>
 	)
 }

@@ -287,8 +287,8 @@ export default StyleSheet.create({
     borderRadius: 50,
     backgroundColor: "white",
     padding: 15,
-    maxWidth: 65,
-    maxHeight: 65,
+    maxWidth: 50,
+    maxHeight: 50,
   },
   cameraOverlay: {
     flex: 1,
@@ -305,13 +305,13 @@ export default StyleSheet.create({
   storeLogo: {
     flex: 1,
     alignSelf: "center",
-    maxWidth: 65,
+    maxWidth: 30,
   },
   roundedButton: {
-    width: "50%",
+    width: "60%",
     justifyContent: "center",
     alignItems: "center",
-    paddingVertical: 15,
+    height: 60,
     borderRadius: 50,
     backgroundColor: "#04B3FF",
   },
@@ -321,46 +321,24 @@ export default StyleSheet.create({
     fontWeight: "bold",
     color: "white",
   },
-  horizontalCard: {
-    width: 100,
-    height: 100,
-    borderRadius: 10,
-    padding: 10,
-    margin: 5,
-    backgroundColor: "white",
-    justifyContent: "center",
-    alignItems: "center",
-
-    shadowColor: "black",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-
-    elevation: 5,
-  },
   horizontalScroll: {
-    // backgroundColor: "grey",
     marginBottom: 20,
-  },
-  horizontalInner: {
-    flexDirection: "row",
   },
   menuInner: {
     justifyContent: "center",
     alignItems: "center",
     flexDirection: "column",
-    flex: 1,
+	flex: 1,
+	paddingTop: 100,
+	borderBottomRightRadius: 100
   },
   menuOverlay: {
     width: 0,
     height: 0,
-    backgroundColor: "#21004B",
-    // position: "absolute",
+    backgroundColor: "#000000",
+    position: "absolute",
     top: 0,
-    borderBottomRightRadius: 200,
+    borderBottomRightRadius: 100,
     zIndex: 100,
 
     shadowColor: "#000",
@@ -374,11 +352,12 @@ export default StyleSheet.create({
   },
   menuItem: {
     padding: 10,
-    marginVertical: 10,
+    marginVertical: 2,
   },
   menuText: {
     color: "white",
-    fontSize: 40,
+	fontSize: 30,
+	fontWeight: 'bold',
     textAlign: "center",
   },
   menuBottom: {
@@ -391,10 +370,15 @@ export default StyleSheet.create({
   circleButton: {
     borderWidth: 3,
     borderColor: "white",
-    width: 55,
-    height: 55,
+    width: 45,
+    height: 45,
     borderRadius: 55,
     justifyContent: "center",
     alignItems: "center",
   },
+  roundedButtonView: {
+	  flex: 1 ,
+	  justifyContent: 'center',
+	  alignItems: 'center'
+  }
 });

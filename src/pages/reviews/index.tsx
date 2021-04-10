@@ -22,9 +22,9 @@ function Reviews(props: any): JSX.Element {
 
     return (
         <View style={styles.rootContainer}>
-            <SafeAreaView style={styles.cameraOverlayTop} >
+            <View style={styles.cameraOverlayTop} >
 
-                <View style={styles.topOverlay}>
+                <SafeAreaView style={styles.topOverlay}>
                     <View style={{flexDirection: 'row'}}>
                         {/* <MaterialIcons color={'white'} size={30} name="arrow-back" /> */}
                         <Image
@@ -34,8 +34,8 @@ function Reviews(props: any): JSX.Element {
                         />
                     </View>
                     <Text style={styles.title}>Your Reviews</Text>
-                </View>
-            </SafeAreaView>
+                </SafeAreaView>
+            </View>
 
             <TouchableOpacity activeOpacity={1} style={styles.horizontalInner} onPress={toggleNumberOfLines}>
                 <View style={styles.horizontalCard}>
