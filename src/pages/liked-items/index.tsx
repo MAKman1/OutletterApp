@@ -10,7 +10,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { APP_COLORS } from "../../shared/styles/colors";
 
 
-function Reviews(props: any): JSX.Element {
+function LikedItems(props: any): JSX.Element {
 
     const [textShown, setTextShown] = useState(true);
     const [textHeight, setTextHeight] = useState(10);
@@ -67,7 +67,7 @@ function Reviews(props: any): JSX.Element {
     return (
         <View style={styles.rootContainer}>
             <SafeAreaView style={styles.cameraOverlayTop} >
-                <Text style={styles.title}>Your Reviews</Text>
+                <Text style={styles.title}>Liked Items</Text>
             </SafeAreaView>
             <View style={styles.horizontalCard}>
                 <View style={styles.cardTop}>
@@ -101,4 +101,4 @@ function Reviews(props: any): JSX.Element {
     )
 }
 
-export default Reviews;
+export default LikedItems;
