@@ -14,8 +14,7 @@ export default StyleSheet.create({
     color: 'black'
   },
   horizontalCard: {
-    maxHeight: 400,
-    alignSelf: 'center',
+    maxHeight: '15%',
     borderRadius: 20,
     padding: 15,
     margin: 15,
@@ -30,29 +29,9 @@ export default StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 20,
   },
-  reviewDate: {
-    color: APP_COLORS.primary,
-    fontSize: 16,
-    marginBottom: 10,
-  },
   cardTop: {
-    flexDirection: "row",
-    justifyContent: 'space-between',
-  },
-  rating: {
-    flexDirection: "row",
-  },
-  ratingText: {
-    color: APP_COLORS.lightBlue,
-    fontSize: 16,
-    paddingRight: 5,
-  },
-  reviewText: {
-    lineHeight: 20,
-  },
-  cameraOverlayTop: {
-    top: 0,
-    width: "100%",
+    alignItems: 'flex-end',
+    backgroundColor: 'red'
   },
   productImage: { 
     width: 90, 
