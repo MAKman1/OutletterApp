@@ -4,19 +4,17 @@ import { APP_COLORS } from "../../shared/styles/colors";
 
 export default StyleSheet.create({
   rootContainer: {
-    backgroundColor: "white",
+    backgroundColor: "#FBFBFB",
     flex: 1,
   },
   title: {
     padding: 20,
     fontSize: 32,
     textAlign: 'center',
-    color: 'white'
-  },
-  horizontalInner: {
-    flex: 1,
+    color: 'black'
   },
   horizontalCard: {
+    maxHeight: 400,
     alignSelf: 'center',
     borderRadius: 20,
     padding: 15,
@@ -30,7 +28,7 @@ export default StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-    elevation: 5,
+    elevation: 20,
   },
   reviewTop: {
     color: APP_COLORS.primary,
@@ -52,75 +50,31 @@ export default StyleSheet.create({
   reviewText: {
     lineHeight: 21,
   },
-  topOverlay: {
-    backgroundColor: APP_COLORS.lightBlue,
-    paddingTop: 20,
-    paddingBottom: 20,
-    marginBottom: 20,
-    // justifyContent: "flex-start",
-    // alignItems: "center",
-    borderBottomRightRadius: 25,
-    borderBottomLeftRadius: 25,
-  },
   cameraOverlayTop: {
     top: 0,
     width: "100%",
   },
+  productImage: { 
+    width: 90, 
+    height: 90, 
+    borderRadius: 5,
+    marginRight: 10,
+  },
   productName: {
-    fontSize: 25, 
-    paddingTop: 10,
+    fontSize: 20, 
   },
   productPrice: {
     color: APP_COLORS.lightBlue, 
     fontSize: 20,
   },
-  menuInner: {
+  roundedButton: {
+    marginTop: 5,
+    height: "10%",
+    width: "50%",
     justifyContent: "center",
     alignItems: "center",
-    flexDirection: "column",
-    flex: 1,
-  },
-  menuOverlay: {
-    width: 0,
-    height: 0,
-    backgroundColor: "#21004B",
-    // position: "absolute",
-    top: 0,
-    borderBottomRightRadius: 200,
-    zIndex: 100,
-
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    shadowOpacity: 0.3,
-    shadowRadius: 10,
-    elevation: 5,
-  },
-  menuItem: {
-    padding: 10,
-    marginVertical: 10,
-  },
-  menuText: {
-    color: "white",
-    fontSize: 40,
-    textAlign: "center",
-  },
-  menuBottom: {
-    flexDirection: "row",
-    marginTop: 50,
-    justifyContent: "center",
-    alignItems: "center",
-    overflow: "hidden",
-  },
-  circleButton: {
-    borderWidth: 3,
-    borderColor: "white",
-    width: 55,
-    height: 55,
-    borderRadius: 55,
-    justifyContent: "center",
-    alignItems: "center",
+    paddingVertical: 15,
+    borderRadius: 50,
+    backgroundColor: "#04B3FF",
   },
 });

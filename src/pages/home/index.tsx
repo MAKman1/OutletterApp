@@ -245,8 +245,7 @@ function Home(props: any): JSX.Element {
 	}
 
 	function openMenuItem(pageName: any) {
-		console.log(pageName);
-		props.navigation.replace(pageName);
+		props.navigation.push(pageName);
 	}
 	
 	return (
