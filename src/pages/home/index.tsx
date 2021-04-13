@@ -264,8 +264,33 @@ function Home(props: any, { navigation }: any): JSX.Element {
 				}
 				style={{ flex: 1 }}
 			/> */}
+			{/* Menu */}
+			<Animated.View style={[styles.menuOverlay, { width: widthAnim, height: heightAnim }]}>
+				{menuActive ?
+					<LinearGradient style={styles.menuInner} useAngle={true} angle={45} colors={['#00E9D8', '#009ED9']} >
+						<TouchableOpacity style={styles.menuItem}>
+							<Text style={styles.menuText}>{"Wishlist"}</Text>
+						</TouchableOpacity>
+						<TouchableOpacity style={styles.menuItem} onPress={() => openMenuItem("Reviews")}>
+							<Text style={styles.menuText}>{"Reviews"}</Text>
+						</TouchableOpacity>
+						<TouchableOpacity style={styles.menuItem}>
+							<Text style={styles.menuText}>{"Liked Items"}</Text>
+						</TouchableOpacity>
+						<View style={styles.menuBottom}>
+							<TouchableOpacity style={[styles.circleButton, { marginRight: 30 }]}>
+								<Feather color={'#FFF'} size={25} name="settings" />
+							</TouchableOpacity>
+							<TouchableOpacity style={styles.circleButton}>
+								<Feather color={'#FFF'} size={25} name="power" />
+							</TouchableOpacity>
+						</View>
+					</LinearGradient>
+					: null}
+
+			</Animated.View>
 			<SafeAreaView style={styles.cameraOverlayTop} >
-				<View style={{ flex: 1, flexDirection: 'row', zIndex: 999 }}>
+				<View style={styles.topIconView}>
 					<View style={{ paddingHorizontal: 10, paddingTop: 20 }}>
 						<Hamburger
 							active={menuActive}
@@ -282,8 +307,13 @@ function Home(props: any, { navigation }: any): JSX.Element {
 						/>
 					</View>
 				</View>
+
+				{loading && <ActivityIndicator color={"white"} size={35} style={{ marginTop: '50%' }} />}
+
+			</SafeAreaView>
+
+			<SafeAreaView style={styles.cameraOverlayBottom} >
 				<View style={{ width: '40%', borderRadius: 30, marginTop: 10 }}>
-					<Text style={{ paddingTop: 10, color: 'black', textAlign: 'left', fontWeight: "bold", }}>Debug</Text>
 					{/* <Switch
 						style={{ alignSelf: 'center' }}
 						trackColor={{ false: "#767577", true: "#8DCC43" }}
@@ -296,37 +326,6 @@ function Home(props: any, { navigation }: any): JSX.Element {
 						<Text style={styles.roundedButtonText}>Show Popup</Text>
 					</TouchableOpacity>
 				</View>
-				{loading && <ActivityIndicator color={"white"} size={35} style={{ marginTop: '50%' }} />}
-
-
-				{/* Menu */}
-				<Animated.View style={[styles.menuOverlay, { width: widthAnim, height: heightAnim }]}>
-					{menuActive ?
-						<LinearGradient style={styles.menuInner} useAngle={true} angle={45} colors={['#00E9D8', '#009ED9']} >
-							<TouchableOpacity style={styles.menuItem}>
-								<Text style={styles.menuText}>{"Wishlist"}</Text>
-							</TouchableOpacity>
-							<TouchableOpacity style={styles.menuItem} onPress={() => openMenuItem("Reviews")}>
-								<Text style={styles.menuText}>{"Reviews"}</Text>
-							</TouchableOpacity>
-							<TouchableOpacity style={styles.menuItem}>
-								<Text style={styles.menuText}>{"Liked Items"}</Text>
-							</TouchableOpacity>
-							<View style={styles.menuBottom}>
-								<TouchableOpacity style={[styles.circleButton, { marginRight: 30 }]}>
-									<Feather color={'#FFF'} size={25} name="settings" />
-								</TouchableOpacity>
-								<TouchableOpacity style={styles.circleButton}>
-									<Feather color={'#FFF'} size={25} name="power" />
-								</TouchableOpacity>
-							</View>
-						</LinearGradient>
-						: null}
-
-				</Animated.View>
-			</SafeAreaView>
-
-			<SafeAreaView style={styles.cameraOverlayBottom} >
 				<View style={styles.cameraOverlay}>
 					<View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
 						<TouchableOpacity style={styles.bottomIcon} onPress={() => { toggleGender(gender); }}>
