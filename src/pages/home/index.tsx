@@ -269,14 +269,14 @@ function Home(props: any, { navigation }: any): JSX.Element {
 			<Animated.View style={[styles.menuOverlay, { width: widthAnim, height: heightAnim }]}>
 				{menuActive ?
 					<LinearGradient style={styles.menuInner} useAngle={true} angle={45} colors={['#00E9D8', '#009ED9']} >
-						<TouchableOpacity style={styles.menuItem}>
-							<Text style={styles.menuText}>{"Wishlist"}</Text>
+						<TouchableOpacity style={styles.menuItem}onPress={() => openMenuItem("BestProduct")}>
+							<Text style={styles.menuText}>{"Best Product Sample"}</Text>
 						</TouchableOpacity>
 						<TouchableOpacity style={styles.menuItem} onPress={() => openMenuItem("Reviews")}>
 							<Text style={styles.menuText}>{"Reviews"}</Text>
 						</TouchableOpacity>
-						<TouchableOpacity style={styles.menuItem}>
-							<Text style={styles.menuText}>{"Liked Items"}</Text>
+						<TouchableOpacity style={styles.menuItem}  onPress={() => openMenuItem("WriteReview")}>
+							<Text style={styles.menuText}>{"Sample Write Review"}</Text>
 						</TouchableOpacity>
 						<View style={styles.menuBottom}>
 							<TouchableOpacity style={[styles.circleButton, { marginRight: 30 }]}>

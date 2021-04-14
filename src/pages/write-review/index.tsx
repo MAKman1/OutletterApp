@@ -117,7 +117,7 @@ function WrtieReview(props: any): JSX.Element {
             <View style={{ flexDirection: 'row', alignItems: "center", justifyContent: 'center', marginBottom: 15 }}>
                 {ratings.map((rating, index) => {
                     return (
-                        <TouchableOpacity onPress={() => updateRatings(index)}>
+                        <TouchableOpacity key={index} onPress={() => updateRatings(index)}>
                             <MaterialIcons color={rating.checked ? APP_COLORS.lightBlue : APP_COLORS.backgroundGray} size={40} name={rating.checked ? "star" : "star-border"} />
                         </TouchableOpacity>
                     )
