@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react'
-import { Text, View, TouchableOpacity, Image, ScrollView, ActivityIndicator, Linking, Dimensions, Animated } from 'react-native'
+import { Text, View, TouchableOpacity, Image, ScrollView, ActivityIndicator, Linking, Dimensions, Animated, LogBox } from 'react-native'
 import styles from './styles'
 
 import SafeAreaView from 'react-native-safe-area-view';
@@ -54,6 +54,7 @@ function Home(props: any, { navigation }: any): JSX.Element {
 
 
 	useEffect(() => {
+		LogBox.ignoreLogs(['Animated: `useNativeDriver`']);
 	}, [])
 
 	useEffect(() => {
@@ -121,7 +122,7 @@ function Home(props: any, { navigation }: any): JSX.Element {
 	function switchStore(store: string) {
 		switch (store) {
 			case 'None':
-				return <MaterialCommunity color={'black'} size={23} name="shopping-outline" />;
+				return <MaterialCommunity color={'black'} size={30} name="shopping-outline" />;
 			case 'LCWaikiki':
 				return <Image style={styles.storeLogo} resizeMode={"contain"} source={require('../../assets/lcLogo.png')} />
 			case 'Koton':
@@ -332,14 +333,14 @@ function Home(props: any, { navigation }: any): JSX.Element {
 							{
 								gender == "Male"
 									?
-									<MaterialCommunity color={'#38AAFE'} size={23} name="face" />
+									<MaterialCommunity color={'#38AAFE'} size={30} name="face" />
 									:
 									(
 										gender == "Female"
 											?
-											<MaterialCommunity color={'#F778A9'} size={23} name="face-woman" />
+											<MaterialCommunity color={'#F778A9'} size={30} name="face-woman" />
 											:
-											<Image style={{ margin: 'auto', alignSelf: 'center', maxWidth: 23, maxHeight: 23, }}
+											<Image style={{ margin: 'auto', alignSelf: 'center', maxWidth: 30, maxHeight: 30, }}
 												source={
 													require('../../assets/genderless.png')
 												}

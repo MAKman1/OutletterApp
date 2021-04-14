@@ -291,9 +291,11 @@ export default StyleSheet.create({
   bottomIcon: {
     borderRadius: 50,
     backgroundColor: "white",
-    padding: 15,
+    padding: 10,
     maxWidth: 50,
     maxHeight: 50,
+    alignContent: 'center',
+    justifyContent: 'center',
   },
   cameraOverlay: {
     flex: 1,
