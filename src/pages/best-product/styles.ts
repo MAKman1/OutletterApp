@@ -14,7 +14,7 @@ export default StyleSheet.create({
         color: 'black'
     },
     horizontalCard: {
-        // maxHeight: 400,
+        maxHeight: 400,
         // alignSelf: 'center',
         borderRadius: 20,
         padding: 15,
