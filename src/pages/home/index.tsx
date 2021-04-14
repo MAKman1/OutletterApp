@@ -352,7 +352,6 @@ function Home(props: any, { navigation }: any): JSX.Element {
 							<LinearGradient useAngle={true} angle={45} colors={['#00E9D8', '#009ED9']} style={styles.roundedButton}>
 								<Text style={styles.roundedButtonText}>Go!</Text>
 							</LinearGradient>
-
 						</TouchableOpacity>
 						<TouchableOpacity style={styles.bottomIcon} onPress={() => { setStoreModal(true) }}>
 							{
