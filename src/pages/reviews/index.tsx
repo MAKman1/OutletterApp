@@ -7,7 +7,7 @@ import axios from 'axios';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { APP_COLORS } from "../../shared/styles/colors";
 
-import WriteReview from '../write-review/index'
+import BestProduct from '../best-product/index'
 
 function Reviews(props: any): JSX.Element {
 
@@ -64,7 +64,7 @@ function Reviews(props: any): JSX.Element {
     }, []);
 
     return (
-        <WriteReview/>
+        <BestProduct/>
         // <View style={styles.rootContainer}>
         //     <SafeAreaView style={styles.cameraOverlayTop} >
         //         <Text style={styles.title}>Your Reviews</Text>
