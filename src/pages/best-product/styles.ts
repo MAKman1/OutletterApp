@@ -14,21 +14,21 @@ export default StyleSheet.create({
         color: 'black'
     },
     horizontalCard: {
-        // maxHeight: 400,
+        maxHeight: 400,
         // alignSelf: 'center',
         borderRadius: 20,
         padding: 15,
         margin: 15,
         backgroundColor: "white",
 
-        // shadowColor: "black",
-        // shadowOffset: {
-        //   width: 0,
-        //   height: 2,
-        // },
-        // shadowOpacity: 0.25,
-        // shadowRadius: 3.84,
-        // elevation: 20,
+        shadowColor: "black",
+        shadowOffset: {
+          width: 0,
+          height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 20,
     },
     reviewDate: {
         color: APP_COLORS.primary,

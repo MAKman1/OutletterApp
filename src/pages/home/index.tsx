@@ -273,10 +273,10 @@ function Home(props: any, { navigation }: any): JSX.Element {
 							<Text style={styles.menuText}>{"Best Product Sample"}</Text>
 						</TouchableOpacity>
 						<TouchableOpacity style={styles.menuItem} onPress={() => openMenuItem("Reviews")}>
-							<Text style={styles.menuText}>{"Reviews"}</Text>
+							<Text style={styles.menuText}>{"Reviews Sample"}</Text>
 						</TouchableOpacity>
 						<TouchableOpacity style={styles.menuItem}  onPress={() => openMenuItem("WriteReview")}>
-							<Text style={styles.menuText}>{"Sample Write Review"}</Text>
+							<Text style={styles.menuText}>{"Write Review Sample"}</Text>
 						</TouchableOpacity>
 						<View style={styles.menuBottom}>
 							<TouchableOpacity style={[styles.circleButton, { marginRight: 30 }]}>
