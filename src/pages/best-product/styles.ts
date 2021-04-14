@@ -21,14 +21,14 @@ export default StyleSheet.create({
         margin: 15,
         backgroundColor: "white",
 
-        // shadowColor: "black",
-        // shadowOffset: {
-        //   width: 0,
-        //   height: 2,
-        // },
-        // shadowOpacity: 0.25,
-        // shadowRadius: 3.84,
-        // elevation: 20,
+        shadowColor: "black",
+        shadowOffset: {
+          width: 0,
+          height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 20,
     },
     reviewDate: {
         color: APP_COLORS.primary,
