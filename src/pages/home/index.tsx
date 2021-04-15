@@ -16,7 +16,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunity from 'react-native-vector-icons/MaterialCommunityIcons';
 import Feather from 'react-native-vector-icons/Feather';
-
+import { launchImageLibrary } from 'react-native-image-picker';
 import Hamburger from 'react-native-hamburger';
 
 import ARDisplay from './arcomponent/index'
@@ -49,6 +49,8 @@ function Home(props: any, { navigation }: any): JSX.Element {
 
 	const [loading, setLoading] = useState(false);
 	const [navRoute, setNavRoute] = useState(null);
+
+	const [uploadedImage, setUploadedImage] = useState('../../assets/lcLogo.png');
 
 
 	//Animations
@@ -304,6 +306,20 @@ function Home(props: any, { navigation }: any): JSX.Element {
 		setMenuActive(false);
 	}
 
+	function uploadeImage() {
+		let options = {
+			mediaType: 'Photo',
+			quality: 1,
+		};
+		launchImageLibrary(options, (response) => {
+			if (response.uri) {
+				// response.uri = response.uri.substring(5); 
+				console.warn(response.uri);
+				setUploadedImage(response.uri);
+			}
+		});
+	}
+
 	return (
 		<View style={[styles.rootContainer, { backgroundColor: '#000' }]}>
 			{/* <ViroARSceneNavigator
@@ -368,7 +384,6 @@ function Home(props: any, { navigation }: any): JSX.Element {
 				{loading && <ActivityIndicator color={"white"} size={35} style={{ marginTop: '50%' }} />}
 
 			</SafeAreaView>
-
 			<SafeAreaView style={styles.cameraOverlayBottom} >
 				<View style={{ width: '40%', borderRadius: 30, marginTop: 10 }}>
 					{/* <Switch
@@ -379,6 +394,9 @@ function Home(props: any, { navigation }: any): JSX.Element {
 						onValueChange={() => toggleDebug(debugModal)}
 						value={debugModal}
 					/> */}
+					<TouchableOpacity onPress={() => uploadeImage()}>
+						<Text style={styles.roundedButtonText}>Upload Image</Text>
+					</TouchableOpacity>
 					<TouchableOpacity onPress={() => setNavRoute("productFoundScreen")}>
 						<Text style={styles.roundedButtonText}>Show Popup</Text>
 					</TouchableOpacity>
