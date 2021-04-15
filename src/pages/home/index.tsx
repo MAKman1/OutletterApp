@@ -6,7 +6,6 @@ import SafeAreaView from 'react-native-safe-area-view';
 import Modal from 'react-native-modal';
 import axios from 'axios';
 
-// @ts-ignore
 import {
 	ViroARSceneNavigator
 } from '@viro-community/react-viro';
@@ -26,6 +25,7 @@ import WriteReview from '../write-review';
 import Reviews from '../reviews';
 import BestProduct from '../best-product';
 import LikedItems from '../liked-items';
+import { CropView } from 'react-native-image-crop-tools';
 
 
 function Home(props: any, { navigation }: any): JSX.Element {
