@@ -261,17 +261,17 @@ export default StyleSheet.create({
   cameraOverlayBottom: {
     position: "absolute",
     bottom: 0,
-    width: "100%"
+    width: "100%",
   },
   cameraOverlayTop: {
     position: "absolute",
     top: 0,
-    width: Dimensions.get('window').width,
-    elevation: 6
+    width: Dimensions.get("window").width,
+    elevation: 6,
   },
   topIconView: {
     flex: 1,
-    flexDirection: 'row'
+    flexDirection: "row",
   },
   topOverlay: {
     flex: 1,
@@ -294,8 +294,8 @@ export default StyleSheet.create({
     padding: 10,
     maxWidth: 50,
     maxHeight: 50,
-    alignContent: 'center',
-    justifyContent: 'center',
+    alignContent: "center",
+    justifyContent: "center",
   },
   cameraOverlay: {
     flex: 1,
@@ -337,7 +337,7 @@ export default StyleSheet.create({
     flexDirection: "column",
     flex: 1,
     paddingTop: 100,
-    borderBottomRightRadius: 100
+    borderBottomRightRadius: 100,
   },
   menuOverlay: {
     width: 0,
@@ -363,7 +363,7 @@ export default StyleSheet.create({
   menuText: {
     color: "white",
     fontSize: 30,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     textAlign: "center",
   },
   menuBottom: {
@@ -384,7 +384,13 @@ export default StyleSheet.create({
   },
   roundedButtonView: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
-  }
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  cropView: {
+	  flex: 1,
+	  marginTop: 30,
+	  marginBottom: 50,
+	  backgroundColor: "#FFF"
+  },
 });

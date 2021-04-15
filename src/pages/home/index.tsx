@@ -27,10 +27,13 @@ import Reviews from '../reviews';
 import BestProduct from '../best-product';
 import LikedItems from '../liked-items';
 
+import { CropView } from 'react-native-image-crop-tools';
+
 
 function Home(props: any, { navigation }: any): JSX.Element {
 	const cameraRef = useRef(null);
 	const arScene = useRef(null);
+	const cropViewRef = useRef(null);
 
 
 	const genders = ["Male", "Female", "Other"];
@@ -50,6 +53,9 @@ function Home(props: any, { navigation }: any): JSX.Element {
 	const [loading, setLoading] = useState(false);
 	const [navRoute, setNavRoute] = useState(null);
 
+	const [showCrop, setShowCrop] = useState(false);
+
+	const [currentImage, setCurrentImage] = useState('https://i.pinimg.com/736x/0b/0c/d5/0b0cd5d09cd50a1c11c630b908ba48a3.jpg');
 
 	//Animations
 	const widthAnim = useRef(new Animated.Value(0)).current;
@@ -191,22 +197,21 @@ function Home(props: any, { navigation }: any): JSX.Element {
 		}
 	}
 
-	async function takePicture() {
-		// arScene.current.replace({ scene: ARDisplay, passProps: { arfound } })
-		// if (cameraRef.current) {
-		// 	const options = { quality: 0.5, base64: true };
-		// 	const data = await cameraRef.current.takePictureAsync(options);
-		// 	uploadImage(data);
-		// }
-		setAr(false);
+
+	async function showCropView() {
 		arScene.current._resetARSession(true, true);
 		arScene.current._takeScreenshot('outletter_' + Date.now() + '_img', false).then((data: any) => {
 			console.log(data.success, data.url, data.errorCode);
-			uploadImage(data);
-		})
-			.catch((error: any) => {
-				console.log('error' + JSON.stringify(error));
-			});
+			setCurrentImage('file://' + data.url);
+			setShowCrop(true);
+		}).catch((error: any) => {
+			console.log('error' + JSON.stringify(error));
+		});
+	}
+
+	async function uploadCroppedImage() {
+		let image = await cropViewRef.current.saveImage(true, 90);
+		console.warn( JSON.stringify( image))
 	}
 
 	async function uploadImage(image: any) {
@@ -317,6 +322,17 @@ function Home(props: any, { navigation }: any): JSX.Element {
 				}
 				style={{ flex: 1 }}
 			/> */}
+			{showCrop ?
+				<CropView
+					sourceUrl={currentImage}
+					style={styles.cropView}
+					ref={cropViewRef}
+					onImageCrop={(res) => console.warn(res)}
+				/>
+				:
+				null
+			}
+
 			{/* Menu */}
 			<Animated.View style={[styles.menuOverlay, { width: widthAnim, height: heightAnim }]}>
 				{menuActive ?
@@ -404,9 +420,9 @@ function Home(props: any, { navigation }: any): JSX.Element {
 									)
 							}
 						</TouchableOpacity>
-						<TouchableOpacity disabled={loading} style={styles.roundedButtonView} onPress={() => takePicture()}>
+						<TouchableOpacity disabled={loading} style={styles.roundedButtonView} onPress={() => { showCrop ? uploadCroppedImage() : showCropView()} }>
 							<LinearGradient useAngle={true} angle={45} colors={['#00E9D8', '#009ED9']} style={styles.roundedButton}>
-								<Text style={styles.roundedButtonText}>Go!</Text>
+								<Text style={styles.roundedButtonText}>{"Go!"}</Text>
 							</LinearGradient>
 						</TouchableOpacity>
 						<TouchableOpacity style={styles.bottomIcon} onPress={() => { setNavRoute("chooseStoreScreen") }}>
@@ -431,5 +447,4 @@ function Home(props: any, { navigation }: any): JSX.Element {
 		</View>
 	)
 }
-
 export default Home;
