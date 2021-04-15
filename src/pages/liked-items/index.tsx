@@ -32,7 +32,7 @@ function LikedItems(props: any): JSX.Element {
                         </View>
                         <Text style={styles.productPrice}> Price: 50.00 TRY</Text>
                         <TouchableOpacity style={styles.roundedButton} onPress={() => { console.log('link') }}>
-                            <Text style={{ color: 'white', fontSize: 12 }}>Visit URL</Text>
+                            <Text style={{ color: '#FFF', fontSize: 11, fontWeight: 'bold' }}>Visit URL</Text>
                         </TouchableOpacity>
                     </View>
                 </View>

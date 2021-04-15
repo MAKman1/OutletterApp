@@ -16,7 +16,8 @@ export default StyleSheet.create({
     reviewTextBox: {
         margin: 15,
         padding: 10,
-        borderWidth: 2,
+		borderWidth: 2,
+		minHeight: 120,
         borderColor: APP_COLORS.lightBlue,
         borderRadius: 10,
         textAlignVertical: 'top'

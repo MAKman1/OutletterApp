@@ -14,7 +14,7 @@ export default StyleSheet.create({
     color: 'black'
   },
   horizontalCard: {
-    maxHeight: '15%',
+	width: Dimensions.get('window').width - 30,
     borderRadius: 20,
     padding: 15,
     margin: 15,
@@ -48,11 +48,11 @@ export default StyleSheet.create({
   },
   roundedButton: {
     marginTop: 5,
-    height: "10%",
+    height: "25",
     width: "50%",
     justifyContent: "center",
     alignItems: "center",
-    paddingVertical: 15,
+    paddingVertical: 8,
     borderRadius: 50,
     backgroundColor: "#04B3FF",
   },

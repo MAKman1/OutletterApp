@@ -9,7 +9,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { APP_COLORS } from "../../shared/styles/colors";
 import { TextInput } from 'react-native-gesture-handler';
 
-function WrtieReview(props: any): JSX.Element {
+function WriteReview(props: any): JSX.Element {
 
     const [textShown, setTextShown] = useState(true);
     const [textHeight, setTextHeight] = useState(10);
@@ -160,4 +160,4 @@ function WrtieReview(props: any): JSX.Element {
     )
 }
 
-export default WrtieReview;
+export default WriteReview;

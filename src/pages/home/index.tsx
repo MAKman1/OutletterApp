@@ -22,6 +22,10 @@ import Hamburger from 'react-native-hamburger';
 import ARDisplay from './arcomponent/index'
 import BottomSwipeableModal from '../../shared/components/modals/bottom-swipeable-modal';
 import ProductFoundModal from '../../shared/components/modals/product-found-modal';
+import WriteReview from '../write-review';
+import Reviews from '../reviews';
+import BestProduct from '../best-product';
+import LikedItems from '../liked-items';
 
 
 function Home(props: any, { navigation }: any): JSX.Element {
@@ -36,8 +40,6 @@ function Home(props: any, { navigation }: any): JSX.Element {
 	const [store, setStore] = useState("None");
 
 	const [arfound, setAr] = useState(false);
-	const [found, setFound] = useState(false);
-	const [storeModal, setStoreModal] = useState(false);
 	const [debugModal, setDebugModal] = useState(true);
 	const [menuActive, setMenuActive] = useState(false);
 
@@ -46,6 +48,7 @@ function Home(props: any, { navigation }: any): JSX.Element {
 	const [bestItem, setBestItem] = useState<any>({});
 
 	const [loading, setLoading] = useState(false);
+	const [navRoute, setNavRoute] = useState(null);
 
 
 	//Animations
@@ -90,6 +93,54 @@ function Home(props: any, { navigation }: any): JSX.Element {
 			).start();
 		}
 	}, [menuActive])
+
+	const getModalHeight = (navRoute: any) => {
+		switch (navRoute) {
+			case "productFoundScreen":
+				return "80%"
+			case "writeReviewScreen":
+				return "80%"
+			case "reviewsScreen":
+				return "80%"
+			case "bestProductScreen":
+				return "70%"
+			case "likedItemsScreen":
+				return "80%"
+			case "chooseStoreScreen":
+				return "55%"
+			default:
+				return "70%"
+		}
+	}
+
+	const renderComponent = (navRoute: any) => {
+		switch (navRoute) {
+			case "productFoundScreen":
+				return <ProductFoundModal bestItem={bestItem} similarItems={similarItems} />
+			case "writeReviewScreen":
+				return <WriteReview />
+			case "reviewsScreen":
+				return <Reviews />
+			case "bestProductScreen":
+				return <BestProduct />
+			case "likedItemsScreen":
+				return <LikedItems />
+			case "chooseStoreScreen":
+				return stores.map((s, index) => {
+					return (<TouchableOpacity key={index} style={{ marginTop: 10, flex: 1, flexDirection: 'row', justifyContent: 'center', minWidth: 300, borderRadius: 10, borderBottomWidth: 1, borderColor: '#04B3FF' }} disabled={store == s} onPress={() => {
+						setStore(s);
+						setNavRoute(null);
+					}}>
+						<Text style={{ textAlign: 'center', fontSize: 35, color: 'black' }}>
+							{s}
+						</Text>
+						{store == s ? <MaterialIcons style={{ textAlignVertical: 'center' }} color={'#04B3FF'} size={30} name="check" /> : null}
+					</TouchableOpacity>)
+				})
+			default:
+				return <ActivityIndicator />
+		}
+	}
 
 	function resetStates() {
 		setQueryItem([]);
@@ -237,7 +288,7 @@ function Home(props: any, { navigation }: any): JSX.Element {
 			.then(function (response) {
 				console.warn(JSON.stringify(response));
 				setStates(response.data);
-				setFound(true);
+				setNavRoute("productFoundScreen");
 				setLoading(false);
 				setAr(true);
 			})
@@ -249,7 +300,8 @@ function Home(props: any, { navigation }: any): JSX.Element {
 	}
 
 	function openMenuItem(pageName: any) {
-		props.navigation.push(pageName);
+		setNavRoute(pageName);
+		setMenuActive(false);
 	}
 
 	return (
@@ -269,15 +321,19 @@ function Home(props: any, { navigation }: any): JSX.Element {
 			<Animated.View style={[styles.menuOverlay, { width: widthAnim, height: heightAnim }]}>
 				{menuActive ?
 					<LinearGradient style={styles.menuInner} useAngle={true} angle={45} colors={['#00E9D8', '#009ED9']} >
-						<TouchableOpacity style={styles.menuItem}onPress={() => openMenuItem("BestProduct")}>
-							<Text style={styles.menuText}>{"Best Product Sample"}</Text>
+						<TouchableOpacity style={styles.menuItem} onPress={() => openMenuItem("likedItemsScreen")}>
+							<Text style={styles.menuText}>{"Liked Items"}</Text>
 						</TouchableOpacity>
-						<TouchableOpacity style={styles.menuItem} onPress={() => openMenuItem("Reviews")}>
-							<Text style={styles.menuText}>{"Reviews Sample"}</Text>
+						<TouchableOpacity style={styles.menuItem} onPress={() => openMenuItem("reviewsScreen")}>
+							<Text style={styles.menuText}>{"Reviews"}</Text>
 						</TouchableOpacity>
-						<TouchableOpacity style={styles.menuItem}  onPress={() => openMenuItem("WriteReview")}>
-							<Text style={styles.menuText}>{"Write Review Sample"}</Text>
+						<TouchableOpacity style={styles.menuItem} onPress={() => openMenuItem("writeReviewScreen")}>
+							<Text style={styles.menuText}>{"Write Review"}</Text>
 						</TouchableOpacity>
+						<TouchableOpacity style={styles.menuItem} onPress={() => openMenuItem("bestProductScreen")}>
+							<Text style={styles.menuText}>{"Best Product"}</Text>
+						</TouchableOpacity>
+
 						<View style={styles.menuBottom}>
 							<TouchableOpacity style={[styles.circleButton, { marginRight: 30 }]}>
 								<Feather color={'#FFF'} size={25} name="settings" />
@@ -323,7 +379,7 @@ function Home(props: any, { navigation }: any): JSX.Element {
 						onValueChange={() => toggleDebug(debugModal)}
 						value={debugModal}
 					/> */}
-					<TouchableOpacity onPress={() => setFound(true)}>
+					<TouchableOpacity onPress={() => setNavRoute("productFoundScreen")}>
 						<Text style={styles.roundedButtonText}>Show Popup</Text>
 					</TouchableOpacity>
 				</View>
@@ -353,7 +409,7 @@ function Home(props: any, { navigation }: any): JSX.Element {
 								<Text style={styles.roundedButtonText}>Go!</Text>
 							</LinearGradient>
 						</TouchableOpacity>
-						<TouchableOpacity style={styles.bottomIcon} onPress={() => { setStoreModal(true) }}>
+						<TouchableOpacity style={styles.bottomIcon} onPress={() => { setNavRoute("chooseStoreScreen") }}>
 							{
 								switchStore(store)
 							}
@@ -364,34 +420,12 @@ function Home(props: any, { navigation }: any): JSX.Element {
 
 
 			<BottomSwipeableModal
-				onCollapse={() => {
-					if (found)
-						setFound(false)
-					if (storeModal)
-						setStoreModal(false)
-				}}
-				show={found || storeModal}
+				onCollapse={() => setNavRoute(null)}
+				show={navRoute != null}
 				navigation={props.navigation}
-				height="70%">
+				height={getModalHeight(navRoute)}>
 
-				{storeModal ?
-
-					stores.map((s, index) => {
-						return (<TouchableOpacity key={index} style={{ marginTop: 10, flex: 1, flexDirection: 'row', justifyContent: 'center', minWidth: 300, borderRadius: 10, borderBottomWidth: 1, borderColor: '#04B3FF' }} disabled={store == s} onPress={() => {
-							setStore(s);
-							setStoreModal(false);
-						}}>
-							<Text style={{ textAlign: 'center', fontSize: 35, color: 'black' }}>
-								{s}
-							</Text>
-							{store == s ? <MaterialIcons style={{ textAlignVertical: 'center' }} color={'#04B3FF'} size={30} name="check" /> : null}
-						</TouchableOpacity>)
-					})
-
-					:
-					<ProductFoundModal bestItem={bestItem} similarItems={similarItems} />
-				}
-
+				{renderComponent(navRoute)}
 
 			</BottomSwipeableModal>
 		</View>

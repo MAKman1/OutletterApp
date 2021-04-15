@@ -11,8 +11,7 @@ function Reviews(props: any): JSX.Element {
 
     const [textShown, setTextShown] = useState(true);
     const [textHeight, setTextHeight] = useState(10);
-    const widthAnim = useRef(new Animated.Value(0)).current;
-    const heightAnim = useRef(new Animated.Value(0)).current;
+    const heightAnim = useRef(new Animated.Value(40)).current;
 
     useEffect(() => {
         LogBox.ignoreLogs(['Animated: `useNativeDriver`']);
@@ -20,13 +19,6 @@ function Reviews(props: any): JSX.Element {
 
     useEffect(() => {
         if (textShown) {
-            Animated.spring(
-                widthAnim,
-                {
-                    toValue: Dimensions.get('window').width * .85,
-                    duration: 1500,
-                }
-            ).start();
             Animated.spring(
                 heightAnim,
                 {
@@ -36,16 +28,9 @@ function Reviews(props: any): JSX.Element {
             ).start();
         } else {
             Animated.spring(
-                widthAnim,
-                {
-                    toValue: Dimensions.get('window').width * .85,
-                    duration: 1500
-                }
-            ).start();
-            Animated.spring(
                 heightAnim,
                 {
-                    toValue: textHeight,
+                    toValue: textHeight + 150, //TODO fix this implementation
                     duration: 1500
                 }
             ).start();
@@ -80,11 +65,11 @@ function Reviews(props: any): JSX.Element {
                         <Text numberOfLines={1} style={styles.productName}> Darth Vader T-Shirt</Text>
                         <Text style={styles.productPrice}> Price: 50.00 TRY</Text>
                         <TouchableOpacity style={styles.roundedButton} onPress={() => toggleNumberOfLines()}>
-                            <Text style={{ color: 'white', fontSize: 12 }}>Visit URL</Text>
+                            <Text style={{ color: 'white', fontSize: 12, fontWeight: 'bold' }}>Visit URL</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
-                <Animated.View style={{ width: widthAnim, height: heightAnim, alignSelf: 'center', flexDirection: 'row' }}>
+                <Animated.View style={{ width: '100%', height: heightAnim, alignSelf: 'center', flexDirection: 'row' }}>
                     <TouchableOpacity activeOpacity={1} onPress={() => toggleNumberOfLines()} style={{ overflow: 'hidden' }}>
                         <Text
                             onLayout={onLayout}
