@@ -33,6 +33,7 @@ function BottomSwipeableModal(props: {
 			swipeDirection="down"
 			useNativeDriver={true}
 			style={{ margin: 0 }}
+			backdropOpacity={0.5}
 		>
 
 			<SafeAreaView style={[styles.fullScreenView, props.height ? { height: props.height } : null]}>

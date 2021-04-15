@@ -72,7 +72,7 @@ function Home(props: any, { navigation }: any): JSX.Element {
 			Animated.spring(
 				heightAnim,
 				{
-					toValue: (Dimensions.get('window').height * 0.5),
+					toValue: (Dimensions.get('window').height * 0.6),
 					duration: 1500
 				}
 			).start();

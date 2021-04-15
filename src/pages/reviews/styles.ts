@@ -79,7 +79,7 @@ export default StyleSheet.create({
   },
   roundedButton: {
     marginTop: 5,
-    height: "25",
+    height: 25,
     width: "50%",
     justifyContent: "center",
     alignItems: "center",

@@ -27,7 +27,7 @@ function BestProduct(props: any): JSX.Element {
                         <Text numberOfLines={1} style={styles.productName}> Darth Vader T-Shirt</Text>
                         <Text style={styles.productPrice}> Price: 50.00 TRY</Text>
                         <TouchableOpacity style={styles.roundedButton} onPress={() => console.log("wz")}>
-                            <Text style={{ color: '#FFF', fontSize: 12 }}>{"Visit URL"}</Text>
+                            <Text style={{ color: '#FFF', fontSize: 12, fontWeight: 'bold' }}>{"Visit URL"}</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
