@@ -387,10 +387,14 @@ export default StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  cropOuter: {
+	flex: 1,
+	justifyContent: 'center',
+	alignItems: 'center'
+  },
   cropView: {
-	  flex: 1,
-	  marginTop: 30,
-	  marginBottom: 50,
-	  backgroundColor: "#FFF"
+	  height: '80%',
+	  width: '100%',
+	  backgroundColor: "#000"
   },
 });

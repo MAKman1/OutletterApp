@@ -211,7 +211,7 @@ function Home(props: any, { navigation }: any): JSX.Element {
 
 	async function uploadCroppedImage() {
 		let image = await cropViewRef.current.saveImage(true, 90);
-		console.warn( JSON.stringify( image))
+		console.warn(JSON.stringify(image))
 	}
 
 	async function uploadImage(image: any) {
@@ -323,14 +323,26 @@ function Home(props: any, { navigation }: any): JSX.Element {
 				style={{ flex: 1 }}
 			/> */}
 			{showCrop ?
-				<CropView
-					sourceUrl={currentImage}
-					style={styles.cropView}
-					ref={cropViewRef}
-					onImageCrop={(res) => console.warn(res)}
-				/>
+				<SafeAreaView style={styles.cropOuter}>
+					<CropView
+						sourceUrl={currentImage}
+						style={styles.cropView}
+						ref={cropViewRef}
+						onImageCrop={(res) => console.warn(res)}
+					/>
+				</SafeAreaView>
 				:
-				null
+				<ViroARSceneNavigator
+					ref={arScene}
+					autofocus={false}
+					initialScene={{
+						scene: ARDisplay,
+					}}
+					viroAppProps={
+						{ arfound, bestItem }
+					}
+					style={{ flex: 1 }}
+				/>
 			}
 
 			{/* Menu */}
@@ -386,50 +398,47 @@ function Home(props: any, { navigation }: any): JSX.Element {
 			</SafeAreaView>
 
 			<SafeAreaView style={styles.cameraOverlayBottom} >
-				<View style={{ width: '40%', borderRadius: 30, marginTop: 10 }}>
-					{/* <Switch
-						style={{ alignSelf: 'center' }}
-						trackColor={{ false: "#767577", true: "#8DCC43" }}
-						thumbColor={debugModal ? "white" : "white"}
-						ios_backgroundColor="#3e3e3e"
-						onValueChange={() => toggleDebug(debugModal)}
-						value={debugModal}
-					/> */}
-					<TouchableOpacity onPress={() => setNavRoute("productFoundScreen")}>
-						<Text style={styles.roundedButtonText}>Show Popup</Text>
-					</TouchableOpacity>
-				</View>
 				<View style={styles.cameraOverlay}>
 					<View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-						<TouchableOpacity style={styles.bottomIcon} onPress={() => { toggleGender(gender); }}>
-							{
-								gender == "Male"
-									?
-									<MaterialCommunity color={'#38AAFE'} size={30} name="face" />
-									:
-									(
-										gender == "Female"
-											?
-											<MaterialCommunity color={'#F778A9'} size={30} name="face-woman" />
-											:
-											<Image style={{ margin: 'auto', alignSelf: 'center', maxWidth: 30, maxHeight: 30, }}
-												source={
-													require('../../assets/genderless.png')
-												}
-											/>
-									)
-							}
-						</TouchableOpacity>
-						<TouchableOpacity disabled={loading} style={styles.roundedButtonView} onPress={() => { showCrop ? uploadCroppedImage() : showCropView()} }>
+						{!showCrop ?
+							<TouchableOpacity style={styles.bottomIcon} onPress={() => { toggleGender(gender); }}>
+								{
+									gender == "Male"
+										?
+										<MaterialCommunity color={'#38AAFE'} size={30} name="face" />
+										:
+										(
+											gender == "Female"
+												?
+												<MaterialCommunity color={'#F778A9'} size={30} name="face-woman" />
+												:
+												<Image style={{ margin: 'auto', alignSelf: 'center', maxWidth: 30, maxHeight: 30, }}
+													source={
+														require('../../assets/genderless.png')
+													}
+												/>
+										)
+								}
+							</TouchableOpacity>
+							:
+							null
+						}
+						<TouchableOpacity disabled={loading} style={[styles.roundedButtonView, showCrop ? { marginLeft: 50 } : null]} onPress={() => { showCrop ? uploadCroppedImage() : showCropView() }}>
 							<LinearGradient useAngle={true} angle={45} colors={['#00E9D8', '#009ED9']} style={styles.roundedButton}>
 								<Text style={styles.roundedButtonText}>{"Go!"}</Text>
 							</LinearGradient>
 						</TouchableOpacity>
-						<TouchableOpacity style={styles.bottomIcon} onPress={() => { setNavRoute("chooseStoreScreen") }}>
-							{
-								switchStore(store)
-							}
-						</TouchableOpacity>
+						{!showCrop ?
+							<TouchableOpacity style={styles.bottomIcon} onPress={() => { setNavRoute("chooseStoreScreen") }}>
+								{
+									switchStore(store)
+								}
+							</TouchableOpacity>
+							:
+							<TouchableOpacity style={styles.bottomIcon} onPress={() => setShowCrop(false)}>
+								<MaterialCommunity color={'black'} size={30} name="close" />
+							</TouchableOpacity>
+						}
 					</View>
 				</View>
 			</SafeAreaView>
