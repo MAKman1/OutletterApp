@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Text, View, TouchableOpacity, Image, SafeAreaView, ScrollView } from 'react-native'
+import { Text, View, TouchableOpacity, Image, SafeAreaView, ScrollView, Touchable } from 'react-native'
 import Modal from 'react-native-modal'
 import styles from './styles'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -37,10 +37,10 @@ function BottomSwipeableModal(props: {
 		>
 
 			<SafeAreaView style={[styles.fullScreenView, props.height ? { height: props.height } : null]}>
-				<TO style={styles.swipeableButtonView}
+				<TouchableOpacity style={styles.swipeableButtonView}
 					onPressOut={() => props.onCollapse()}>
 					<View style={styles.swipeableButton} />
-				</TO>
+				</TouchableOpacity>
 				<ScrollView style={styles.popupScroll}>
 
 
