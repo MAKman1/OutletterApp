@@ -322,7 +322,7 @@ function Home(props: any, { navigation }: any): JSX.Element {
 
 	return (
 		<View style={[styles.rootContainer, { backgroundColor: '#000' }]}>
-			{/* <ViroARSceneNavigator
+			<ViroARSceneNavigator
 				ref={arScene}
 				autofocus={false}
 				initialScene={{
@@ -332,7 +332,7 @@ function Home(props: any, { navigation }: any): JSX.Element {
 					{ arfound, bestItem }
 				}
 				style={{ flex: 1 }}
-			/> */}
+			/>
 			{/* Menu */}
 			<Animated.View style={[styles.menuOverlay, { width: widthAnim, height: heightAnim }]}>
 				{menuActive ?
@@ -403,6 +403,10 @@ function Home(props: any, { navigation }: any): JSX.Element {
 				</View>
 				<View style={styles.cameraOverlay}>
 					<View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+						{/* <TouchableOpacity style={styles.bottomIcon}> */}
+							{/* <MaterialCommunity color={'#F778A9'} size={30} name="arrow" /> */}
+							{/* <MaterialIcons></MaterialIcons> */}
+						{/* </TouchableOpacity> */}
 						<TouchableOpacity style={styles.bottomIcon} onPress={() => { toggleGender(gender); }}>
 							{
 								gender == "Male"
