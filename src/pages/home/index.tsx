@@ -290,7 +290,7 @@ function Home(props: any, { navigation }: any): JSX.Element {
 		}
 
 		// console.log(JSON.stringify(data));
-		axios.post('https://6461348afde3.ngrok.io/api/v1/items/', data, config)
+		axios.post('https://6da2ceb2e522.ngrok.io/api/v1/test/', data, config)
 			.then(function (response) {
 				console.warn(JSON.stringify(response));
 				setStates(response.data);
@@ -317,8 +317,6 @@ function Home(props: any, { navigation }: any): JSX.Element {
 		};
 		launchImageLibrary(options, (response) => {
 			if (response.uri) {
-				// response.uri = response.uri.substring(5); 
-				console.warn(response.uri);
 				setCurrentImage(response.uri);
 				setShowCrop(true);
 			}
