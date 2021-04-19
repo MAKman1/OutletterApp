@@ -8,6 +8,7 @@ target 'Outletter' do
 
   pod 'ViroReact', :path => '../node_modules/@viro-community/react-viro/ios/'
   pod 'ViroKit_static_lib', :path => '../node_modules/@viro-community/react-viro/ios/dist/ViroRenderer/static_lib'
+  pod 'react-native-image-crop-tools', :path => '../node_modules/react-native-image-crop-tools'
   
   use_react_native!(:path => config["reactNativePath"])
 

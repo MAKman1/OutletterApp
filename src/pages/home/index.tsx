@@ -16,7 +16,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunity from 'react-native-vector-icons/MaterialCommunityIcons';
 import Feather from 'react-native-vector-icons/Feather';
-
+import { launchImageLibrary } from 'react-native-image-picker';
 import Hamburger from 'react-native-hamburger';
 
 import ARDisplay from './arcomponent/index'
@@ -54,8 +54,9 @@ function Home(props: any, { navigation }: any): JSX.Element {
 	const [navRoute, setNavRoute] = useState(null);
 
 	const [showCrop, setShowCrop] = useState(false);
-
 	const [currentImage, setCurrentImage] = useState('https://i.pinimg.com/736x/0b/0c/d5/0b0cd5d09cd50a1c11c630b908ba48a3.jpg');
+	// const [uploadedImage, setUploadedImage] = useState('../../assets/lcLogo.png');
+
 
 	//Animations
 	const widthAnim = useRef(new Animated.Value(0)).current;
@@ -309,19 +310,23 @@ function Home(props: any, { navigation }: any): JSX.Element {
 		setMenuActive(false);
 	}
 
+	function uploadeImage() {
+		let options = {
+			mediaType: 'Photo',
+			quality: 1,
+		};
+		launchImageLibrary(options, (response) => {
+			if (response.uri) {
+				// response.uri = response.uri.substring(5); 
+				console.warn(response.uri);
+				setCurrentImage(response.uri);
+				setShowCrop(true);
+			}
+		});
+	}
+
 	return (
 		<View style={[styles.rootContainer, { backgroundColor: '#000' }]}>
-			{/* <ViroARSceneNavigator
-				ref={arScene}
-				autofocus={false}
-				initialScene={{
-					scene: ARDisplay,
-				}}
-				viroAppProps={
-					{ arfound, bestItem }
-				}
-				style={{ flex: 1 }}
-			/> */}
 			{showCrop ?
 				<SafeAreaView style={styles.cropOuter}>
 					<CropView
@@ -332,17 +337,18 @@ function Home(props: any, { navigation }: any): JSX.Element {
 					/>
 				</SafeAreaView>
 				:
-				<ViroARSceneNavigator
-					ref={arScene}
-					autofocus={false}
-					initialScene={{
-						scene: ARDisplay,
-					}}
-					viroAppProps={
-						{ arfound, bestItem }
-					}
-					style={{ flex: 1 }}
-				/>
+				null
+				// <ViroARSceneNavigator
+				// 	ref={arScene}
+				// 	autofocus={false}
+				// 	initialScene={{
+				// 		scene: ARDisplay,
+				// 	}}
+				// 	viroAppProps={
+				// 		{ arfound, bestItem }
+				// 	}
+				// 	style={{ flex: 1 }}
+				// />
 			}
 
 			{/* Menu */}
@@ -396,7 +402,6 @@ function Home(props: any, { navigation }: any): JSX.Element {
 				{loading && <ActivityIndicator color={"white"} size={35} style={{ marginTop: '50%' }} />}
 
 			</SafeAreaView>
-
 			<SafeAreaView style={styles.cameraOverlayBottom} >
 				<View style={styles.cameraOverlay}>
 					<View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -424,6 +429,9 @@ function Home(props: any, { navigation }: any): JSX.Element {
 							null
 						}
 						<TouchableOpacity disabled={loading} style={[styles.roundedButtonView, showCrop ? { marginLeft: 50 } : null]} onPress={() => { showCrop ? uploadCroppedImage() : showCropView() }}>
+							<TouchableOpacity onPress={() => uploadeImage()}>
+								<Text style={styles.roundedButtonText}>Upload Image</Text>
+							</TouchableOpacity>
 							<LinearGradient useAngle={true} angle={45} colors={['#00E9D8', '#009ED9']} style={styles.roundedButton}>
 								<Text style={styles.roundedButtonText}>{"Go!"}</Text>
 							</LinearGradient>
