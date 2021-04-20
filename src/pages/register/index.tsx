@@ -106,7 +106,7 @@ function RegisterScreen({navigation}): JSX.Element {
 
 
 
-						<TouchableOpacity>
+						<TouchableOpacity onPress={() => navigation.navigate("Login")}>
 							<Text style={styles.subText}>{"Already have an account?  "}
 								<Text style={[styles.smallButtonText, { color: "grey" }]}>{"Login"}</Text>
 							</Text>
