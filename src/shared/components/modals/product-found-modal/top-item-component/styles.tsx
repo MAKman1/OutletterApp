@@ -1,13 +1,11 @@
 import { StyleSheet, Dimensions } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { APP_COLORS } from "../../shared/styles/colors";
+import { APP_COLORS } from '../../../../styles/colors';
 
 export default StyleSheet.create({
   rootContainer: {
     // backgroundColor: "#FBFBFB",
     flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'center'
   },
   title: {
     padding: 20,
@@ -16,8 +14,8 @@ export default StyleSheet.create({
     color: 'black'
   },
   horizontalCard: {
-    maxHeight: 400,
-    width: Dimensions.get('window').width * 0.9,
+    height: 105,
+    width: Dimensions.get('window').width - 130,
     borderRadius: 20,
     padding: 15,
     margin: 15,
@@ -32,33 +30,27 @@ export default StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 10,
   },
-  popupTitle: {
-    color: 'black',
-    fontSize: 25,
-    // fontWeight: "bold",
-    marginBottom: 10,
-  },
   cardTop: {
     alignItems: 'flex-end',
     backgroundColor: 'red'
   },
   productImage: {
-    width: 90,
-    height: 90,
+    width: 75,
+    height: 75,
     borderRadius: 5,
-    marginRight: 10,
+    marginRight: 20,
   },
   productName: {
-    fontSize: 20,
+    fontSize: 22,
   },
   productPrice: {
     color: APP_COLORS.lightBlue,
-    fontSize: 20,
+    fontSize: 16,
   },
   roundedButton: {
     marginTop: 5,
     height: 25,
-    width: "50%",
+    width: 75,
     justifyContent: "center",
     alignItems: "center",
     paddingVertical: 8,

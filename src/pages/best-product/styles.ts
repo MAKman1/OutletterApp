@@ -1,11 +1,14 @@
-import { StyleSheet, Dimensions } from "react-native";
+import { StyleSheet, Dimensions, useWindowDimensions } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { APP_COLORS } from "../../shared/styles/colors";
 
 export default StyleSheet.create({
     rootContainer: {
-        backgroundColor: "#FBFBFB",
+        width: Dimensions.get('window').width,
+        // backgroundColor: "#FBFBFB",
         flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'center'
     },
     title: {
         padding: 20,
@@ -15,7 +18,7 @@ export default StyleSheet.create({
     },
     horizontalCard: {
         maxHeight: 400,
-        // alignSelf: 'center',
+        width: Dimensions.get('window').width * 0.9,
         borderRadius: 20,
         padding: 15,
         margin: 15,
@@ -28,7 +31,7 @@ export default StyleSheet.create({
         },
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
-        elevation: 20,
+        elevation: 10,
     },
     reviewDate: {
         color: APP_COLORS.primary,
@@ -56,7 +59,7 @@ export default StyleSheet.create({
         width: 110,
         height: 110,
         borderRadius: 5,
-        marginRight: 10,
+        marginRight: 20,
     },
     productName: {
         fontSize: 25,
@@ -70,7 +73,7 @@ export default StyleSheet.create({
     roundedButton: {
         marginTop: 5,
         height: 25,
-        width: "50%",
+        width: 80,
         justifyContent: "center",
         alignItems: "center",
         paddingVertical: 5,
@@ -82,6 +85,17 @@ export default StyleSheet.create({
         width: 45,
         borderWidth: 3,
         borderColor: APP_COLORS.lightBlue,
+        borderRadius: 50,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: 5,
+    },
+    optionIconsSelected: {
+        height: 45,
+        width: 45,
+        borderWidth: 3,
+        borderColor: APP_COLORS.lightBlue,
+        backgroundColor: APP_COLORS.lightBlue,
         borderRadius: 50,
         justifyContent: 'center',
         alignItems: 'center',

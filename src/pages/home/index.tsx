@@ -46,7 +46,7 @@ function Home(props: any, { navigation }: any): JSX.Element {
 	const [debugModal, setDebugModal] = useState(true);
 	const [menuActive, setMenuActive] = useState(false);
 
-	const [queryItem, setQueryItem] = useState<any>({});
+	const [queryItem, setQueryItem] = useState<any>({});	
 	const [similarItems, setSimilarItems] = useState<any[]>([]);
 	const [bestItem, setBestItem] = useState<any>({});
 
@@ -55,6 +55,7 @@ function Home(props: any, { navigation }: any): JSX.Element {
 
 	const [showCrop, setShowCrop] = useState(false);
 	const [currentImage, setCurrentImage] = useState('https://i.pinimg.com/736x/0b/0c/d5/0b0cd5d09cd50a1c11c630b908ba48a3.jpg');
+	
 	// const [uploadedImage, setUploadedImage] = useState('../../assets/lcLogo.png');
 
 
@@ -123,7 +124,7 @@ function Home(props: any, { navigation }: any): JSX.Element {
 	const renderComponent = (navRoute: any) => {
 		switch (navRoute) {
 			case "productFoundScreen":
-				return <ProductFoundModal bestItem={bestItem} similarItems={similarItems} />
+				return <ProductFoundModal bestItem={bestItem} similarItems={similarItems} queryItem={queryItem}/>
 			case "writeReviewScreen":
 				return <WriteReview />
 			case "reviewsScreen":
@@ -150,7 +151,7 @@ function Home(props: any, { navigation }: any): JSX.Element {
 	}
 
 	function resetStates() {
-		setQueryItem([]);
+		setQueryItem({});
 		setSimilarItems([]);
 		setBestItem({});
 	}
@@ -211,8 +212,8 @@ function Home(props: any, { navigation }: any): JSX.Element {
 	}
 
 	async function uploadCroppedImage() {
-		let image = await cropViewRef.current.saveImage(true, 90);
-		console.warn(JSON.stringify(image))
+		// let image = await cropViewRef.current.saveImage(true, 90);
+		uploadImage(currentImage);
 	}
 
 	async function uploadImage(image: any) {
@@ -271,7 +272,8 @@ function Home(props: any, { navigation }: any): JSX.Element {
 
 		var data = new FormData();
 		data.append("picture", {
-			uri: 'file://' + image.url,
+			// uri: 'file://' + image.url,
+			uri: image,
 			name: 'uploaded_image_' + Date.now() + '.jpg',
 			type: 'image/*'
 		})
@@ -288,11 +290,11 @@ function Home(props: any, { navigation }: any): JSX.Element {
 				'Content-Type': 'multipart/form-data'
 			}
 		}
-
+		
 		// console.log(JSON.stringify(data));
-		axios.post('https://6da2ceb2e522.ngrok.io/api/v1/test/', data, config)
+		axios.post('https://12a0393b6e6c.ngrok.io/api/v1/test/', data, config)
 			.then(function (response) {
-				console.warn(JSON.stringify(response));
+				console.log(JSON.stringify(response));
 				setStates(response.data);
 				setNavRoute("productFoundScreen");
 				setLoading(false);
@@ -310,7 +312,7 @@ function Home(props: any, { navigation }: any): JSX.Element {
 		setMenuActive(false);
 	}
 
-	function uploadeImage() {
+	function uploadFromGallery() {
 		let options = {
 			mediaType: 'Photo',
 			quality: 1,
@@ -331,22 +333,22 @@ function Home(props: any, { navigation }: any): JSX.Element {
 						sourceUrl={currentImage}
 						style={styles.cropView}
 						ref={cropViewRef}
-						onImageCrop={(res) => console.warn(res)}
+						onImageCrop={(res) => setCurrentImage(res.uri)}
 					/>
 				</SafeAreaView>
 				:
-				null
-				// <ViroARSceneNavigator
-				// 	ref={arScene}
-				// 	autofocus={false}
-				// 	initialScene={{
-				// 		scene: ARDisplay,
-				// 	}}
-				// 	viroAppProps={
-				// 		{ arfound, bestItem }
-				// 	}
-				// 	style={{ flex: 1 }}
-				// />
+				// null
+				<ViroARSceneNavigator
+					ref={arScene}
+					autofocus={false}
+					initialScene={{
+						scene: ARDisplay,
+					}}
+					viroAppProps={
+						{ arfound, bestItem }
+					}
+					style={{ flex: 1 }}
+				/>
 			}
 
 			{/* Menu */}
@@ -427,7 +429,7 @@ function Home(props: any, { navigation }: any): JSX.Element {
 							null
 						}
 						<TouchableOpacity disabled={loading} style={[styles.roundedButtonView, showCrop ? { marginLeft: 50 } : null]} onPress={() => { showCrop ? uploadCroppedImage() : showCropView() }}>
-							<TouchableOpacity onPress={() => uploadeImage()}>
+							<TouchableOpacity onPress={() => uploadFromGallery()}>
 								<Text style={styles.roundedButtonText}>Upload Image</Text>
 							</TouchableOpacity>
 							<LinearGradient useAngle={true} angle={45} colors={['#00E9D8', '#009ED9']} style={styles.roundedButton}>
