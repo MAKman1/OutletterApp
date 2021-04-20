@@ -290,9 +290,9 @@ function Home(props: any, { navigation }: any): JSX.Element {
 				'Content-Type': 'multipart/form-data'
 			}
 		}
-
+		
 		// console.log(JSON.stringify(data));
-		axios.post('https://6da2ceb2e522.ngrok.io/api/v1/test/', data, config)
+		axios.post('https://dbd374c7803e.ngrok.io/api/v1/test/', data, config)
 			.then(function (response) {
 				console.log(JSON.stringify(response));
 				setStates(response.data);

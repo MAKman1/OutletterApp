@@ -90,6 +90,17 @@ export default StyleSheet.create({
         alignItems: 'center',
         marginBottom: 5,
     },
+    optionIconsSelected: {
+        height: 45,
+        width: 45,
+        borderWidth: 3,
+        borderColor: APP_COLORS.lightBlue,
+        backgroundColor: APP_COLORS.lightBlue,
+        borderRadius: 50,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: 5,
+    },
     optionContainer: {
         flex: 1,
         flexDirection: 'column',
