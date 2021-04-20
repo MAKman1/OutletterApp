@@ -5,14 +5,29 @@ import { APP_COLORS } from '../../shared/styles/colors';
 import styles from './styles';
 import LinearGradient from 'react-native-linear-gradient';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import axios from 'axios'
+import { Cache } from '../../shared/libs/cache';
 
-function LoginScreen({navigation}): JSX.Element {
+function LoginScreen({ navigation }): JSX.Element {
 
 	const [username, setUsername] = useState('');
 	const [password, setPassword] = useState('');
 
 	useEffect(() => {
 	}, [])
+
+	const login = (username: string, password: string) => {
+		let data = {
+			username: username,
+			password: password
+		}
+		axios.post('https://dbd374c7803e.ngrok.io/api/v1/user/login/', data).then((res) => {
+			Cache.saveString(res.data.token, "AUTH_TOKEN");
+			navigation.replace("Home")
+		}).catch((err) => {
+			console.warn("Error: " + JSON.stringify(err))
+		})
+	}
 
 	return (
 		<View style={styles.rootContainer}>
@@ -51,7 +66,7 @@ function LoginScreen({navigation}): JSX.Element {
 								style={styles.textInput} />
 						</View>
 
-						<TouchableOpacity style={styles.buttonOuter} onPress={() => navigation.replace("Home")}>
+						<TouchableOpacity style={styles.buttonOuter} onPress={() => login(username, password)}>
 							<LinearGradient style={styles.actionButton} useAngle={true} angle={45} colors={['#00E9D8', '#009ED9']} >
 								<Text style={styles.buttonText}>{"Login"}</Text>
 							</LinearGradient>

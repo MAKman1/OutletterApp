@@ -15,7 +15,8 @@ export default StyleSheet.create({
   textInput: {
     fontSize: 16,
     marginLeft: 15,
-    marginRight: 15,
+	marginRight: 15,
+	width: '100%'
   },
   inputView: {
     flexDirection: "row",
@@ -110,16 +111,16 @@ export default StyleSheet.create({
     elevation: 5,
   },
   titleLogo: {
-	  margin: 5,
+	  margin: 0,
 	  alignSelf: 'center'
   },
   titleLogoOuter: {
 	alignSelf: "center",
     position: "absolute",
-	top: 50,
+	top: 60,
 	backgroundColor: "#FFF",
 	borderRadius: 50,
-	paddingHorizontal: 20,
+	paddingHorizontal: 5,
 	zIndex: 999
   },
   scroll: {
