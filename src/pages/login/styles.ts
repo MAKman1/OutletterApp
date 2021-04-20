@@ -3,96 +3,132 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { APP_COLORS } from "../../shared/styles/colors";
 
 export default StyleSheet.create({
-    rootContainer: {
-        backgroundColor: "#FBFBFB",
-        flex: 1,
+  rootContainer: {
+    backgroundColor: "#FBFBFB",
+    flex: 1,
+    flexDirection: "column",
+  },
+  containerInner: {
+    flex: 1,
+    justifyContent: "center",
+  },
+  textInput: {
+    fontSize: 16,
+    marginLeft: 15,
+    marginRight: 15,
+  },
+  inputView: {
+    flexDirection: "row",
+    marginHorizontal: 20,
+    marginVertical: 15,
+    padding: 15,
+    alignItems: "center",
+    backgroundColor: "#FFF",
+    borderRadius: 50,
+    borderWidth: 0.5,
+    borderColor: "#CECECE",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 4,
     },
-    title: {
-        padding: 20,
-        fontSize: 32,
-        textAlign: 'center',
-        color: 'black'
+    shadowOpacity: 0.15,
+    shadowRadius: 10,
+    elevation: 5,
+  },
+  titleText: {
+    fontSize: 35,
+    color: "#7E7E7E",
+    fontWeight: "bold",
+    textAlign: "center",
+    marginBottom: 20,
+  },
+  actionButton: {
+    borderRadius: 50,
+    height: 50,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  actionButtonSmall: {
+    borderRadius: 50,
+    height: 40,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  buttonOuter: {
+    marginHorizontal: 20,
+    marginTop: 20,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 4,
     },
-    horizontalCard: {
-        maxHeight: 400,
-        // alignSelf: 'center',
-        borderRadius: 20,
-        padding: 15,
-        margin: 15,
-        backgroundColor: "white",
-
-        shadowColor: "black",
-        shadowOffset: {
-          width: 0,
-          height: 2,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
-        elevation: 20,
+    shadowOpacity: 0.2,
+    shadowRadius: 10,
+    elevation: 5,
+  },
+  buttonText: {
+    color: "#FFF",
+    fontWeight: "bold",
+    fontSize: 20,
+    textAlign: "center",
+  },
+  smallButtonText: {
+    color: "#FFF",
+    fontWeight: "bold",
+    fontSize: 16,
+    textAlign: "center",
+  },
+  subText: {
+    color: "grey",
+    fontSize: 16,
+    textAlign: "center",
+    marginTop: 50,
+  },
+  backImage: {
+    width: "100%",
+    height: "100%",
+    position: "absolute",
+    top: 0,
+  },
+  smallButton: {
+    flex: 1,
+    backgroundColor: "#B2B2B2",
+    height: 40,
+    borderRadius: 50,
+    justifyContent: "center",
+    alignItems: "center",
+    marginHorizontal: 20,
+    marginTop: 20,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 4,
     },
-    reviewDate: {
-        color: APP_COLORS.primary,
-        fontSize: 16,
-        marginBottom: 10,
-    },
-    reviewText: {
-        lineHeight: 20,
-    },
-    cameraOverlayTop: {
-        top: 0,
-        width: "100%",
-
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
-
-        // elevation: 5,
-    },
-    productImage: {
-        width: 110,
-        height: 110,
-        borderRadius: 5,
-        marginRight: 10,
-    },
-    productName: {
-        fontSize: 25,
-        paddingBottom: 5
-    },
-    productPrice: {
-        color: APP_COLORS.lightBlue,
-        fontSize: 20,
-        marginBottom: 5
-    },
-    roundedButton: {
-        marginTop: 5,
-        height: 25,
-        width: "50%",
-        justifyContent: "center",
-        alignItems: "center",
-        paddingVertical: 5,
-        borderRadius: 50,
-        backgroundColor: "#04B3FF",
-    },
-    optionIcons: {
-        height: 45,
-        width: 45,
-        borderWidth: 3,
-        borderColor: APP_COLORS.lightBlue,
-        borderRadius: 50,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginBottom: 5,
-    },
-    optionContainer: {
-        flex: 1,
-        flexDirection: 'column',
-        alignItems: 'center',
-    },
-    optionText: {
-        fontSize: 12
-    }
+    shadowOpacity: 0.2,
+    shadowRadius: 10,
+    elevation: 5,
+  },
+  titleLogo: {
+	  margin: 5,
+	  alignSelf: 'center'
+  },
+  titleLogoOuter: {
+	alignSelf: "center",
+    position: "absolute",
+	top: 50,
+	backgroundColor: "#FFF",
+	borderRadius: 50,
+	paddingHorizontal: 20,
+	zIndex: 999
+  },
+  scroll: {
+	  height: '100%',
+	  width: '100%'
+  },
+  scrollInner: {
+	  minHeight: '100%',
+	  width: '100%',
+	  justifyContent: 'center'
+  }
 });
