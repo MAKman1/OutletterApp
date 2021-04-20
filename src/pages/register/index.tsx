@@ -5,8 +5,9 @@ import { APP_COLORS } from '../../shared/styles/colors';
 import styles from './styles';
 import LinearGradient from 'react-native-linear-gradient';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import axios from 'axios';
 
-function RegisterScreen({navigation}): JSX.Element {
+function RegisterScreen({ navigation }): JSX.Element {
 
 	const [name, setName] = useState('');
 	const [email, setEmail] = useState('');
@@ -19,11 +20,36 @@ function RegisterScreen({navigation}): JSX.Element {
 	useEffect(() => {
 	}, [])
 
+	const register = (name: string, email: string,
+		age: string, gender: string, location: string, password: string) => {
+
+		let data = new FormData();
+		data.append( "user_name", "bilalbink123")
+		data.append( "email", "bilal@bink.com")
+		data.append( "password", "secret123.")
+		data.append( "confirm_password", "secret123.")
+		data.append( "first_name", "Muhammad Bilal")
+		data.append( "gender", "male")
+		data.append( "last_name", "Khalid")
+		data.append( "about", "hi")
+		// data.append( "profile_image", null)
+
+		axios.post('https://12a0393b6e6c.ngrok.io/api/v1/user/register/', data, {
+			headers: {"Content-Type": "multipart/form-data"}
+		}).then(res => {
+			// Cache.saveString(res.data.token, "AUTH_TOKEN");
+			console.warn("Res: " + JSON.stringify(res))
+			navigation.replace("Home");
+		}).catch((err) => {
+			console.warn("Error: " + JSON.stringify(err))
+		})
+
+	}
 	return (
 		<View style={styles.rootContainer}>
 
 			<View style={styles.backButton}>
-				<TouchableOpacity style={{paddingHorizontal: 15}} onPress={() => navigation.goBack()}>
+				<TouchableOpacity style={{ paddingHorizontal: 15 }} onPress={() => navigation.goBack()}>
 					<AntDesign name={"left"} size={22} color={'#000'} />
 				</TouchableOpacity>
 			</View>
@@ -56,7 +82,6 @@ function RegisterScreen({navigation}): JSX.Element {
 							<AntDesign name={"mail"} size={22} color={'#009ED9'} />
 							<TextInput
 								value={email}
-								secureTextEntry={true}
 								onChangeText={setEmail}
 								placeholder={"E-mail"}
 								style={styles.textInput} />
@@ -98,7 +123,7 @@ function RegisterScreen({navigation}): JSX.Element {
 								style={styles.textInput} />
 						</View>
 
-						<TouchableOpacity style={styles.buttonOuter}>
+						<TouchableOpacity style={styles.buttonOuter} onPress={() => register(name, email, age, gender, location, password)}>
 							<LinearGradient style={styles.actionButton} useAngle={true} angle={45} colors={['#00E9D8', '#009ED9']} >
 								<Text style={styles.buttonText}>{"Sign Up"}</Text>
 							</LinearGradient>

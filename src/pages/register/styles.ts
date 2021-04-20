@@ -15,7 +15,8 @@ export default StyleSheet.create({
   textInput: {
     fontSize: 16,
     marginLeft: 15,
-    marginRight: 15,
+	marginRight: 15,
+	width: '100%'
   },
   inputView: {
     flexDirection: "row",
