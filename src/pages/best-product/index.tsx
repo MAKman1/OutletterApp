@@ -22,7 +22,6 @@ function BestProduct(props: any): JSX.Element {
         }
         axios.get('https://dbd374c7803e.ngrok.io/api/v1/like/', config)
             .then(function (response) {
-                console.log(JSON.stringify(response.data));
                 let likedItems = response.data;
                 if (likedItems) {
                     setLiked(likedItems.some((item: any) => item.rel_item === props.bestItem.id));
@@ -34,7 +33,6 @@ function BestProduct(props: any): JSX.Element {
 
         axios.get('https://dbd374c7803e.ngrok.io/api/v1/wish/', config)
             .then(function (response) {
-                console.log(JSON.stringify(response.data));
                 let wishedItem = response.data;
                 if (wishedItem) {
                     setWished(wishedItem.some((item: any) => item.rel_item === props.bestItem.id));
@@ -150,7 +148,7 @@ function BestProduct(props: any): JSX.Element {
                             <MaterialIcons color={'black'} size={25} name="share" />
                         </TouchableOpacity>
                         <Text style={styles.optionText}>
-                            Shares
+                            Share
                         </Text>
                     </View>
                 </View>
