@@ -24,18 +24,23 @@ function RegisterScreen({ navigation }): JSX.Element {
 		age: string, gender: string, location: string, password: string) => {
 
 		let data = new FormData();
-		data.append( "user_name", "bilalbink123")
-		data.append( "email", "bilal@bink.com")
-		data.append( "password", "secret123.")
-		data.append( "confirm_password", "secret123.")
-		data.append( "first_name", "Muhammad Bilal")
-		data.append( "gender", "male")
-		data.append( "last_name", "Khalid")
-		data.append( "about", "hi")
-		// data.append( "profile_image", null)
+		data.append("user_name", "bilalbink123")
+		data.append("email", "bilal@bink.com")
+		data.append("password", "secret123.")
+		data.append("confirm_password", "secret123.")
+		data.append("first_name", "Muhammad Bilal")
+		data.append("gender", "male")
+		data.append("last_name", "Khalid")
+		data.append("about", "hi")
+		data.append("profile_image", {
+			uri: 'file:///Users/mak/Library/Developer/CoreSimulator/Devices/54D46DCD-AF2E-406D-8742-E29D2CCA2B02/data/Containers/Data/Application/9D798F17-509A-45DD-BD29-6951BDAF1BDF/tmp/A50725CA-5F55-4B5D-8794-92E7D270537D.png',
+			// uri: null,
+			name: 'uploaded_image_' + Date.now() + '.jpg',
+			type: 'image/*'
+		})
 
 		axios.post('https://12a0393b6e6c.ngrok.io/api/v1/user/register/', data, {
-			headers: {"Content-Type": "multipart/form-data"}
+			headers: { "Content-Type": "multipart/form-data" }
 		}).then(res => {
 			// Cache.saveString(res.data.token, "AUTH_TOKEN");
 			console.warn("Res: " + JSON.stringify(res))

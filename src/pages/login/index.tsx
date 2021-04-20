@@ -21,12 +21,13 @@ function LoginScreen({ navigation }): JSX.Element {
 			username: username,
 			password: password
 		}
-		axios.post('https://dbd374c7803e.ngrok.io/api/v1/user/login/', data).then((res) => {
-			Cache.saveString(res.data.token, "AUTH_TOKEN");
-			navigation.replace("Home")
-		}).catch((err) => {
-			console.warn("Error: " + JSON.stringify(err))
-		})
+		navigation.replace("Home")
+		// axios.post('https://12a0393b6e6c.ngrok.io/api/v1/user/login/', data).then((res) => {
+		// 	Cache.saveString(res.data.token, "AUTH_TOKEN");
+		// 	navigation.replace("Home")
+		// }).catch((err) => {
+		// 	console.warn("Error: " + JSON.stringify(err))
+		// })
 	}
 
 	return (

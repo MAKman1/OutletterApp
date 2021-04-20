@@ -319,6 +319,7 @@ function Home(props: any, { navigation }: any): JSX.Element {
 		};
 		launchImageLibrary(options, (response) => {
 			if (response.uri) {
+				console.log(response.uri)
 				setCurrentImage(response.uri);
 				setShowCrop(true);
 			}
@@ -337,18 +338,18 @@ function Home(props: any, { navigation }: any): JSX.Element {
 					/>
 				</SafeAreaView>
 				:
-				// null
-				<ViroARSceneNavigator
-					ref={arScene}
-					autofocus={false}
-					initialScene={{
-						scene: ARDisplay,
-					}}
-					viroAppProps={
-						{ arfound, bestItem }
-					}
-					style={{ flex: 1 }}
-				/>
+				null
+				// <ViroARSceneNavigator
+				// 	ref={arScene}
+				// 	autofocus={false}
+				// 	initialScene={{
+				// 		scene: ARDisplay,
+				// 	}}
+				// 	viroAppProps={
+				// 		{ arfound, bestItem }
+				// 	}
+				// 	style={{ flex: 1 }}
+				// />
 			}
 
 			{/* Menu */}
