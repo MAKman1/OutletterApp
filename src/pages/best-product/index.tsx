@@ -8,7 +8,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { APP_COLORS } from "../../shared/styles/colors";
 
 function BestProduct(props: any): JSX.Element {
-
+    const [itemLiked, setItemLiked] = useState(false);
 
     useEffect(() => {
     }, [])

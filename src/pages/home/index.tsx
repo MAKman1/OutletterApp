@@ -46,7 +46,7 @@ function Home(props: any, { navigation }: any): JSX.Element {
 	const [debugModal, setDebugModal] = useState(true);
 	const [menuActive, setMenuActive] = useState(false);
 
-	const [queryItem, setQueryItem] = useState<any>({});
+	const [queryItem, setQueryItem] = useState<any>({});	
 	const [similarItems, setSimilarItems] = useState<any[]>([]);
 	const [bestItem, setBestItem] = useState<any>({});
 
@@ -124,7 +124,7 @@ function Home(props: any, { navigation }: any): JSX.Element {
 	const renderComponent = (navRoute: any) => {
 		switch (navRoute) {
 			case "productFoundScreen":
-				return <ProductFoundModal bestItem={bestItem} similarItems={similarItems} />
+				return <ProductFoundModal bestItem={bestItem} similarItems={similarItems} queryItem={queryItem}/>
 			case "writeReviewScreen":
 				return <WriteReview />
 			case "reviewsScreen":
@@ -151,7 +151,7 @@ function Home(props: any, { navigation }: any): JSX.Element {
 	}
 
 	function resetStates() {
-		setQueryItem([]);
+		setQueryItem({});
 		setSimilarItems([]);
 		setBestItem({});
 	}
@@ -294,7 +294,7 @@ function Home(props: any, { navigation }: any): JSX.Element {
 		// console.log(JSON.stringify(data));
 		axios.post('https://6da2ceb2e522.ngrok.io/api/v1/test/', data, config)
 			.then(function (response) {
-				console.warn(JSON.stringify(response));
+				console.log(JSON.stringify(response));
 				setStates(response.data);
 				setNavRoute("productFoundScreen");
 				setLoading(false);

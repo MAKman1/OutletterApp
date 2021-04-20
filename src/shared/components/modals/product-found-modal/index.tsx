@@ -7,11 +7,12 @@ import { TouchableOpacity as TO } from 'react-native-gesture-handler';
 import MaterialCommunity from 'react-native-vector-icons/MaterialCommunityIcons';
 import Feather from 'react-native-vector-icons/Feather';
 import BestProduct from '../../../../pages/best-product/index'
-
+import TopItem from './top-item-component/index'
 
 function ProductFoundModal(props: {
 	bestItem?: any,
-	similarItems?: any[]
+	similarItems?: any[],
+	queryItem?: any,
 
 }): JSX.Element {
 
@@ -37,11 +38,6 @@ function ProductFoundModal(props: {
 				>
 					{props.bestItem &&
 						<BestProduct bestItem={props.bestItem} />
-						// <TouchableOpacity activeOpacity={1} style={styles.horizontalInner} onPress={() => Linking.openURL(props.bestItem.url)}>
-						// 	<View style={styles.horizontalCard}>
-						// 		<Image style={{ width: 90, height: 90, borderRadius: 5 }} source={{ uri: props.bestItem.image_url }} />
-						// 	</View>
-						// </TouchableOpacity>
 					}
 				</ScrollView>
 
@@ -60,11 +56,9 @@ function ProductFoundModal(props: {
 						<View style={styles.horizontalInner}>
 							{props.similarItems && props.similarItems.map((item, index) => {
 								if (index != 0 && item != null) {
-									return (<TouchableOpacity activeOpacity={1} style={styles.horizontalInner} onPress={() => Linking.openURL(item[index].url)} key={index}>
-										<View style={styles.horizontalCard}>
-											<Image style={{ width: 90, height: 90, borderRadius: 5 }} source={{ uri: item.image_url }} />
-										</View>
-									</TouchableOpacity>)
+									return (
+										<TopItem key={index} topItem={item} />
+									)
 								}
 							})}
 
@@ -73,7 +67,7 @@ function ProductFoundModal(props: {
 				</ScrollView>
 
 
-				{/* {debugModal && queryItem &&
+				{/* {debugModal && queryItem && */}
 					<View>
 
 						<View style={{ alignContent: 'flex-start', paddingHorizontal: 20 }}>
@@ -82,26 +76,26 @@ function ProductFoundModal(props: {
 
 						<View style={{ alignContent: 'flex-start', paddingHorizontal: 20 }}>
 							<Text style={styles.popupTitle}>Labels</Text>
-							<Text style={{ color: 'black' }}>{JSON.stringify(queryItem.label)}</Text>
+							<Text style={{ color: 'black' }}>{JSON.stringify(props.queryItem.label)}</Text>
 						</View>
 
 						<View style={{ alignContent: 'flex-start', paddingHorizontal: 20 }}>
 							<Text style={styles.popupTitle}>Text</Text>
-							<Text style={{ color: 'black' }}>{JSON.stringify(queryItem.texts)}</Text>
+							<Text style={{ color: 'black' }}>{JSON.stringify(props.queryItem.texts)}</Text>
 						</View>
 
 						<View style={{ alignContent: 'flex-start', paddingHorizontal: 20 }}>
 							<Text style={styles.popupTitle}>Colors</Text>
-							<Text style={{ color: 'black' }}>{JSON.stringify(queryItem.color)}</Text>
+							<Text style={{ color: 'black' }}>{JSON.stringify(props.queryItem.color)}</Text>
 						</View>
 
 						<View style={{ alignContent: 'flex-start', paddingHorizontal: 20 }}>
 							<Text style={styles.popupTitle}>Segmented image</Text>
 						</View>
-						<Image style={{ height: 400, width: 400 }} source={{ uri: 'https://867229285c17.ngrok.io' + queryItem.picture }} resizeMode={'contain'} />
+						<Image style={{ height: 400, width: 400 }} source={{ uri: 'https://6da2ceb2e522.ngrok.io' + props.queryItem.picture }} resizeMode={'contain'} />
 
 					</View>
-				} */}
+				{/* } */}
 
 
 				{/* </View> */}

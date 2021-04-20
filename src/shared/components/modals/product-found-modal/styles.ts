@@ -6,9 +6,9 @@ export default StyleSheet.create({
     marginBottom: 20,
   },
   popupTitle: {
-    color: APP_COLORS.primary,
-    fontSize: 22,
-    fontWeight: "bold",
+    color: 'black',
+    fontSize: 25,
+    // fontWeight: "bold",
     marginBottom: 10,
   },
   horizontalCard: {
