@@ -56,41 +56,45 @@ function BestProduct(props: any): JSX.Element {
     }
 
     function likeItem() {
-        var data = new FormData();
-        data.append("rel_item", props.bestItem.id);
-        const config = {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-                'Authorization': 'Token 7330a179a43e3e044e3eff28cc66f6a11905b417'
+        if (!liked) {
+            var data = new FormData();
+            data.append("rel_item", props.bestItem.id);
+            const config = {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    'Authorization': 'Token 7330a179a43e3e044e3eff28cc66f6a11905b417'
+                }
             }
+            axios.post('https://dbd374c7803e.ngrok.io/api/v1/like/', data, config)
+                .then(function (response) {
+                    setlikeAmount(likeAmount + 1);
+                    setLiked(true);
+                })
+                .catch(function (error) {
+                    console.warn("Error: " + JSON.stringify(error));
+                });
         }
-        axios.post('https://dbd374c7803e.ngrok.io/api/v1/like/', data, config)
-            .then(function (response) {
-                setlikeAmount(likeAmount + 1);
-                setLiked(true);
-            })
-            .catch(function (error) {
-                console.warn("Error: " + JSON.stringify(error));
-            });
     }
 
     function addToWishlist() {
-        var data = new FormData();
-        data.append("rel_item", props.bestItem.id);
-        const config = {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-                'Authorization': 'Token 7330a179a43e3e044e3eff28cc66f6a11905b417'
+        if (!wished) {
+            var data = new FormData();
+            data.append("rel_item", props.bestItem.id);
+            const config = {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    'Authorization': 'Token 7330a179a43e3e044e3eff28cc66f6a11905b417'
+                }
             }
+            axios.post('https://dbd374c7803e.ngrok.io/api/v1/wish/', data, config)
+                .then(function (response) {
+                    setWishAmount(wishAmount + 1);
+                    setWished(true);
+                })
+                .catch(function (error) {
+                    console.warn("Error: " + JSON.stringify(error));
+                });
         }
-        axios.post('https://dbd374c7803e.ngrok.io/api/v1/wish/', data, config)
-            .then(function (response) {
-                setWishAmount(wishAmount + 1);
-                setWished(true);
-            })
-            .catch(function (error) {
-                console.warn("Error: " + JSON.stringify(error));
-            });
     }
 
     async function shareLink() {
