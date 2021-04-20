@@ -14,8 +14,8 @@ export default StyleSheet.create({
     color: 'black'
   },
   horizontalCard: {
-    height: 125,
-    width: Dimensions.get('window').width - 90,
+    height: 105,
+    width: Dimensions.get('window').width - 130,
     borderRadius: 20,
     padding: 15,
     margin: 15,
@@ -35,22 +35,22 @@ export default StyleSheet.create({
     backgroundColor: 'red'
   },
   productImage: {
-    width: 90,
-    height: 90,
+    width: 75,
+    height: 75,
     borderRadius: 5,
     marginRight: 20,
   },
   productName: {
-    fontSize: 24,
+    fontSize: 22,
   },
   productPrice: {
     color: APP_COLORS.lightBlue,
-    fontSize: 18,
+    fontSize: 16,
   },
   roundedButton: {
     marginTop: 5,
     height: 25,
-    width: "50%",
+    width: 75,
     justifyContent: "center",
     alignItems: "center",
     paddingVertical: 8,

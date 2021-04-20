@@ -28,10 +28,10 @@ function TopItem(props: any): JSX.Element {
     return (
         <View style={styles.rootContainer}>
             <View style={styles.horizontalCard}>
-                <View style={{ flexDirection: 'row', paddingBottom: 20 }}>
+                <View style={{ flexDirection: 'row', paddingBottom: 20, alignItems: 'center' }}>
                     <Image style={styles.productImage} source={{uri: props.topItem.image_url}} />
                     <View>
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', overflow: 'hidden', maxWidth: '100%' }}>
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', overflow: 'hidden' }}>
                             <Text style={styles.productName} numberOfLines={1}>{props.topItem.name}</Text>
                         </View>
                         <Text style={styles.productPrice}>{'Price: ' + props.topItem.price + ' TRY'}</Text>

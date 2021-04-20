@@ -4,8 +4,10 @@ import { APP_COLORS } from "../../shared/styles/colors";
 
 export default StyleSheet.create({
   rootContainer: {
-    backgroundColor: "#FBFBFB",
+    // backgroundColor: "#FBFBFB",
     flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center'
   },
   title: {
     padding: 20,
@@ -14,7 +16,8 @@ export default StyleSheet.create({
     color: 'black'
   },
   horizontalCard: {
-	width: Dimensions.get('window').width - 30,
+    maxHeight: 400,
+    width: Dimensions.get('window').width * 0.9,
     borderRadius: 20,
     padding: 15,
     margin: 15,
@@ -27,23 +30,29 @@ export default StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-    elevation: 20,
+    elevation: 10,
+  },
+  popupTitle: {
+    color: 'black',
+    fontSize: 25,
+    // fontWeight: "bold",
+    marginBottom: 10,
   },
   cardTop: {
     alignItems: 'flex-end',
     backgroundColor: 'red'
   },
-  productImage: { 
-    width: 90, 
-    height: 90, 
+  productImage: {
+    width: 90,
+    height: 90,
     borderRadius: 5,
     marginRight: 10,
   },
   productName: {
-    fontSize: 20, 
+    fontSize: 20,
   },
   productPrice: {
-    color: APP_COLORS.lightBlue, 
+    color: APP_COLORS.lightBlue,
     fontSize: 20,
   },
   roundedButton: {

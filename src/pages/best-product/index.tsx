@@ -20,7 +20,7 @@ function BestProduct(props: any): JSX.Element {
                 'Authorization': 'Token 7330a179a43e3e044e3eff28cc66f6a11905b417'
             }
         }
-        axios.get('https://dbd374c7803e.ngrok.io/api/v1/like/', config)
+        axios.get('https://12a0393b6e6c.ngrok.io/api/v1/like/', config)
             .then(function (response) {
                 let likedItems = response.data;
                 if (likedItems) {
@@ -31,7 +31,7 @@ function BestProduct(props: any): JSX.Element {
                 console.warn("Error: " + JSON.stringify(error));
             });
 
-        axios.get('https://dbd374c7803e.ngrok.io/api/v1/wish/', config)
+        axios.get('https://12a0393b6e6c.ngrok.io/api/v1/wish/', config)
             .then(function (response) {
                 let wishedItem = response.data;
                 if (wishedItem) {
@@ -63,7 +63,7 @@ function BestProduct(props: any): JSX.Element {
                     'Authorization': 'Token 7330a179a43e3e044e3eff28cc66f6a11905b417'
                 }
             }
-            axios.post('https://dbd374c7803e.ngrok.io/api/v1/like/', data, config)
+            axios.post('https://12a0393b6e6c.ngrok.io/api/v1/like/', data, config)
                 .then(function (response) {
                     setlikeAmount(likeAmount + 1);
                     setLiked(true);
@@ -84,7 +84,7 @@ function BestProduct(props: any): JSX.Element {
                     'Authorization': 'Token 7330a179a43e3e044e3eff28cc66f6a11905b417'
                 }
             }
-            axios.post('https://dbd374c7803e.ngrok.io/api/v1/wish/', data, config)
+            axios.post('https://12a0393b6e6c.ngrok.io/api/v1/wish/', data, config)
                 .then(function (response) {
                     setWishAmount(wishAmount + 1);
                     setWished(true);
@@ -108,7 +108,7 @@ function BestProduct(props: any): JSX.Element {
     return (
         <View style={styles.rootContainer}>
             <View style={styles.horizontalCard}>
-                <View style={{ flexDirection: 'row', paddingBottom: 20 }}>
+                <View style={{ flexDirection: 'row', paddingBottom: 20, overflow: 'hidden' }}>
                     <Image style={styles.productImage} source={{ uri: props.bestItem.image_url }} />
                     <View style={{ overflow: 'hidden', }}>
                         <Text numberOfLines={1} style={styles.productName}>{props.bestItem.name}</Text>

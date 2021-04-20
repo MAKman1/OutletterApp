@@ -292,7 +292,7 @@ function Home(props: any, { navigation }: any): JSX.Element {
 		}
 		
 		// console.log(JSON.stringify(data));
-		axios.post('https://dbd374c7803e.ngrok.io/api/v1/test/', data, config)
+		axios.post('https://12a0393b6e6c.ngrok.io/api/v1/test/', data, config)
 			.then(function (response) {
 				console.log(JSON.stringify(response));
 				setStates(response.data);
