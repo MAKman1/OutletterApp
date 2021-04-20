@@ -1,11 +1,14 @@
-import { StyleSheet, Dimensions } from "react-native";
+import { StyleSheet, Dimensions, useWindowDimensions } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { APP_COLORS } from "../../shared/styles/colors";
 
 export default StyleSheet.create({
     rootContainer: {
-        backgroundColor: "#FBFBFB",
+        width: Dimensions.get('window').width,
+        // backgroundColor: "#FBFBFB",
         flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'center'
     },
     title: {
         padding: 20,
@@ -15,7 +18,7 @@ export default StyleSheet.create({
     },
     horizontalCard: {
         maxHeight: 400,
-        // alignSelf: 'center',
+        width: Dimensions.get('window').width * 0.9,
         borderRadius: 20,
         padding: 15,
         margin: 15,
@@ -28,7 +31,7 @@ export default StyleSheet.create({
         },
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
-        elevation: 20,
+        elevation: 10,
     },
     reviewDate: {
         color: APP_COLORS.primary,
@@ -56,7 +59,7 @@ export default StyleSheet.create({
         width: 110,
         height: 110,
         borderRadius: 5,
-        marginRight: 10,
+        marginRight: 20,
     },
     productName: {
         fontSize: 25,

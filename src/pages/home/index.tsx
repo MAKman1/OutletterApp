@@ -55,6 +55,7 @@ function Home(props: any, { navigation }: any): JSX.Element {
 
 	const [showCrop, setShowCrop] = useState(false);
 	const [currentImage, setCurrentImage] = useState('https://i.pinimg.com/736x/0b/0c/d5/0b0cd5d09cd50a1c11c630b908ba48a3.jpg');
+	
 	// const [uploadedImage, setUploadedImage] = useState('../../assets/lcLogo.png');
 
 
@@ -211,8 +212,8 @@ function Home(props: any, { navigation }: any): JSX.Element {
 	}
 
 	async function uploadCroppedImage() {
-		let image = await cropViewRef.current.saveImage(true, 90);
-		console.warn(JSON.stringify(image))
+		// let image = await cropViewRef.current.saveImage(true, 90);
+		uploadImage(currentImage);
 	}
 
 	async function uploadImage(image: any) {
@@ -271,7 +272,8 @@ function Home(props: any, { navigation }: any): JSX.Element {
 
 		var data = new FormData();
 		data.append("picture", {
-			uri: 'file://' + image.url,
+			// uri: 'file://' + image.url,
+			uri: image,
 			name: 'uploaded_image_' + Date.now() + '.jpg',
 			type: 'image/*'
 		})
@@ -310,7 +312,7 @@ function Home(props: any, { navigation }: any): JSX.Element {
 		setMenuActive(false);
 	}
 
-	function uploadeImage() {
+	function uploadFromGallery() {
 		let options = {
 			mediaType: 'Photo',
 			quality: 1,
@@ -331,22 +333,22 @@ function Home(props: any, { navigation }: any): JSX.Element {
 						sourceUrl={currentImage}
 						style={styles.cropView}
 						ref={cropViewRef}
-						onImageCrop={(res) => console.warn(res)}
+						onImageCrop={(res) => setCurrentImage(res.uri)}
 					/>
 				</SafeAreaView>
 				:
-				null
-				// <ViroARSceneNavigator
-				// 	ref={arScene}
-				// 	autofocus={false}
-				// 	initialScene={{
-				// 		scene: ARDisplay,
-				// 	}}
-				// 	viroAppProps={
-				// 		{ arfound, bestItem }
-				// 	}
-				// 	style={{ flex: 1 }}
-				// />
+				// null
+				<ViroARSceneNavigator
+					ref={arScene}
+					autofocus={false}
+					initialScene={{
+						scene: ARDisplay,
+					}}
+					viroAppProps={
+						{ arfound, bestItem }
+					}
+					style={{ flex: 1 }}
+				/>
 			}
 
 			{/* Menu */}
@@ -427,7 +429,7 @@ function Home(props: any, { navigation }: any): JSX.Element {
 							null
 						}
 						<TouchableOpacity disabled={loading} style={[styles.roundedButtonView, showCrop ? { marginLeft: 50 } : null]} onPress={() => { showCrop ? uploadCroppedImage() : showCropView() }}>
-							<TouchableOpacity onPress={() => uploadeImage()}>
+							<TouchableOpacity onPress={() => uploadFromGallery()}>
 								<Text style={styles.roundedButtonText}>Upload Image</Text>
 							</TouchableOpacity>
 							<LinearGradient useAngle={true} angle={45} colors={['#00E9D8', '#009ED9']} style={styles.roundedButton}>

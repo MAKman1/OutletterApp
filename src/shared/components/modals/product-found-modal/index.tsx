@@ -6,7 +6,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { TouchableOpacity as TO } from 'react-native-gesture-handler';
 import MaterialCommunity from 'react-native-vector-icons/MaterialCommunityIcons';
 import Feather from 'react-native-vector-icons/Feather';
-
+import BestProduct from '../../../../pages/best-product/index'
 
 
 function ProductFoundModal(props: {
@@ -17,6 +17,7 @@ function ProductFoundModal(props: {
 
 
 	useEffect(() => {
+		console.log(props.bestItem);
 	}, [])
 
 
@@ -35,11 +36,12 @@ function ProductFoundModal(props: {
 					showsHorizontalScrollIndicator={false}
 				>
 					{props.bestItem &&
-						<TouchableOpacity activeOpacity={1} style={styles.horizontalInner} onPress={() => Linking.openURL(props.bestItem.url)}>
-							<View style={styles.horizontalCard}>
-								<Image style={{ width: 90, height: 90, borderRadius: 5 }} source={{ uri: props.bestItem.image_url }} />
-							</View>
-						</TouchableOpacity>
+						<BestProduct bestItem={props.bestItem} />
+						// <TouchableOpacity activeOpacity={1} style={styles.horizontalInner} onPress={() => Linking.openURL(props.bestItem.url)}>
+						// 	<View style={styles.horizontalCard}>
+						// 		<Image style={{ width: 90, height: 90, borderRadius: 5 }} source={{ uri: props.bestItem.image_url }} />
+						// 	</View>
+						// </TouchableOpacity>
 					}
 				</ScrollView>
 

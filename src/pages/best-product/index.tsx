@@ -1,12 +1,11 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react'
-import { Text, View, TouchableOpacity, Image, SafeAreaView, Animated, Dimensions, LogBox } from 'react-native'
+import { Text, View, TouchableOpacity, Image, SafeAreaView, Animated, Dimensions, Linking } from 'react-native'
 import styles from './styles'
 
 import axios from 'axios';
 
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { APP_COLORS } from "../../shared/styles/colors";
-import App from '../../../App';
 
 function BestProduct(props: any): JSX.Element {
 
@@ -14,19 +13,25 @@ function BestProduct(props: any): JSX.Element {
     useEffect(() => {
     }, [])
 
+    function openURL() {
+        Linking.canOpenURL(props.bestItem.url).then(supported => {
+            if (supported) {
+              Linking.openURL(props.bestItem.url);
+            } else {
+              console.log("Couldn't Open" + props.bestItem.url);
+            }
+          });
+    }
+
     return (
-        // <WriteReview/>
         <View style={styles.rootContainer}>
-            <SafeAreaView style={styles.cameraOverlayTop} >
-                <Text style={styles.title}>Best Product</Text>
-            </SafeAreaView>
             <View style={styles.horizontalCard}>
                 <View style={{ flexDirection: 'row', paddingBottom: 20 }}>
-                    <Image style={styles.productImage} source={require('../../assets/darthvader.jpg')} />
-                    <View style={{ overflow: 'hidden', maxWidth: '70%', }}>
-                        <Text numberOfLines={1} style={styles.productName}> Darth Vader T-Shirt</Text>
-                        <Text style={styles.productPrice}> Price: 50.00 TRY</Text>
-                        <TouchableOpacity style={styles.roundedButton} onPress={() => console.log("wz")}>
+                    <Image style={styles.productImage} source={{uri: props.bestItem.image_url}} />
+                    <View style={{ overflow: 'hidden',  }}>
+                        <Text numberOfLines={1} style={styles.productName}>{props.bestItem.name}</Text>
+                        <Text style={styles.productPrice}>{'Price: ' + props.bestItem.price + ' TRY'}</Text>
+                        <TouchableOpacity style={styles.roundedButton} onPress={() => openURL()}>
                             <Text style={{ color: '#FFF', fontSize: 12, fontWeight: 'bold' }}>{"Visit URL"}</Text>
                         </TouchableOpacity>
                     </View>
@@ -37,7 +42,7 @@ function BestProduct(props: any): JSX.Element {
                             <MaterialIcons color={'black'} size={25} name="thumb-up" />
                         </TouchableOpacity>
                         <Text style={styles.optionText}>
-                            100 Likes
+                            {props.bestItem.item_likes_count + ' Likes'}
                         </Text>
                     </View>
                     <View style={styles.optionContainer}>
@@ -45,7 +50,7 @@ function BestProduct(props: any): JSX.Element {
                             <MaterialIcons color={'black'} size={25} name="edit" />
                         </TouchableOpacity>
                         <Text style={styles.optionText}>
-                            12 Reviews
+                        {props.bestItem.item_reviews.length + ' Reviews'}
                         </Text>
                     </View>
                     <View style={styles.optionContainer}>
@@ -53,7 +58,7 @@ function BestProduct(props: any): JSX.Element {
                             <MaterialIcons color={'black'} size={25} name="add" />
                         </TouchableOpacity>
                         <Text style={styles.optionText}>
-                            46 Wishes
+                        {props.bestItem.item_wish_count + ' Wishes'}
                         </Text>
                     </View>
                     <View style={styles.optionContainer}>
@@ -61,7 +66,7 @@ function BestProduct(props: any): JSX.Element {
                             <MaterialIcons color={'black'} size={25} name="share" />
                         </TouchableOpacity>
                         <Text style={styles.optionText}>
-                            4 Shares
+                            Shares
                         </Text>
                     </View>
                 </View>
