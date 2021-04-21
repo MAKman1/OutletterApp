@@ -26,6 +26,7 @@ import WriteReview from '../write-review';
 import Reviews from '../reviews';
 import BestProduct from '../best-product';
 import LikedItems from '../liked-items';
+import Wishlist from '../wishlist/index'
 
 import { CropView } from 'react-native-image-crop-tools';
 
@@ -123,6 +124,8 @@ function Home(props: any, { navigation }: any): JSX.Element {
 
 	const renderComponent = (navRoute: any) => {
 		switch (navRoute) {
+			case "wishlistScreen":
+				return <Wishlist />
 			case "productFoundScreen":
 				return <ProductFoundModal bestItem={bestItem} similarItems={similarItems} queryItem={queryItem}/>
 			case "writeReviewScreen":
@@ -355,6 +358,9 @@ function Home(props: any, { navigation }: any): JSX.Element {
 			<Animated.View style={[styles.menuOverlay, { width: widthAnim, height: heightAnim }]}>
 				{menuActive ?
 					<LinearGradient style={styles.menuInner} useAngle={true} angle={45} colors={['#00E9D8', '#009ED9']} >
+						<TouchableOpacity style={styles.menuItem} onPress={() => openMenuItem("wishlistScreen")}>
+							<Text style={styles.menuText}>{"Wishlist"}</Text>
+						</TouchableOpacity>
 						<TouchableOpacity style={styles.menuItem} onPress={() => openMenuItem("likedItemsScreen")}>
 							<Text style={styles.menuText}>{"Liked Items"}</Text>
 						</TouchableOpacity>
@@ -364,9 +370,9 @@ function Home(props: any, { navigation }: any): JSX.Element {
 						<TouchableOpacity style={styles.menuItem} onPress={() => openMenuItem("writeReviewScreen")}>
 							<Text style={styles.menuText}>{"Write Review"}</Text>
 						</TouchableOpacity>
-						<TouchableOpacity style={styles.menuItem} onPress={() => openMenuItem("bestProductScreen")}>
+						{/* <TouchableOpacity style={styles.menuItem} onPress={() => openMenuItem("bestProductScreen")}>
 							<Text style={styles.menuText}>{"Best Product"}</Text>
-						</TouchableOpacity>
+						</TouchableOpacity> */}
 
 						<View style={styles.menuBottom}>
 							<TouchableOpacity style={[styles.circleButton, { marginRight: 30 }]}>
