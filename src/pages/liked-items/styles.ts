@@ -7,16 +7,10 @@ export default StyleSheet.create({
     // backgroundColor: "#FBFBFB",
     flex: 1,
     flexDirection: 'row',
-    justifyContent: 'center'
-  },
-  title: {
-    padding: 20,
-    fontSize: 32,
-    textAlign: 'center',
-    color: 'black'
+    justifyContent: 'center',
   },
   horizontalCard: {
-    maxHeight: 400,
+    height: 130,
     width: Dimensions.get('window').width * 0.9,
     borderRadius: 20,
     padding: 15,
@@ -46,10 +40,12 @@ export default StyleSheet.create({
     width: 90,
     height: 90,
     borderRadius: 5,
-    marginRight: 10,
+    marginRight: 20,
+    marginLeft: 10,
   },
   productName: {
-    fontSize: 20,
+    fontSize: 22,
+    // paddingBottom: 5
   },
   productPrice: {
     color: APP_COLORS.lightBlue,
@@ -58,10 +54,10 @@ export default StyleSheet.create({
   roundedButton: {
     marginTop: 5,
     height: 25,
-    width: "50%",
+    width: 80,
     justifyContent: "center",
     alignItems: "center",
-    paddingVertical: 8,
+    paddingVertical: 5,
     borderRadius: 50,
     backgroundColor: "#04B3FF",
   },
