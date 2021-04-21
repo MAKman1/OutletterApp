@@ -65,6 +65,7 @@ function Home(props: any, { navigation }: any): JSX.Element {
 	const widthAnim = useRef(new Animated.Value(0)).current;
 	const heightAnim = useRef(new Animated.Value(0)).current;
 	const iconPos = useRef(new Animated.Value(0)).current;
+	const imageIconPos = useRef(new Animated.Value(0)).current;
 
 	useEffect(() => {
 		LogBox.ignoreLogs(['Animated: `useNativeDriver`']);
@@ -114,12 +115,26 @@ function Home(props: any, { navigation }: any): JSX.Element {
 					duration: 100
 				}
 			).start();
+			Animated.spring(
+				imageIconPos,
+				{
+					toValue: 140,
+					duration: 100
+				}
+			).start();
 		} else {
 			Animated.spring(
 				iconPos,
 				{
 					toValue: 0,
 					duration: 1500
+				}
+			).start();
+			Animated.spring(
+				imageIconPos,
+				{
+					toValue: 0,
+					duration: 100
 				}
 			).start();
 		}
@@ -439,36 +454,43 @@ function Home(props: any, { navigation }: any): JSX.Element {
 								<TouchableOpacity style={{ ...styles.bottomIcon, zIndex: 2, position: 'absolute' }} onPress={() => setIconActive(!iconActive)}>
 									<MaterialCommunity color={'#38AAFE'} size={30} name="plus" />
 								</TouchableOpacity>
-								<Animated.View style={{ overflow: 'hidden', bottom: iconPos, zIndex: 1, backgroundColor: 'green' }}>
-									<TouchableOpacity style={{...styles.bottomIcon}} onPress={() => { toggleGender(gender); }}>
-										{
-											gender == "Male"
-												?
-												<MaterialCommunity color={'#38AAFE'} size={30} name="face" />
-												:
-												(
-													gender == "Female"
-														?
-														<MaterialCommunity color={'#F778A9'} size={30} name="face-woman" />
-														:
-														<Image style={{ margin: 'auto', alignSelf: 'center', maxWidth: 30, maxHeight: 30, }}
-															source={
-																require('../../assets/genderless.png')
-															}
-														/>
-												)
-										}
-									</TouchableOpacity>
-								</Animated.View>
+								<View>
+									<Animated.View style={{ overflow: 'hidden', bottom: iconPos, zIndex: 1, position: 'absolute' }}>
+										<TouchableOpacity style={{ ...styles.bottomIcon }} onPress={() => { toggleGender(gender); }}>
+											{
+												gender == "Male"
+													?
+													<MaterialCommunity color={'#38AAFE'} size={30} name="face" />
+													:
+													(
+														gender == "Female"
+															?
+															<MaterialCommunity color={'#F778A9'} size={30} name="face-woman" />
+															:
+															<Image style={{ margin: 'auto', alignSelf: 'center', maxWidth: 30, maxHeight: 30, }}
+																source={
+																	require('../../assets/genderless.png')
+																}
+															/>
+													)
+											}
+										</TouchableOpacity>
+									</Animated.View>
+									<Animated.View style={{ overflow: 'hidden', bottom: imageIconPos, zIndex: 1 }}>
+										<TouchableOpacity style={{ ...styles.bottomIcon, zIndex: 2 }} onPress={() => uploadFromGallery()}>
+											<MaterialCommunity color={'#38AAFE'} size={30} name="image" />
+										</TouchableOpacity>
+									</Animated.View>
+								</View>
 							</>
 
 							:
 							null
 						}
 						<TouchableOpacity disabled={loading} style={[styles.roundedButtonView, showCrop ? { marginLeft: 50 } : null]} onPress={() => { showCrop ? uploadCroppedImage() : showCropView() }}>
-							<TouchableOpacity onPress={() => uploadFromGallery()}>
+							{/* <TouchableOpacity >
 								<Text style={styles.roundedButtonText}>Upload Image</Text>
-							</TouchableOpacity>
+							</TouchableOpacity> */}
 							<LinearGradient useAngle={true} angle={45} colors={['#00E9D8', '#009ED9']} style={styles.roundedButton}>
 								<Text style={styles.roundedButtonText}>{"Go!"}</Text>
 							</LinearGradient>
