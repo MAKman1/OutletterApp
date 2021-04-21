@@ -260,8 +260,10 @@ export default StyleSheet.create({
   },
   cameraOverlayBottom: {
     position: "absolute",
+    backgroundColor: 'red',
     bottom: 0,
     width: "100%",
+    overflow: 'visible'
   },
   cameraOverlayTop: {
     position: "absolute",
