@@ -60,6 +60,7 @@ export default StyleSheet.create({
         height: 110,
         borderRadius: 5,
         marginRight: 20,
+        marginLeft: 10,
     },
     productName: {
         fontSize: 25,

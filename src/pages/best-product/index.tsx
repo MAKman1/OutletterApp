@@ -20,22 +20,22 @@ function BestProduct(props: any): JSX.Element {
                 'Authorization': 'Token 7330a179a43e3e044e3eff28cc66f6a11905b417'
             }
         }
-        axios.get('https://12a0393b6e6c.ngrok.io/api/v1/like/', config)
+        axios.get('https://2dc15dea62f4.ngrok.io/api/v1/like/', config)
             .then(function (response) {
                 let likedItems = response.data;
                 if (likedItems) {
-                    setLiked(likedItems.some((item: any) => item.rel_item === props.bestItem.id));
+                    setLiked(likedItems.some((item: any) => item.rel_item.id === props.bestItem.id));
                 }
             })
             .catch(function (error) {
                 console.warn("Error: " + JSON.stringify(error));
             });
 
-        axios.get('https://12a0393b6e6c.ngrok.io/api/v1/wish/', config)
+        axios.get('https://2dc15dea62f4.ngrok.io/api/v1/wish/', config)
             .then(function (response) {
                 let wishedItem = response.data;
                 if (wishedItem) {
-                    setWished(wishedItem.some((item: any) => item.rel_item === props.bestItem.id));
+                    setWished(wishedItem.some((item: any) => item.rel_item.id === props.bestItem.id));
                 }
             })
             .catch(function (error) {
@@ -63,7 +63,7 @@ function BestProduct(props: any): JSX.Element {
                     'Authorization': 'Token 7330a179a43e3e044e3eff28cc66f6a11905b417'
                 }
             }
-            axios.post('https://12a0393b6e6c.ngrok.io/api/v1/like/', data, config)
+            axios.post('https://2dc15dea62f4.ngrok.io/api/v1/like/', data, config)
                 .then(function (response) {
                     setlikeAmount(likeAmount + 1);
                     setLiked(true);
@@ -84,7 +84,7 @@ function BestProduct(props: any): JSX.Element {
                     'Authorization': 'Token 7330a179a43e3e044e3eff28cc66f6a11905b417'
                 }
             }
-            axios.post('https://12a0393b6e6c.ngrok.io/api/v1/wish/', data, config)
+            axios.post('https://2dc15dea62f4.ngrok.io/api/v1/wish/', data, config)
                 .then(function (response) {
                     setWishAmount(wishAmount + 1);
                     setWished(true);

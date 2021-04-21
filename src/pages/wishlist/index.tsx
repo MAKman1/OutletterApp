@@ -10,8 +10,8 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { APP_COLORS } from "../../shared/styles/colors";
 
 
-function LikedItems(props: any): JSX.Element {
-    const [likedItems, setLikedItems] = useState<any[]>([])
+function Wishlist(props: any): JSX.Element {
+    const [wishlistItems, setWishlistItems] = useState<any[]>([])
 
     useEffect(() => {
         const config = {
@@ -20,9 +20,9 @@ function LikedItems(props: any): JSX.Element {
                 'Authorization': 'Token 7330a179a43e3e044e3eff28cc66f6a11905b417'
             }
         }
-        axios.get('https://2dc15dea62f4.ngrok.io/api/v1/like/', config)
+        axios.get('https://2dc15dea62f4.ngrok.io/api/v1/wish/', config)
             .then(function (response) {
-                setLikedItems(response.data);
+                setWishlistItems(response.data);
             })
             .catch(function (error) {
                 console.warn("Error: " + JSON.stringify(error));
@@ -30,11 +30,11 @@ function LikedItems(props: any): JSX.Element {
     }, [])
 
     function openURL(index: number) {
-        Linking.canOpenURL(likedItems[index].rel_item.url).then(supported => {
+        Linking.canOpenURL(wishlistItems[index].rel_item.url).then(supported => {
             if (supported) {
-                Linking.openURL(likedItems[index].rel_item.url);
+                Linking.openURL(wishlistItems[index].rel_item.url);
             } else {
-                console.log("Couldn't Open" + likedItems[index].rel_item.url);
+                console.log("Couldn't Open" + wishlistItems[index].rel_item.url);
             }
         });
     }
@@ -45,12 +45,12 @@ function LikedItems(props: any): JSX.Element {
                 'Authorization': 'Token 7330a179a43e3e044e3eff28cc66f6a11905b417'
             }
         }
-        axios.delete('https://2dc15dea62f4.ngrok.io/api/v1/like/' + likedItems[index].id + '/', config)
+        axios.delete('https://2dc15dea62f4.ngrok.io/api/v1/wish/' + wishlistItems[index].id + '/', config)
                 .then(function (response) {
-                    let newLikedItems = [...likedItems];
-                    newLikedItems.splice(index, 1);
-                    setLikedItems(newLikedItems);
-                    // console.log(likedItems);
+                    let newWishlistItems = [...wishlistItems];
+                    newWishlistItems.splice(index, 1);
+                    setWishlistItems(newWishlistItems);
+                    // console.log(WishlistItems);
                 })
                 .catch(function (error) {
                     console.warn("Error: " + JSON.stringify(error));
@@ -60,12 +60,12 @@ function LikedItems(props: any): JSX.Element {
         return (
             <>
                 <View style={{ alignContent: 'flex-start', paddingLeft: 20 }}>
-                    <Text style={styles.popupTitle}>Your Liked Items</Text>
+                    <Text style={styles.popupTitle}>Your Wishlist</Text>
                 </View>
                 <View style={styles.rootContainer}>
                     {
-                        likedItems ?
-                            likedItems.map((item, index) => {
+                        wishlistItems ?
+                            wishlistItems.map((item, index) => {
                                 return (
                                     <View key={index} style={styles.horizontalCard}>
                                         <TouchableOpacity style={{ alignSelf: 'flex-end', marginBottom: -20 }} onPress={() => removeItem(index)}>
@@ -94,4 +94,4 @@ function LikedItems(props: any): JSX.Element {
         )
     }
 
-    export default LikedItems;
+    export default Wishlist;

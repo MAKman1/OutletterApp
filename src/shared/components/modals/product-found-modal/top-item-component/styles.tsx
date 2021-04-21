@@ -14,7 +14,7 @@ export default StyleSheet.create({
     color: 'black'
   },
   horizontalCard: {
-    height: 105,
+    height: 110,
     width: Dimensions.get('window').width - 130,
     borderRadius: 20,
     padding: 15,
@@ -39,6 +39,7 @@ export default StyleSheet.create({
     height: 75,
     borderRadius: 5,
     marginRight: 20,
+    marginLeft: 5,
   },
   productName: {
     fontSize: 22,

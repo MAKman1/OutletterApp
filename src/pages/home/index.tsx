@@ -26,6 +26,7 @@ import WriteReview from '../write-review';
 import Reviews from '../reviews';
 import BestProduct from '../best-product';
 import LikedItems from '../liked-items';
+import Wishlist from '../wishlist/index'
 
 import { CropView } from 'react-native-image-crop-tools';
 
@@ -45,8 +46,9 @@ function Home(props: any, { navigation }: any): JSX.Element {
 	const [arfound, setAr] = useState(false);
 	const [debugModal, setDebugModal] = useState(true);
 	const [menuActive, setMenuActive] = useState(false);
+	const [iconActive, setIconActive] = useState(false);
 
-	const [queryItem, setQueryItem] = useState<any>({});	
+	const [queryItem, setQueryItem] = useState<any>({});
 	const [similarItems, setSimilarItems] = useState<any[]>([]);
 	const [bestItem, setBestItem] = useState<any>({});
 
@@ -55,14 +57,14 @@ function Home(props: any, { navigation }: any): JSX.Element {
 
 	const [showCrop, setShowCrop] = useState(false);
 	const [currentImage, setCurrentImage] = useState('https://i.pinimg.com/736x/0b/0c/d5/0b0cd5d09cd50a1c11c630b908ba48a3.jpg');
-	
+
 	// const [uploadedImage, setUploadedImage] = useState('../../assets/lcLogo.png');
 
 
 	//Animations
 	const widthAnim = useRef(new Animated.Value(0)).current;
 	const heightAnim = useRef(new Animated.Value(0)).current;
-
+	const iconPos = useRef(new Animated.Value(0)).current;
 
 	useEffect(() => {
 		LogBox.ignoreLogs(['Animated: `useNativeDriver`']);
@@ -102,6 +104,27 @@ function Home(props: any, { navigation }: any): JSX.Element {
 		}
 	}, [menuActive])
 
+
+	useEffect(() => {
+		if (iconActive) {
+			Animated.spring(
+				iconPos,
+				{
+					toValue: 70,
+					duration: 100
+				}
+			).start();
+		} else {
+			Animated.spring(
+				iconPos,
+				{
+					toValue: 0,
+					duration: 1500
+				}
+			).start();
+		}
+	}, [iconActive])
+
 	const getModalHeight = (navRoute: any) => {
 		switch (navRoute) {
 			case "productFoundScreen":
@@ -123,8 +146,10 @@ function Home(props: any, { navigation }: any): JSX.Element {
 
 	const renderComponent = (navRoute: any) => {
 		switch (navRoute) {
+			case "wishlistScreen":
+				return <Wishlist />
 			case "productFoundScreen":
-				return <ProductFoundModal bestItem={bestItem} similarItems={similarItems} queryItem={queryItem}/>
+				return <ProductFoundModal bestItem={bestItem} similarItems={similarItems} queryItem={queryItem} />
 			case "writeReviewScreen":
 				return <WriteReview />
 			case "reviewsScreen":
@@ -290,9 +315,9 @@ function Home(props: any, { navigation }: any): JSX.Element {
 				'Content-Type': 'multipart/form-data'
 			}
 		}
-		
+
 		// console.log(JSON.stringify(data));
-		axios.post('https://12a0393b6e6c.ngrok.io/api/v1/test/', data, config)
+		axios.post('https://2dc15dea62f4.ngrok.io/api/v1/test/', data, config)
 			.then(function (response) {
 				console.log(JSON.stringify(response));
 				setStates(response.data);
@@ -356,6 +381,9 @@ function Home(props: any, { navigation }: any): JSX.Element {
 			<Animated.View style={[styles.menuOverlay, { width: widthAnim, height: heightAnim }]}>
 				{menuActive ?
 					<LinearGradient style={styles.menuInner} useAngle={true} angle={45} colors={['#00E9D8', '#009ED9']} >
+						<TouchableOpacity style={styles.menuItem} onPress={() => openMenuItem("wishlistScreen")}>
+							<Text style={styles.menuText}>{"Wishlist"}</Text>
+						</TouchableOpacity>
 						<TouchableOpacity style={styles.menuItem} onPress={() => openMenuItem("likedItemsScreen")}>
 							<Text style={styles.menuText}>{"Liked Items"}</Text>
 						</TouchableOpacity>
@@ -365,9 +393,9 @@ function Home(props: any, { navigation }: any): JSX.Element {
 						<TouchableOpacity style={styles.menuItem} onPress={() => openMenuItem("writeReviewScreen")}>
 							<Text style={styles.menuText}>{"Write Review"}</Text>
 						</TouchableOpacity>
-						<TouchableOpacity style={styles.menuItem} onPress={() => openMenuItem("bestProductScreen")}>
+						{/* <TouchableOpacity style={styles.menuItem} onPress={() => openMenuItem("bestProductScreen")}>
 							<Text style={styles.menuText}>{"Best Product"}</Text>
-						</TouchableOpacity>
+						</TouchableOpacity> */}
 
 						<View style={styles.menuBottom}>
 							<TouchableOpacity style={[styles.circleButton, { marginRight: 30 }]}>
@@ -407,25 +435,33 @@ function Home(props: any, { navigation }: any): JSX.Element {
 				<View style={styles.cameraOverlay}>
 					<View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
 						{!showCrop ?
-							<TouchableOpacity style={styles.bottomIcon} onPress={() => { toggleGender(gender); }}>
-								{
-									gender == "Male"
-										?
-										<MaterialCommunity color={'#38AAFE'} size={30} name="face" />
-										:
-										(
-											gender == "Female"
+							<>
+								<TouchableOpacity style={{ ...styles.bottomIcon, zIndex: 2, position: 'absolute' }} onPress={() => setIconActive(!iconActive)}>
+									<MaterialCommunity color={'#38AAFE'} size={30} name="plus" />
+								</TouchableOpacity>
+								<Animated.View style={{ overflow: 'hidden', bottom: iconPos, zIndex: 1, backgroundColor: 'green' }}>
+									<TouchableOpacity style={{...styles.bottomIcon}} onPress={() => { toggleGender(gender); }}>
+										{
+											gender == "Male"
 												?
-												<MaterialCommunity color={'#F778A9'} size={30} name="face-woman" />
+												<MaterialCommunity color={'#38AAFE'} size={30} name="face" />
 												:
-												<Image style={{ margin: 'auto', alignSelf: 'center', maxWidth: 30, maxHeight: 30, }}
-													source={
-														require('../../assets/genderless.png')
-													}
-												/>
-										)
-								}
-							</TouchableOpacity>
+												(
+													gender == "Female"
+														?
+														<MaterialCommunity color={'#F778A9'} size={30} name="face-woman" />
+														:
+														<Image style={{ margin: 'auto', alignSelf: 'center', maxWidth: 30, maxHeight: 30, }}
+															source={
+																require('../../assets/genderless.png')
+															}
+														/>
+												)
+										}
+									</TouchableOpacity>
+								</Animated.View>
+							</>
+
 							:
 							null
 						}
