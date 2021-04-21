@@ -54,6 +54,7 @@ function Home(props: any, { navigation }: any): JSX.Element {
 
 	const [loading, setLoading] = useState(false);
 	const [navRoute, setNavRoute] = useState(null);
+	const [secondRoute, setSecondRoute] = useState(null);
 
 	const [showCrop, setShowCrop] = useState(false);
 	const [currentImage, setCurrentImage] = useState('https://i.pinimg.com/736x/0b/0c/d5/0b0cd5d09cd50a1c11c630b908ba48a3.jpg');
@@ -145,13 +146,16 @@ function Home(props: any, { navigation }: any): JSX.Element {
 	}
 
 	const renderComponent = (navRoute: any) => {
-		switch (navRoute) {
+		if( navRoute == null)
+			return null;
+			
+		switch (navRoute.name) {
 			case "wishlistScreen":
 				return <Wishlist />
 			case "productFoundScreen":
-				return <ProductFoundModal bestItem={bestItem} similarItems={similarItems} queryItem={queryItem} />
+				return <ProductFoundModal bestItem={bestItem} similarItems={similarItems} queryItem={queryItem} onReviewPressed={( id: any) => setSecondRoute( {name: "writeReviewScreen", props: id})}/>
 			case "writeReviewScreen":
-				return <WriteReview />
+				return <WriteReview id={navRoute.props}/>
 			case "reviewsScreen":
 				return <Reviews />
 			case "bestProductScreen":
@@ -321,7 +325,7 @@ function Home(props: any, { navigation }: any): JSX.Element {
 			.then(function (response) {
 				console.log(JSON.stringify(response));
 				setStates(response.data);
-				setNavRoute("productFoundScreen");
+				setNavRoute({name:"productFoundScreen"});
 				setLoading(false);
 				setAr(true);
 			})
@@ -333,7 +337,7 @@ function Home(props: any, { navigation }: any): JSX.Element {
 	}
 
 	function openMenuItem(pageName: any) {
-		setNavRoute(pageName);
+		setNavRoute({name: pageName});
 		setMenuActive(false);
 	}
 
@@ -386,9 +390,6 @@ function Home(props: any, { navigation }: any): JSX.Element {
 						</TouchableOpacity>
 						<TouchableOpacity style={styles.menuItem} onPress={() => openMenuItem("likedItemsScreen")}>
 							<Text style={styles.menuText}>{"Liked Items"}</Text>
-						</TouchableOpacity>
-						<TouchableOpacity style={styles.menuItem} onPress={() => openMenuItem("reviewsScreen")}>
-							<Text style={styles.menuText}>{"Reviews"}</Text>
 						</TouchableOpacity>
 						<TouchableOpacity style={styles.menuItem} onPress={() => openMenuItem("writeReviewScreen")}>
 							<Text style={styles.menuText}>{"Write Review"}</Text>
@@ -474,7 +475,7 @@ function Home(props: any, { navigation }: any): JSX.Element {
 							</LinearGradient>
 						</TouchableOpacity>
 						{!showCrop ?
-							<TouchableOpacity style={styles.bottomIcon} onPress={() => { setNavRoute("chooseStoreScreen") }}>
+							<TouchableOpacity style={styles.bottomIcon} onPress={() => { setNavRoute({name:"chooseStoreScreen"}) }}>
 								{
 									switchStore(store)
 								}
@@ -496,8 +497,16 @@ function Home(props: any, { navigation }: any): JSX.Element {
 				height={getModalHeight(navRoute)}>
 
 				{renderComponent(navRoute)}
-
 			</BottomSwipeableModal>
+
+			<BottomSwipeableModal
+				onCollapse={() => setSecondRoute(null)}
+				show={secondRoute != null}
+				navigation={props.navigation}
+				height={getModalHeight(secondRoute)}>
+				{renderComponent(secondRoute)}
+			</BottomSwipeableModal>
+
 		</View>
 	)
 }

@@ -103,7 +103,11 @@ function BestProduct(props: any): JSX.Element {
         } catch (error) {
             console.warn(error.message);
         }
-    }
+	}
+	
+	const openReviews = ( id: any) => {
+		props.onReviewPressed( id);
+	}
 
     return (
         <View style={styles.rootContainer}>
@@ -128,7 +132,7 @@ function BestProduct(props: any): JSX.Element {
                         </Text>
                     </View>
                     <View style={styles.optionContainer}>
-                        <TouchableOpacity style={styles.optionIcons}>
+                        <TouchableOpacity style={styles.optionIcons} onPress={() => openReviews( props.bestItem.id)}>
                             <MaterialIcons color={'black'} size={25} name="edit" />
                         </TouchableOpacity>
                         <Text style={styles.optionText}>
