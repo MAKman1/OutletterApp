@@ -8,128 +8,142 @@ import LinearGradient from 'react-native-linear-gradient';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { APP_COLORS } from "../../shared/styles/colors";
 import { TextInput } from 'react-native-gesture-handler';
+import { SERVER_URL } from '../../shared/constants/constants';
 
 function WriteReview(props: any): JSX.Element {
 
-    const [textShown, setTextShown] = useState(true);
-    const [textHeight, setTextHeight] = useState(10);
-    const [text, setText] = React.useState('');
-    const [ratings, setRatings] = useState([
-        {
-            id: 1,
-            checked: false,
-        },
-        {
-            id: 2,
-            checked: false,
-        },
-        {
-            id: 3,
-            checked: false,
-        },
-        {
-            id: 4,
-            checked: false,
-        },
-        {
-            id: 5,
-            checked: false
-        },
-    ]);
-    const [score, setScore] = useState(0);
+	const [textShown, setTextShown] = useState(true);
+	const [textHeight, setTextHeight] = useState(10);
+	const [text, setText] = React.useState('');
+	const [ratings, setRatings] = useState([
+		{
+			id: 1,
+			checked: false,
+		},
+		{
+			id: 2,
+			checked: false,
+		},
+		{
+			id: 3,
+			checked: false,
+		},
+		{
+			id: 4,
+			checked: false,
+		},
+		{
+			id: 5,
+			checked: false
+		},
+	]);
+	const [score, setScore] = useState(0);
 
-    const widthAnim = useRef(new Animated.Value(0)).current;
-    const heightAnim = useRef(new Animated.Value(0)).current;
+	const widthAnim = useRef(new Animated.Value(0)).current;
+	const heightAnim = useRef(new Animated.Value(0)).current;
 
-    useEffect(() => {
-        LogBox.ignoreLogs(['Animated: `useNativeDriver`']);
-    }, [])
+	useEffect(() => {
+		LogBox.ignoreLogs(['Animated: `useNativeDriver`']);
+	}, [])
 
-    useEffect(() => {
-        if (textShown) {
-            Animated.spring(
-                widthAnim,
-                {
-                    toValue: Dimensions.get('window').width * .85,
-                    duration: 1500,
-                }
-            ).start();
-            Animated.spring(
-                heightAnim,
-                {
-                    toValue: 40,
-                    duration: 1500
-                }
-            ).start();
-        } else {
-            Animated.spring(
-                widthAnim,
-                {
-                    toValue: Dimensions.get('window').width * .85,
-                    duration: 1500
-                }
-            ).start();
-            Animated.spring(
-                heightAnim,
-                {
-                    toValue: textHeight,
-                    duration: 1500
-                }
-            ).start();
-        }
-    }, [textShown])
+	useEffect(() => {
+		if (textShown) {
+			Animated.spring(
+				widthAnim,
+				{
+					toValue: Dimensions.get('window').width * .85,
+					duration: 1500,
+				}
+			).start();
+			Animated.spring(
+				heightAnim,
+				{
+					toValue: 40,
+					duration: 1500
+				}
+			).start();
+		} else {
+			Animated.spring(
+				widthAnim,
+				{
+					toValue: Dimensions.get('window').width * .85,
+					duration: 1500
+				}
+			).start();
+			Animated.spring(
+				heightAnim,
+				{
+					toValue: textHeight,
+					duration: 1500
+				}
+			).start();
+		}
+	}, [textShown])
 
-    const toggleNumberOfLines = () => {
-        setTextShown(!textShown);
-    }
+	const updateRatings = (id: number) => {
+		let newRatings = [...ratings];
+		for (let i = 0; i < 5; i++) {
+			if (i <= id) {
+				newRatings[i].checked = true;
+			}
+			else {
+				newRatings[i].checked = false;
+			}
+		}
+		setRatings(newRatings);
+		setScore(id + 1);
+	}
 
-    const onLayout = useCallback(e => {
-        let { x, y, width, height } = e.nativeEvent.layout;
-        setTextHeight(height);
-    }, []);
+	const postReview = (content: string, ratings: any, item: string) => {
 
-    const updateRatings = (id: number) => {
-        let newRatings = [...ratings];
-        for (let i = 0; i < 5; i++) {
-            if (i <= id) {
-                newRatings[i].checked = true;
-            }
-            else {
-                newRatings[i].checked = false;
-            }
-        }
-        setRatings(newRatings);
-        setScore(id + 1);
-    }
+		let rating = 0;
+		ratings.array.forEach((r: any) => {
+			if( r.checked)
+				rating++;
+		});
+		var data = new FormData();
+		data.append("title", " ");
+		data.append("content", content);
+		data.append("rel_item", item);
+		data.append("rating", rating);
 
-    const postReview = () => {
-        var data = new FormData();
-		data.append("text", text);
-		data.append("score", score);
-    }
+		const config = {
+			headers: {
+				'Content-Type': 'multipart/form-data',
+				'Authorization': 'Token 7330a179a43e3e044e3eff28cc66f6a11905b417'
+			}
+		}
+		axios.post(SERVER_URL + "review/", data, config)
+			.then(function (response) {
+				//Review posted
+			})
+			.catch(function (error) {
+				console.warn("Error: " + JSON.stringify(error));
+			});
+	}
 
-    return (
-        <View style={styles.rootContainer}>
-            <SafeAreaView style={styles.cameraOverlayTop} >
-                <Text style={styles.title}>Write Review</Text>
-            </SafeAreaView>
-            <TextInput style={styles.reviewTextBox} multiline numberOfLines={4} value={text} onChangeText={text => setText(text)} placeholder={'Write review...'} />
-            <View style={{ flexDirection: 'row', alignItems: "center", justifyContent: 'center', marginBottom: 15 }}>
-                {ratings.map((rating, index) => {
-                    return (
-                        <TouchableOpacity key={index} onPress={() => updateRatings(index)}>
-                            <MaterialIcons color={rating.checked ? APP_COLORS.lightBlue : APP_COLORS.backgroundGray} size={40} name={rating.checked ? "star" : "star-border"} />
-                        </TouchableOpacity>
-                    )
-                })
-                }
-            </View>
-            <TouchableOpacity style={styles.roundedButtonView} onPress={() => { postReview() }}>
-                <LinearGradient useAngle={true} angle={45} colors={['#00E9D8', '#009ED9']} style={styles.roundedButton}>
-                    <Text style={styles.roundedButtonText}>Add Review</Text>
-                </LinearGradient>
-            </TouchableOpacity>
-            {/* <View style={styles.horizontalCard}>
+	return (
+		<View style={styles.rootContainer}>
+			<SafeAreaView style={styles.cameraOverlayTop} >
+				<Text style={styles.title}>Write Review</Text>
+			</SafeAreaView>
+			<TextInput style={styles.reviewTextBox} multiline numberOfLines={4} value={text} onChangeText={text => setText(text)} placeholder={'Write review...'} />
+			<View style={{ flexDirection: 'row', alignItems: "center", justifyContent: 'center', marginBottom: 15 }}>
+				{ratings.map((rating, index) => {
+					return (
+						<TouchableOpacity key={index} onPress={() => updateRatings(index)}>
+							<MaterialIcons color={rating.checked ? APP_COLORS.lightBlue : APP_COLORS.backgroundGray} size={40} name={rating.checked ? "star" : "star-border"} />
+						</TouchableOpacity>
+					)
+				})
+				}
+			</View>
+			<TouchableOpacity style={styles.roundedButtonView} onPress={() => { postReview( text, ratings, props.itemId) }}>
+				<LinearGradient useAngle={true} angle={45} colors={['#00E9D8', '#009ED9']} style={styles.roundedButton}>
+					<Text style={styles.roundedButtonText}>Add Review</Text>
+				</LinearGradient>
+			</TouchableOpacity>
+			{/* <View style={styles.horizontalCard}>
                 <View style={styles.cardTop}>
                     <Text style={styles.reviewDate}>24/3/21</Text>
                     <View style={styles.rating}>
@@ -156,8 +170,8 @@ function WriteReview(props: any): JSX.Element {
                     </TouchableOpacity>
                 </Animated.View>
             </View> */}
-        </View>
-    )
+		</View>
+	)
 }
 
 export default WriteReview;
