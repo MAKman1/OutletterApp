@@ -165,27 +165,40 @@ function Home(props: any, { navigation }: any): JSX.Element {
 	}
 
 	const renderComponent = (navRoute: any) => {
-			
+
 		if (navRoute == null)
 			return null;
 
 		switch (navRoute.name) {
 			case "selectedItemScreen":
-				return <SelectedItem />
+				return <SelectedItem id={navRoute.props} />
 			case "wishlistScreen":
-				return <Wishlist />
+				return <Wishlist
+					onItemPressed={(item: any) => {
+						setSecondRoute({ name: "selectedItemScreen", props: item })
+					}}
+				/>
 			case "productFoundScreen":
-				return <ProductFoundModal bestItem={bestItem} similarItems={similarItems} queryItem={queryItem} onReviewPressed={(id: any) => {
-					setSecondRoute({ name: "writeReviewScreen", props: id })
-				}} />
+				return <ProductFoundModal bestItem={bestItem} similarItems={similarItems} queryItem={queryItem}
+					onReviewPressed={(id: any) => {
+						setSecondRoute({ name: "writeReviewScreen", props: id })
+					}}
+					onItemPressed={(id: any) => {
+						setSecondRoute({ name: "selectedItemScreen", props: id })
+					}}
+				/>
 			case "writeReviewScreen":
 				return <WriteReview id={navRoute.props} />
 			case "reviewsScreen":
 				return <Reviews />
-			case "bestProductScreen":
-				return <BestProduct />
+			// case "bestProductScreen":
+			// 	return <BestProduct />
 			case "likedItemsScreen":
-				return <LikedItems />
+				return <LikedItems
+					onItemPressed={(id: any) => {
+						setSecondRoute({ name: "selectedItemScreen", props: id })
+					}}
+				/>
 			case "chooseStoreScreen":
 				return stores.map((s, index) => {
 					return (<TouchableOpacity key={index} style={{ marginTop: 10, flex: 1, flexDirection: 'row', justifyContent: 'center', minWidth: 300, borderRadius: 10, borderBottomWidth: 1, borderColor: '#04B3FF' }} disabled={store == s} onPress={() => {

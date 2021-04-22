@@ -13,7 +13,8 @@ function ProductFoundModal(props: {
 	bestItem?: any,
 	similarItems?: any[],
 	queryItem?: any,
-	onReviewPressed: any
+	onReviewPressed: any,
+	onItemPressed: any,
 
 }): JSX.Element {
 
@@ -58,7 +59,7 @@ function ProductFoundModal(props: {
 							{props.similarItems && props.similarItems.map((item, index) => {
 								if (index != 0 && item != null) {
 									return (
-										<TopItem key={index} topItem={item} />
+										<TopItem key={index} topItem={item} onItemPressed={props.onItemPressed}/>
 									)
 								}
 							})}
@@ -68,7 +69,7 @@ function ProductFoundModal(props: {
 				</ScrollView>
 
 
-				{/* {debugModal && queryItem && */}
+				{/* {debugModal && queryItem &&
 					<View>
 
 						<View style={{ alignContent: 'flex-start', paddingHorizontal: 20 }}>
@@ -96,8 +97,8 @@ function ProductFoundModal(props: {
 						<Image style={{ height: 400, width: 400 }} source={{ uri: 'https://3e01cf7dcbd2.ngrok.io' + props.queryItem.picture }} resizeMode={'contain'} />
 
 					</View>
-				{/* } */}
-
+				}
+ */}
 
 				{/* </View> */}
 			</TouchableOpacity>

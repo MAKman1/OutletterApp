@@ -46,52 +46,59 @@ function LikedItems(props: any): JSX.Element {
             }
         }
         axios.delete('https://3e01cf7dcbd2.ngrok.io/api/v1/like/' + likedItems[index].id + '/', config)
-                .then(function (response) {
-                    let newLikedItems = [...likedItems];
-                    newLikedItems.splice(index, 1);
-                    setLikedItems(newLikedItems);
-                    // console.log(likedItems);
-                })
-                .catch(function (error) {
-                    console.warn("Error: " + JSON.stringify(error));
-                });
-        }
+            .then(function (response) {
+                let newLikedItems = [...likedItems];
+                newLikedItems.splice(index, 1);
+                setLikedItems(newLikedItems);
+                // console.log(likedItems);
+            })
+            .catch(function (error) {
+                console.warn("Error: " + JSON.stringify(error));
+            });
+    }
 
-        return (
-            <>
-                <View style={{ alignContent: 'flex-start', paddingLeft: 20 }}>
-                    <Text style={styles.popupTitle}>Your Liked Items</Text>
-                </View>
-                <View style={styles.rootContainer}>
-                    {
-                        likedItems ?
-                            likedItems.map((item, index) => {
-                                return (
-                                    <View key={index} style={styles.horizontalCard}>
-                                        <TouchableOpacity style={{ alignSelf: 'flex-end', marginBottom: -20 }} onPress={() => removeItem(index)}>
-                                            <MaterialIcons color={APP_COLORS.labelGray} size={20} name="close" />
-                                        </TouchableOpacity>
-                                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                            <Image style={styles.productImage} source={{ uri: item.rel_item.image_url }} />
-                                            <View>
+    const openItem = (id: any) => {
+        props.onItemPressed(id);
+    }
+
+
+    return (
+        <>
+            <View style={{ alignContent: 'flex-start', paddingLeft: 20 }}>
+                <Text style={styles.popupTitle}>Your Liked Items</Text>
+            </View>
+            <View style={styles.rootContainer}>
+                {
+                    likedItems ?
+                        likedItems.map((item, index) => {
+                            return (
+                                <View key={index} style={styles.horizontalCard}>
+                                    <TouchableOpacity style={{ alignSelf: 'flex-end', marginBottom: -20 }} onPress={() => removeItem(index)}>
+                                        <MaterialIcons color={APP_COLORS.labelGray} size={20} name="close" />
+                                    </TouchableOpacity>
+                                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                        <Image style={styles.productImage} source={{ uri: item.rel_item.image_url }} />
+                                        <View>
+                                            <TouchableOpacity onPress={() => openItem(item.rel_item.id)}>
                                                 <View style={{ overflow: 'hidden', maxWidth: 200 }}>
                                                     <Text style={styles.productName} numberOfLines={1}>{item.rel_item.name}</Text>
                                                 </View>
-                                                <Text style={styles.productPrice}>{'Price: ' + item.rel_item.price + ' TRY'}</Text>
-                                                <TouchableOpacity style={styles.roundedButton} onPress={() => openURL(index)}>
-                                                    <Text style={{ color: '#FFF', fontSize: 11, fontWeight: 'bold' }}>Visit URL</Text>
-                                                </TouchableOpacity>
-                                            </View>
+                                            </TouchableOpacity>
+                                            <Text style={styles.productPrice}>{'Price: ' + item.rel_item.price + ' TRY'}</Text>
+                                            <TouchableOpacity style={styles.roundedButton} onPress={() => openURL(index)}>
+                                                <Text style={{ color: '#FFF', fontSize: 11, fontWeight: 'bold' }}>Visit URL</Text>
+                                            </TouchableOpacity>
                                         </View>
                                     </View>
-                                )
-                            })
-                            :
-                            null
-                    }
-                </View>
-            </>
-        )
-    }
+                                </View>
+                            )
+                        })
+                        :
+                        null
+                }
+            </View>
+        </>
+    )
+}
 
-    export default LikedItems;
+export default LikedItems;
