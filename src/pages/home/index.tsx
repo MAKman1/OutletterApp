@@ -346,7 +346,7 @@ function Home(props: any, { navigation }: any): JSX.Element {
 		}
 
 		// console.log(JSON.stringify(data));
-		axios.post('https://2dc15dea62f4.ngrok.io/api/v1/test/', data, config)
+		axios.post('https://2dc15dea62f4.ngrok.io/api/v1/items/', data, config)
 			.then(function (response) {
 				console.log(JSON.stringify(response));
 				setStates(response.data);
@@ -392,18 +392,18 @@ function Home(props: any, { navigation }: any): JSX.Element {
 					/>
 				</SafeAreaView>
 				:
-				// null
-				<ViroARSceneNavigator
-					ref={arScene}
-					autofocus={false}
-					initialScene={{
-						scene: ARDisplay,
-					}}
-					viroAppProps={
-						{ arfound, bestItem }
-					}
-					style={{ flex: 1 }}
-				/>
+				null
+				// <ViroARSceneNavigator
+				// 	ref={arScene}
+				// 	autofocus={false}
+				// 	initialScene={{
+				// 		scene: ARDisplay,
+				// 	}}
+				// 	viroAppProps={
+				// 		{ arfound, bestItem }
+				// 	}
+				// 	style={{ flex: 1 }}
+				// />
 			}
 
 			{/* Menu */}
