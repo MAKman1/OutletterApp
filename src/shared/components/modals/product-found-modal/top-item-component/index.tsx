@@ -18,22 +18,29 @@ function TopItem(props: any): JSX.Element {
     function openURL() {
         Linking.canOpenURL(props.topItem.url).then(supported => {
             if (supported) {
-              Linking.openURL(props.topItem.url);
+                Linking.openURL(props.topItem.url);
             } else {
-              console.log("Couldn't Open" + props.topItem.url);
+                console.log("Couldn't Open" + props.topItem.url);
             }
-          });
+        });
+    }
+
+    const openItem = () => {
+        // console.log(props.topItem.id)
+        props.onItemPressed(props.topItem.id);
     }
 
     return (
         <View style={styles.rootContainer}>
             <View style={styles.horizontalCard}>
                 <View style={{ flexDirection: 'row', paddingBottom: 20, alignItems: 'center' }}>
-                    <Image style={styles.productImage} source={{uri: props.topItem.image_url}} />
+                    <Image style={styles.productImage} source={{ uri: props.topItem.image_url }} />
                     <View>
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', overflow: 'hidden' }}>
-                            <Text style={styles.productName} numberOfLines={1}>{props.topItem.name}</Text>
-                        </View>
+                        <TouchableOpacity onPress={() => openItem()}>
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', overflow: 'hidden' }}>
+                                <Text style={styles.productName} numberOfLines={1}>{props.topItem.name}</Text>
+                            </View>
+                        </TouchableOpacity>
                         <Text style={styles.productPrice}>{'Price: ' + props.topItem.price + ' TRY'}</Text>
                         <TouchableOpacity style={styles.roundedButton} onPress={() => openURL()}>
                             <Text style={{ color: '#FFF', fontSize: 11, fontWeight: 'bold' }}>Visit URL</Text>

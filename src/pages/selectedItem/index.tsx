@@ -6,13 +6,15 @@ import axios from 'axios';
 
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { APP_COLORS } from "../../shared/styles/colors";
+import { SERVER_URL } from '../../shared/constants/constants';
+
 
 function BestProduct(props: any): JSX.Element {
     const [liked, setLiked] = useState(false);
     const [wished, setWished] = useState(false);
-    const [likeAmount, setlikeAmount] = useState(props.bestItem.item_likes_count);
-    const [wishAmount, setWishAmount] = useState(props.bestItem.item_wish_count);
-
+    const [likeAmount, setlikeAmount] = useState(0);
+    const [wishAmount, setWishAmount] = useState(0);
+    const [selectedItem, setSelectedItem] = useState<any>({})
 
     useEffect(() => {
         const config = {
@@ -24,7 +26,7 @@ function BestProduct(props: any): JSX.Element {
             .then(function (response) {
                 let likedItems = response.data;
                 if (likedItems) {
-                    setLiked(likedItems.some((item: any) => item.rel_item.id === props.bestItem.id));
+                    setLiked(likedItems.some((item: any) => item.id === selectedItem.id));
                 }
             })
             .catch(function (error) {
@@ -35,8 +37,19 @@ function BestProduct(props: any): JSX.Element {
             .then(function (response) {
                 let wishedItem = response.data;
                 if (wishedItem) {
-                    setWished(wishedItem.some((item: any) => item.rel_item.id === props.bestItem.id));
+                    setWished(wishedItem.some((item: any) => item.id === selectedItem.id));
                 }
+            })
+            .catch(function (error) {
+                console.warn("Error: " + JSON.stringify(error));
+            });
+
+        axios.get('https://3e01cf7dcbd2.ngrok.io/api/v1/item/' + props.id + '/', config)
+            .then(function (response) {
+                console.log(response.data)
+                setSelectedItem(response.data);
+                setWishAmount(response.data.item_wish_count);
+                setlikeAmount(response.data.item_likes_count)
             })
             .catch(function (error) {
                 console.warn("Error: " + JSON.stringify(error));
@@ -44,11 +57,11 @@ function BestProduct(props: any): JSX.Element {
     }, [])
 
     function openURL() {
-        Linking.canOpenURL(props.bestItem.url).then(supported => {
+        Linking.canOpenURL(selectedItem.url).then(supported => {
             if (supported) {
-                Linking.openURL(props.bestItem.url);
+                Linking.openURL(selectedItem.url);
             } else {
-                console.log("Couldn't Open" + props.bestItem.url);
+                console.log("Couldn't Open" + selectedItem.url);
             }
         });
     }
@@ -56,7 +69,7 @@ function BestProduct(props: any): JSX.Element {
     function likeItem() {
         if (!liked) {
             var data = new FormData();
-            data.append("rel_item", props.bestItem.id);
+            data.append("rel_item", selectedItem.id);
             const config = {
                 headers: {
                     'Content-Type': 'multipart/form-data',
@@ -77,7 +90,7 @@ function BestProduct(props: any): JSX.Element {
     function addToWishlist() {
         if (!wished) {
             var data = new FormData();
-            data.append("rel_item", props.bestItem.id);
+            data.append("rel_item", selectedItem.id);
             const config = {
                 headers: {
                     'Content-Type': 'multipart/form-data',
@@ -98,7 +111,7 @@ function BestProduct(props: any): JSX.Element {
     async function shareLink() {
         try {
             await Share.share({
-                message: props.bestItem.url
+                message: selectedItem.url
             });
         } catch (error) {
             console.warn(error.message);
@@ -106,59 +119,54 @@ function BestProduct(props: any): JSX.Element {
     }
 
     return (
-        <>
-            <View style={{ alignContent: 'flex-start', paddingLeft: 20 }}>
-                <Text style={styles.popupTitle}>Your Liked Items</Text>
-            </View>
-            <View style={styles.rootContainer}>
-                <View style={styles.horizontalCard}>
-                    <View style={{ flexDirection: 'row', paddingBottom: 20, overflow: 'hidden' }}>
-                        <Image style={styles.productImage} source={{ uri: props.bestItem.image_url }} />
-                        <View style={{ overflow: 'hidden', }}>
-                            <Text numberOfLines={1} style={styles.productName}>{props.bestItem.name}</Text>
-                            <Text style={styles.productPrice}>{'Price: ' + props.bestItem.price + ' TRY'}</Text>
-                            <TouchableOpacity style={styles.roundedButton} onPress={() => openURL()}>
-                                <Text style={{ color: '#FFF', fontSize: 12, fontWeight: 'bold' }}>{"Visit URL"}</Text>
-                            </TouchableOpacity>
-                        </View>
+        <View style={styles.rootContainer}>
+            <View style={styles.horizontalCard}>
+                <View style={{ flexDirection: 'row', paddingBottom: 20, overflow: 'hidden' }}>
+                    <Image style={styles.productImage} source={{ uri: selectedItem.image_url }} />
+                    <View style={{ overflow: 'hidden', }}>
+                        <Text numberOfLines={1} style={styles.productName}>{selectedItem.name}</Text>
+                        <Text style={styles.productPrice}>{'Price: ' + selectedItem.price + ' TRY'}</Text>
+                        <TouchableOpacity style={styles.roundedButton} onPress={() => openURL()}>
+                            <Text style={{ color: '#FFF', fontSize: 12, fontWeight: 'bold' }}>{"Visit URL"}</Text>
+                        </TouchableOpacity>
                     </View>
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignContent: 'center' }}>
-                        <View style={styles.optionContainer}>
-                            <TouchableOpacity style={liked ? styles.optionIconsSelected : styles.optionIcons} onPress={() => likeItem()}>
-                                <MaterialIcons color={liked ? 'white' : 'black'} size={25} name="thumb-up" />
-                            </TouchableOpacity>
-                            <Text style={styles.optionText}>
-                                {likeAmount + ' Likes'}
-                            </Text>
-                        </View>
-                        <View style={styles.optionContainer}>
-                            <TouchableOpacity style={styles.optionIcons}>
-                                <MaterialIcons color={'black'} size={25} name="edit" />
-                            </TouchableOpacity>
-                            <Text style={styles.optionText}>
-                                {props.bestItem.item_reviews.length + ' Reviews'}
-                            </Text>
-                        </View>
-                        <View style={styles.optionContainer}>
-                            <TouchableOpacity style={wished ? styles.optionIconsSelected : styles.optionIcons} onPress={() => addToWishlist()}>
-                                <MaterialIcons color={wished ? 'white' : 'black'} size={25} name="add" />
-                            </TouchableOpacity>
-                            <Text style={styles.optionText}>
-                                {wishAmount + ' Wishes'}
-                            </Text>
-                        </View>
-                        <View style={styles.optionContainer}>
-                            <TouchableOpacity style={styles.optionIcons} onPress={() => shareLink()}>
-                                <MaterialIcons color={'black'} size={25} name="share" />
-                            </TouchableOpacity>
-                            <Text style={styles.optionText}>
-                                Share
+                </View>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignContent: 'center' }}>
+                    <View style={styles.optionContainer}>
+                        <TouchableOpacity style={liked ? styles.optionIconsSelected : styles.optionIcons} onPress={() => likeItem()}>
+                            <MaterialIcons color={liked ? 'white' : 'black'} size={25} name="thumb-up" />
+                        </TouchableOpacity>
+                        <Text style={styles.optionText}>
+                            {likeAmount + ' Likes'}
                         </Text>
-                        </View>
+                    </View>
+                    <View style={styles.optionContainer}>
+                        <TouchableOpacity style={styles.optionIcons}>
+                            <MaterialIcons color={'black'} size={25} name="edit" />
+                        </TouchableOpacity>
+                        <Text style={styles.optionText}>
+                            {selectedItem.item_reviews? selectedItem.item_reviews.length + ' Reviews' : '0 + Reviews' }
+                        </Text>
+                    </View>
+                    <View style={styles.optionContainer}>
+                        <TouchableOpacity style={wished ? styles.optionIconsSelected : styles.optionIcons} onPress={() => addToWishlist()}>
+                            <MaterialIcons color={wished ? 'white' : 'black'} size={25} name="add" />
+                        </TouchableOpacity>
+                        <Text style={styles.optionText}>
+                            {wishAmount + ' Wishes'}
+                        </Text>
+                    </View>
+                    <View style={styles.optionContainer}>
+                        <TouchableOpacity style={styles.optionIcons} onPress={() => shareLink()}>
+                            <MaterialIcons color={'black'} size={25} name="share" />
+                        </TouchableOpacity>
+                        <Text style={styles.optionText}>
+                            Share
+                        </Text>
                     </View>
                 </View>
             </View>
-        </>
+        </View>
     )
 }
 
