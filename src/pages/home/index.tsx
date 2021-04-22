@@ -360,7 +360,7 @@ function Home(props: any, { navigation }: any): JSX.Element {
 		}
 
 		// console.log(JSON.stringify(data));
-		axios.post(SERVER_URL + 'test/', data, config)
+		axios.post(SERVER_URL + 'items/', data, config)
 			.then(function (response) {
 				console.log(JSON.stringify(response));
 				setStates(response.data);
