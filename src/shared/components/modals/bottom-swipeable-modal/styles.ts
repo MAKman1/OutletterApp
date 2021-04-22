@@ -14,7 +14,7 @@ export default StyleSheet.create({
   fullScreenView: {
     position: "absolute",
     bottom: 0,
-    height: "70%",
+    height: "100%",
     width: "100%",
     borderTopRightRadius: 20,
     borderTopLeftRadius: 20,

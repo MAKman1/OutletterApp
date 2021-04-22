@@ -14,17 +14,19 @@ function BottomSwipeableModal(props: {
 	show: boolean,
 	onCollapse: any,
 	children?: any,
-	height?: string,
+	height?: number,
 	collapsable?: boolean
 }): JSX.Element {
 
 	const fullHeight = Dimensions.get('window').height;
 
 	const [minimized, setMinimized] = useState(false);
-	const heightAnim = useRef(new Animated.Value(props.height ? (fullHeight * props.height) : 0)).current;
+	const heightAnim = useRef(new Animated.Value(props.height ? (fullHeight * props.height) : (fullHeight * 0.7))).current;
 
 	useEffect(() => {
-	}, [])
+		if( props.show)
+			toggleView( true)
+	}, [props.show])
 
 	const toggleView = (minimized: boolean) => {
 		if (minimized) {
@@ -35,6 +37,7 @@ function BottomSwipeableModal(props: {
 					duration: 1500
 				}
 			).start();
+			setMinimized(false);
 		} else {
 			Animated.spring(
 				heightAnim,
@@ -43,11 +46,8 @@ function BottomSwipeableModal(props: {
 					duration: 1500
 				}
 			).start();
-		}
-		if (minimized)
-			setMinimized(false);
-		else
 			setMinimized(true);
+		}
 	}
 
 

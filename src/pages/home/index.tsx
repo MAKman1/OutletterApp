@@ -143,7 +143,7 @@ function Home(props: any, { navigation }: any): JSX.Element {
 
 	const getModalHeight = (navRoute: any) => {
 		if (navRoute == null)
-			return null;
+			return 0.7;
 
 		switch (navRoute.name) {
 			case "productFoundScreen":
