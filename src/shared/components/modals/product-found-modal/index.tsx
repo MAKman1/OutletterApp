@@ -13,6 +13,7 @@ function ProductFoundModal(props: {
 	bestItem?: any,
 	similarItems?: any[],
 	queryItem?: any,
+	onReviewPressed: any
 
 }): JSX.Element {
 
@@ -37,7 +38,7 @@ function ProductFoundModal(props: {
 					showsHorizontalScrollIndicator={false}
 				>
 					{props.bestItem &&
-						<BestProduct bestItem={props.bestItem} />
+						<BestProduct bestItem={props.bestItem} onReviewPressed={props.onReviewPressed}/>
 					}
 				</ScrollView>
 

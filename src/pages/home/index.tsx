@@ -55,6 +55,7 @@ function Home(props: any, { navigation }: any): JSX.Element {
 
 	const [loading, setLoading] = useState(false);
 	const [navRoute, setNavRoute] = useState(null);
+	const [secondRoute, setSecondRoute] = useState(null);
 
 	const [showCrop, setShowCrop] = useState(false);
 	const [currentImage, setCurrentImage] = useState('https://i.pinimg.com/736x/0b/0c/d5/0b0cd5d09cd50a1c11c630b908ba48a3.jpg');
@@ -142,34 +143,43 @@ function Home(props: any, { navigation }: any): JSX.Element {
 	}, [iconActive])
 
 	const getModalHeight = (navRoute: any) => {
-		switch (navRoute) {
+		if (navRoute == null)
+			return 0.7;
+
+		switch (navRoute.name) {
 			case "productFoundScreen":
-				return "80%"
+				return 0.8
 			case "writeReviewScreen":
-				return "80%"
+				return 0.8
 			case "reviewsScreen":
-				return "80%"
+				return 0.8
 			case "bestProductScreen":
-				return "70%"
+				return 0.7
 			case "likedItemsScreen":
-				return "80%"
+				return 0.8
 			case "chooseStoreScreen":
-				return "55%"
+				return 0.55
 			default:
-				return "70%"
+				return 0.7
 		}
 	}
 
 	const renderComponent = (navRoute: any) => {
-		switch (navRoute) {
+			
+		if (navRoute == null)
+			return null;
+
+		switch (navRoute.name) {
 			case "selectedItemScreen":
 				return <SelectedItem />
 			case "wishlistScreen":
 				return <Wishlist />
 			case "productFoundScreen":
-				return <ProductFoundModal bestItem={bestItem} similarItems={similarItems} queryItem={queryItem} />
+				return <ProductFoundModal bestItem={bestItem} similarItems={similarItems} queryItem={queryItem} onReviewPressed={(id: any) => {
+					setSecondRoute({ name: "writeReviewScreen", props: id })
+				}} />
 			case "writeReviewScreen":
-				return <WriteReview />
+				return <WriteReview id={navRoute.props} />
 			case "reviewsScreen":
 				return <Reviews />
 			case "bestProductScreen":
@@ -256,6 +266,7 @@ function Home(props: any, { navigation }: any): JSX.Element {
 
 	async function uploadCroppedImage() {
 		// let image = await cropViewRef.current.saveImage(true, 90);
+		setShowCrop(false);
 		uploadImage(currentImage);
 	}
 
@@ -339,7 +350,7 @@ function Home(props: any, { navigation }: any): JSX.Element {
 			.then(function (response) {
 				console.log(JSON.stringify(response));
 				setStates(response.data);
-				setNavRoute("productFoundScreen");
+				setNavRoute({ name: "productFoundScreen" });
 				setLoading(false);
 				setAr(true);
 			})
@@ -351,7 +362,7 @@ function Home(props: any, { navigation }: any): JSX.Element {
 	}
 
 	function openMenuItem(pageName: any) {
-		setNavRoute(pageName);
+		setNavRoute({ name: pageName });
 		setMenuActive(false);
 	}
 
@@ -404,9 +415,6 @@ function Home(props: any, { navigation }: any): JSX.Element {
 						</TouchableOpacity>
 						<TouchableOpacity style={styles.menuItem} onPress={() => openMenuItem("likedItemsScreen")}>
 							<Text style={styles.menuText}>{"Liked Items"}</Text>
-						</TouchableOpacity>
-						<TouchableOpacity style={styles.menuItem} onPress={() => openMenuItem("reviewsScreen")}>
-							<Text style={styles.menuText}>{"Reviews"}</Text>
 						</TouchableOpacity>
 						<TouchableOpacity style={styles.menuItem} onPress={() => openMenuItem("writeReviewScreen")}>
 							<Text style={styles.menuText}>{"Write Review"}</Text>
@@ -499,7 +507,7 @@ function Home(props: any, { navigation }: any): JSX.Element {
 							</LinearGradient>
 						</TouchableOpacity>
 						{!showCrop ?
-							<TouchableOpacity style={styles.bottomIcon} onPress={() => { setNavRoute("chooseStoreScreen") }}>
+							<TouchableOpacity style={styles.bottomIcon} onPress={() => { setNavRoute({ name: "chooseStoreScreen" }) }}>
 								{
 									switchStore(store)
 								}
@@ -513,15 +521,12 @@ function Home(props: any, { navigation }: any): JSX.Element {
 				</View>
 			</SafeAreaView>
 
-
 			<BottomSwipeableModal
-				onCollapse={() => setNavRoute(null)}
-				show={navRoute != null}
+				onCollapse={() => secondRoute != null ? setSecondRoute(null) : setNavRoute(null)}
+				show={secondRoute != null || navRoute != null}
 				navigation={props.navigation}
-				height={getModalHeight(navRoute)}>
-
-				{renderComponent(navRoute)}
-
+				height={secondRoute != null ? getModalHeight(secondRoute) : getModalHeight(navRoute)}>
+				{renderComponent(secondRoute != null ? secondRoute : navRoute)}
 			</BottomSwipeableModal>
 		</View>
 	)

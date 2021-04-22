@@ -4,7 +4,7 @@ import { APP_COLORS } from '../../../../styles/colors';
 
 export default StyleSheet.create({
   rootContainer: {
-    // backgroundColor: "#FBFBFB",
+    // backgroundColor: "#FFFFFF",
     flex: 1,
   },
   title: {

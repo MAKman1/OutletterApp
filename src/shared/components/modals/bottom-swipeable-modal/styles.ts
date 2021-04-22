@@ -2,7 +2,9 @@ import { StyleSheet, Dimensions } from "react-native";
 import { APP_COLORS } from "../../../styles/colors";
 
 export default StyleSheet.create({
-  popupScroll: {},
+  popupScroll: {
+	  height: '100%'
+  },
   popupInner: {
     flex: 1,
     paddingBottom: 100,
@@ -12,7 +14,7 @@ export default StyleSheet.create({
   fullScreenView: {
     position: "absolute",
     bottom: 0,
-    height: "70%",
+    height: "100%",
     width: "100%",
     borderTopRightRadius: 20,
     borderTopLeftRadius: 20,
@@ -22,9 +24,11 @@ export default StyleSheet.create({
 	width: "100%",
 	height: 10,
 	paddingVertical: 20,
+	paddingLeft: 40,
 	marginBottom: 10,
     justifyContent: "center",
-	alignItems: "center"
+	alignItems: "center",
+	flex: 1
   },
   swipeableButton: {
     width: 35,
@@ -32,4 +36,12 @@ export default StyleSheet.create({
     borderRadius: 10,
     backgroundColor: "#B6B6B6",
   },
+  topBar: {
+	  flexDirection: 'row',
+	  alignItems: 'center'
+  },
+  closeButton: {
+	  paddingHorizontal: 10,
+	  paddingVertical: 10
+  }
 });

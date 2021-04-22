@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react'
-import { Text, View, TouchableOpacity, Image, SafeAreaView, Animated, Dimensions, LogBox } from 'react-native'
+import { Text, View, TouchableOpacity, Image, SafeAreaView, Animated, Dimensions, LogBox, Linking, ActivityIndicator } from 'react-native'
 import styles from './styles'
 
 import axios from 'axios';
@@ -12,8 +12,6 @@ import { SERVER_URL } from '../../shared/constants/constants';
 
 function WriteReview(props: any): JSX.Element {
 
-	const [textShown, setTextShown] = useState(true);
-	const [textHeight, setTextHeight] = useState(10);
 	const [text, setText] = React.useState('');
 	const [ratings, setRatings] = useState([
 		{
@@ -38,47 +36,33 @@ function WriteReview(props: any): JSX.Element {
 		},
 	]);
 	const [score, setScore] = useState(0);
+	const [reviews, setReviews] = useState(null);
 
-	const widthAnim = useRef(new Animated.Value(0)).current;
-	const heightAnim = useRef(new Animated.Value(0)).current;
 
 	useEffect(() => {
 		LogBox.ignoreLogs(['Animated: `useNativeDriver`']);
+
+		getReviews();
+
 	}, [])
 
-	useEffect(() => {
-		if (textShown) {
-			Animated.spring(
-				widthAnim,
-				{
-					toValue: Dimensions.get('window').width * .85,
-					duration: 1500,
-				}
-			).start();
-			Animated.spring(
-				heightAnim,
-				{
-					toValue: 40,
-					duration: 1500
-				}
-			).start();
-		} else {
-			Animated.spring(
-				widthAnim,
-				{
-					toValue: Dimensions.get('window').width * .85,
-					duration: 1500
-				}
-			).start();
-			Animated.spring(
-				heightAnim,
-				{
-					toValue: textHeight,
-					duration: 1500
-				}
-			).start();
+	const getReviews = () => {
+		//Get reviews
+		const config = {
+			headers: {
+				'Content-Type': 'multipart/form-data',
+				'Authorization': 'Token 7330a179a43e3e044e3eff28cc66f6a11905b417'
+			}
 		}
-	}, [textShown])
+		axios.get(SERVER_URL + "item/" + props.id, config)
+			.then(function (response) {
+				setReviews(response.data.item_reviews)
+			})
+			.catch(function (error) {
+				console.warn("Error: " + JSON.stringify(error));
+			});
+	}
+
 
 	const updateRatings = (id: number) => {
 		let newRatings = [...ratings];
@@ -95,18 +79,17 @@ function WriteReview(props: any): JSX.Element {
 	}
 
 	const postReview = (content: string, ratings: any, item: string) => {
-
-		let rating = 0;
-		ratings.array.forEach((r: any) => {
-			if( r.checked)
-				rating++;
+		let rating: number = 0.0;
+		ratings.forEach((r: any) => {
+			if (r.checked)
+				rating += 1.0
 		});
+
 		var data = new FormData();
-		data.append("title", " ");
+		data.append("title", "Review");
 		data.append("content", content);
 		data.append("rel_item", item);
 		data.append("rating", rating);
-
 		const config = {
 			headers: {
 				'Content-Type': 'multipart/form-data',
@@ -114,62 +97,82 @@ function WriteReview(props: any): JSX.Element {
 			}
 		}
 		axios.post(SERVER_URL + "review/", data, config)
-			.then(function (response) {
-				//Review posted
+			.then(function (response: any) {
+				setReviews(null);
+				getReviews();
 			})
 			.catch(function (error) {
 				console.warn("Error: " + JSON.stringify(error));
 			});
 	}
 
+	const openURL = (url: any) => {
+		Linking.openURL(url);
+	}
+
 	return (
 		<View style={styles.rootContainer}>
-			<SafeAreaView style={styles.cameraOverlayTop} >
-				<Text style={styles.title}>Write Review</Text>
-			</SafeAreaView>
-			<TextInput style={styles.reviewTextBox} multiline numberOfLines={4} value={text} onChangeText={text => setText(text)} placeholder={'Write review...'} />
-			<View style={{ flexDirection: 'row', alignItems: "center", justifyContent: 'center', marginBottom: 15 }}>
-				{ratings.map((rating, index) => {
-					return (
-						<TouchableOpacity key={index} onPress={() => updateRatings(index)}>
-							<MaterialIcons color={rating.checked ? APP_COLORS.lightBlue : APP_COLORS.backgroundGray} size={40} name={rating.checked ? "star" : "star-border"} />
-						</TouchableOpacity>
-					)
-				})
-				}
+			<View style={styles.revOuter}>
+				<SafeAreaView style={styles.cameraOverlayTop} >
+					<Text style={styles.title}>Write Review</Text>
+				</SafeAreaView>
+				<TextInput style={styles.reviewTextBox} multiline numberOfLines={4} value={text} onChangeText={text => setText(text)} placeholder={'Write review...'} />
+				<View style={{ flexDirection: 'row', alignItems: "center", justifyContent: 'center', marginBottom: 15 }}>
+					{ratings.map((rating, index) => {
+						return (
+							<TouchableOpacity key={index} onPress={() => updateRatings(index)}>
+								<MaterialIcons color={rating.checked ? APP_COLORS.lightBlue : APP_COLORS.backgroundGray} size={40} name={rating.checked ? "star" : "star-border"} />
+							</TouchableOpacity>
+						)
+					})
+					}
+				</View>
+				<TouchableOpacity style={styles.roundedButtonView} onPress={() => { postReview(text, ratings, props.id) }}>
+					<LinearGradient useAngle={true} angle={45} colors={['#00E9D8', '#009ED9']} style={styles.roundedButton}>
+						<Text style={styles.roundedButtonText}>Add Review</Text>
+					</LinearGradient>
+				</TouchableOpacity>
 			</View>
-			<TouchableOpacity style={styles.roundedButtonView} onPress={() => { postReview( text, ratings, props.itemId) }}>
-				<LinearGradient useAngle={true} angle={45} colors={['#00E9D8', '#009ED9']} style={styles.roundedButton}>
-					<Text style={styles.roundedButtonText}>Add Review</Text>
-				</LinearGradient>
-			</TouchableOpacity>
-			{/* <View style={styles.horizontalCard}>
-                <View style={styles.cardTop}>
-                    <Text style={styles.reviewDate}>24/3/21</Text>
-                    <View style={styles.rating}>
-                        <Text style={styles.ratingText}>4.7</Text>
-                        <MaterialIcons color={APP_COLORS.lightBlue} size={20} name="star" />
-                    </View>
-                </View>
-                <View style={{ flexDirection: 'row', paddingBottom: 20 }}>
-                    <Image style={styles.productImage} source={require('../../assets/darthvader.jpg')} />
-                    <View style={{ overflow: 'hidden', maxWidth: '50%', }}>
-                        <Text numberOfLines={1} style={styles.productName}> Darth Vader T-Shirt</Text>
-                        <Text style={styles.productPrice}> Price: 50.00 TRY</Text>
-                        <TouchableOpacity style={styles.smallRoundedButton} onPress={() => toggleNumberOfLines()}>
-                            <Text style={{ color: 'white', fontSize: 12 }}>Visit URL</Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-                <Animated.View style={{ width: widthAnim, height: heightAnim, alignSelf: 'center', flexDirection: 'row' }}>
-                    <TouchableOpacity activeOpacity={1} onPress={() => toggleNumberOfLines()} style={{ overflow: 'hidden' }}>
-                        <Text
-                            onLayout={onLayout}
-                            style={styles.reviewText}>{"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum"}
-                        </Text>
-                    </TouchableOpacity>
-                </Animated.View>
-            </View> */}
+			<Text style={styles.reviewTitle}>{"Reviews"}</Text>
+			{reviews == null
+				?
+				<ActivityIndicator />
+				:
+				(React.Children.toArray(reviews?.map((review: any) => (
+
+					<View style={styles.horizontalCard}>
+						<View style={styles.cardTop}>
+							<TouchableOpacity style={{ alignSelf: 'flex-end' }}>
+								<MaterialIcons color={APP_COLORS.labelGray} size={20} name="close" />
+							</TouchableOpacity>
+						</View>
+						<View style={{ flexDirection: 'row', }}>
+							<View style={{ flexDirection: 'row', paddingBottom: 20 }}>
+								<Image style={styles.productImage} source={{ uri: review.rel_item.image_url }} />
+								<View style={{ overflow: 'hidden', maxWidth: 160, }}>
+									<Text numberOfLines={1} style={styles.productName}>{review.rel_item.name}</Text>
+									<Text style={styles.productPrice}>{'Price: ' + review.rel_item.price + ' TRY'}</Text>
+									<TouchableOpacity style={styles.smallRoundedButton} onPress={() => openURL("http://google.com")}>
+										<Text style={{ color: 'white', fontSize: 12, fontWeight: 'bold' }}>Visit URL</Text>
+									</TouchableOpacity>
+								</View>
+							</View>
+							<View style={{ ...styles.rating, alignItems: 'flex-end', flex: 1, marginTop: 10 }}>
+								<Text style={styles.ratingText}>{review.rating}</Text>
+								<View style={{ flexDirection: 'row' }}>
+									<MaterialIcons color={parseInt(review.rating) >= 1 ? APP_COLORS.lightBlue : APP_COLORS.backgroundGray} size={12} name="star" />
+									<MaterialIcons color={parseInt(review.rating) >= 2 ? APP_COLORS.lightBlue : APP_COLORS.backgroundGray} size={12} name="star" />
+									<MaterialIcons color={parseInt(review.rating) >= 3 ? APP_COLORS.lightBlue : APP_COLORS.backgroundGray} size={12} name="star" />
+									<MaterialIcons color={parseInt(review.rating) >= 4 ? APP_COLORS.lightBlue : APP_COLORS.backgroundGray} size={12} name="star" />
+									<MaterialIcons color={parseInt(review.rating) === 5 ? APP_COLORS.lightBlue : APP_COLORS.backgroundGray} size={12} name="star" />
+								</View>
+							</View>
+						</View>
+						<Text numberOfLines={1} ellipsizeMode={"tail"} style={styles.reviewText}>{"\"" + review.content + "\""}</Text>
+					</View>
+				))))
+			}
+
 		</View>
 	)
 }
