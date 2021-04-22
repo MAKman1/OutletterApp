@@ -5,7 +5,7 @@ import { APP_COLORS } from "../../shared/styles/colors";
 export default StyleSheet.create({
     rootContainer: {
         width: Dimensions.get('window').width,
-        // backgroundColor: "#FBFBFB",
+        // backgroundColor: "#FFFFFF",
         flex: 1,
         flexDirection: 'row',
         justifyContent: 'center'

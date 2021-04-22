@@ -7,7 +7,10 @@ import axios from 'axios';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { APP_COLORS } from "../../shared/styles/colors";
 
-function BestProduct(props: any): JSX.Element {
+function BestProduct(props: {
+	onReviewPressed: any,
+	bestItem: any
+}): JSX.Element {
     const [liked, setLiked] = useState(false);
     const [wished, setWished] = useState(false);
     const [likeAmount, setlikeAmount] = useState(props.bestItem.item_likes_count);

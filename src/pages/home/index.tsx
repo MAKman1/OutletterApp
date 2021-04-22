@@ -142,35 +142,40 @@ function Home(props: any, { navigation }: any): JSX.Element {
 	}, [iconActive])
 
 	const getModalHeight = (navRoute: any) => {
-		switch (navRoute) {
+		if (navRoute == null)
+			return null;
+
+		switch (navRoute.name) {
 			case "productFoundScreen":
-				return "80%"
+				return 0.8
 			case "writeReviewScreen":
-				return "80%"
+				return 0.8
 			case "reviewsScreen":
-				return "80%"
+				return 0.8
 			case "bestProductScreen":
-				return "70%"
+				return 0.7
 			case "likedItemsScreen":
-				return "80%"
+				return 0.8
 			case "chooseStoreScreen":
-				return "55%"
+				return 0.55
 			default:
-				return "70%"
+				return 0.7
 		}
 	}
 
 	const renderComponent = (navRoute: any) => {
-		if( navRoute == null)
+		if (navRoute == null)
 			return null;
-			
+
 		switch (navRoute.name) {
 			case "wishlistScreen":
 				return <Wishlist />
 			case "productFoundScreen":
-				return <ProductFoundModal bestItem={bestItem} similarItems={similarItems} queryItem={queryItem} onReviewPressed={( id: any) => setSecondRoute( {name: "writeReviewScreen", props: id})}/>
+				return <ProductFoundModal bestItem={bestItem} similarItems={similarItems} queryItem={queryItem} onReviewPressed={(id: any) => {
+					setSecondRoute({ name: "writeReviewScreen", props: id })
+				}} />
 			case "writeReviewScreen":
-				return <WriteReview id={navRoute.props}/>
+				return <WriteReview id={navRoute.props} />
 			case "reviewsScreen":
 				return <Reviews />
 			case "bestProductScreen":
@@ -257,6 +262,7 @@ function Home(props: any, { navigation }: any): JSX.Element {
 
 	async function uploadCroppedImage() {
 		// let image = await cropViewRef.current.saveImage(true, 90);
+		setShowCrop(false);
 		uploadImage(currentImage);
 	}
 
@@ -340,7 +346,7 @@ function Home(props: any, { navigation }: any): JSX.Element {
 			.then(function (response) {
 				console.log(JSON.stringify(response));
 				setStates(response.data);
-				setNavRoute({name:"productFoundScreen"});
+				setNavRoute({ name: "productFoundScreen" });
 				setLoading(false);
 				setAr(true);
 			})
@@ -352,7 +358,7 @@ function Home(props: any, { navigation }: any): JSX.Element {
 	}
 
 	function openMenuItem(pageName: any) {
-		setNavRoute({name: pageName});
+		setNavRoute({ name: pageName });
 		setMenuActive(false);
 	}
 
@@ -497,7 +503,7 @@ function Home(props: any, { navigation }: any): JSX.Element {
 							</LinearGradient>
 						</TouchableOpacity>
 						{!showCrop ?
-							<TouchableOpacity style={styles.bottomIcon} onPress={() => { setNavRoute({name:"chooseStoreScreen"}) }}>
+							<TouchableOpacity style={styles.bottomIcon} onPress={() => { setNavRoute({ name: "chooseStoreScreen" }) }}>
 								{
 									switchStore(store)
 								}
@@ -511,24 +517,13 @@ function Home(props: any, { navigation }: any): JSX.Element {
 				</View>
 			</SafeAreaView>
 
-
 			<BottomSwipeableModal
-				onCollapse={() => setNavRoute(null)}
-				show={navRoute != null}
+				onCollapse={() => secondRoute != null ? setSecondRoute(null) : setNavRoute(null)}
+				show={secondRoute != null || navRoute != null}
 				navigation={props.navigation}
-				height={getModalHeight(navRoute)}>
-
-				{renderComponent(navRoute)}
+				height={secondRoute != null ? getModalHeight(secondRoute) : getModalHeight(navRoute)}>
+				{renderComponent(secondRoute != null ? secondRoute : navRoute)}
 			</BottomSwipeableModal>
-
-			<BottomSwipeableModal
-				onCollapse={() => setSecondRoute(null)}
-				show={secondRoute != null}
-				navigation={props.navigation}
-				height={getModalHeight(secondRoute)}>
-				{renderComponent(secondRoute)}
-			</BottomSwipeableModal>
-
 		</View>
 	)
 }

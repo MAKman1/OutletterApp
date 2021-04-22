@@ -4,7 +4,7 @@ import { APP_COLORS } from "../../shared/styles/colors";
 
 export default StyleSheet.create({
   rootContainer: {
-    backgroundColor: "#FBFBFB",
+    backgroundColor: "#FFFFFF",
     flex: 1,
     flexDirection: "column",
   },

@@ -13,7 +13,7 @@ function ProductFoundModal(props: {
 	bestItem?: any,
 	similarItems?: any[],
 	queryItem?: any,
-	onReviewPressed?: any
+	onReviewPressed: any
 
 }): JSX.Element {
 
