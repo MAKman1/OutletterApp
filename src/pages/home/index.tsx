@@ -12,6 +12,8 @@ import {
 } from '@viro-community/react-viro';
 import LinearGradient from 'react-native-linear-gradient';
 
+import { Bars } from 'react-native-loader';
+
 
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunity from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -86,7 +88,7 @@ function Home(props: any, { navigation }: any): JSX.Element {
 			Animated.spring(
 				heightAnim,
 				{
-					toValue: (Dimensions.get('window').height * 0.6),
+					toValue: (Dimensions.get('window').height * 0.5),
 					duration: 1500
 				}
 			).start();
@@ -166,7 +168,7 @@ function Home(props: any, { navigation }: any): JSX.Element {
 	}
 
 	const renderComponent = (navRoute: any) => {
-			
+
 		if (navRoute == null)
 			return null;
 
@@ -455,7 +457,11 @@ function Home(props: any, { navigation }: any): JSX.Element {
 					</View>
 				</View>
 
-				{loading && <ActivityIndicator color={"white"} size={35} style={{ marginTop: '50%' }} />}
+				{(!menuActive && loading) &&
+					<View style={{ marginTop: '60%', alignItems: 'center' }}>
+						<Bars size={30} color="#FFFFFF" />
+					</View>
+				}
 
 			</SafeAreaView>
 			<SafeAreaView style={styles.cameraOverlayBottom} >
