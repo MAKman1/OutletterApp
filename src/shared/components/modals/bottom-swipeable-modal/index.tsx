@@ -1,11 +1,13 @@
 import React, { useEffect, useState, useRef } from 'react'
-import { Text, View, TouchableOpacity, Image, SafeAreaView, ScrollView, Touchable, Animated, Dimensions } from 'react-native'
+import { Text, View, TouchableOpacity, Image, SafeAreaView, ScrollView, Touchable, Animated, Dimensions, ActivityIndicator } from 'react-native'
 import Modal from 'react-native-modal'
 import styles from './styles'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { TouchableOpacity as TO } from 'react-native-gesture-handler';
 import MaterialCommunity from 'react-native-vector-icons/MaterialCommunityIcons';
 import Feather from 'react-native-vector-icons/Feather';
+import { Bubbles, Bars } from 'react-native-loader';
+import { APP_COLORS } from '../../../styles/colors';
 
 
 
@@ -21,12 +23,23 @@ function BottomSwipeableModal(props: {
 	const fullHeight = Dimensions.get('window').height;
 
 	const [minimized, setMinimized] = useState(false);
+	const [loading, setLoading] = useState(true);
 	const heightAnim = useRef(new Animated.Value(props.height ? (fullHeight * props.height) : (fullHeight * 0.7))).current;
 
 	useEffect(() => {
-		if( props.show)
-			toggleView( true)
+		if (props.show) {
+			toggleView(true)
+		}
 	}, [props.show])
+
+	useEffect(() => {
+		if (props.children) {
+			setLoading(true);
+			setTimeout(() => {
+				setLoading( false)
+			}, 1000);
+		}
+	}, [props.children])
 
 	const toggleView = (minimized: boolean) => {
 		if (minimized) {
@@ -84,7 +97,13 @@ function BottomSwipeableModal(props: {
 
 
 					{/* Content */}
-					{props.children}
+					{loading ?
+						<View style={{ marginTop: '30%', alignItems: 'center' }}>
+							<Bars size={20} color={APP_COLORS.lightBlue} />
+						</View>
+						:
+						props.children
+					}
 
 				</ScrollView>
 			</Animated.View>
