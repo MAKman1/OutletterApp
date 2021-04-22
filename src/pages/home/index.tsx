@@ -26,7 +26,8 @@ import WriteReview from '../write-review';
 import Reviews from '../reviews';
 import BestProduct from '../best-product';
 import LikedItems from '../liked-items';
-import Wishlist from '../wishlist/index'
+import Wishlist from '../wishlist/index';
+import SelectedItem from '../selectedItem/index'
 
 import { CropView } from 'react-native-image-crop-tools';
 
@@ -161,6 +162,8 @@ function Home(props: any, { navigation }: any): JSX.Element {
 
 	const renderComponent = (navRoute: any) => {
 		switch (navRoute) {
+			case "selectedItemScreen":
+				return <SelectedItem />
 			case "wishlistScreen":
 				return <Wishlist />
 			case "productFoundScreen":
@@ -378,18 +381,18 @@ function Home(props: any, { navigation }: any): JSX.Element {
 					/>
 				</SafeAreaView>
 				:
-				null
-				// <ViroARSceneNavigator
-				// 	ref={arScene}
-				// 	autofocus={false}
-				// 	initialScene={{
-				// 		scene: ARDisplay,
-				// 	}}
-				// 	viroAppProps={
-				// 		{ arfound, bestItem }
-				// 	}
-				// 	style={{ flex: 1 }}
-				// />
+				// null
+				<ViroARSceneNavigator
+					ref={arScene}
+					autofocus={false}
+					initialScene={{
+						scene: ARDisplay,
+					}}
+					viroAppProps={
+						{ arfound, bestItem }
+					}
+					style={{ flex: 1 }}
+				/>
 			}
 
 			{/* Menu */}

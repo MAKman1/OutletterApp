@@ -29,7 +29,6 @@ function ARDisplay(props: any): JSX.Element {
 
         setPos([cameraPosition[0], cameraPosition[1], cameraPosition[2]]); // ADD OFFSET +30 or smt
         setRot(cameraRotation);
-        console.log(markerPosition);
       }
     );
   }
@@ -39,37 +38,45 @@ function ARDisplay(props: any): JSX.Element {
       {props.arSceneNavigator.viroAppProps.arfound ?
         <>
           <ViroImage
-              height={0.1}
-              width={0.1}
-              position={[-0.25, 0.03, -0.9]}
-              placeholderSource={{ uri: newProps.bestItem.image_url }}
-              source={{ uri: newProps.bestItem.image_url }}
-            />
+            height={0.13}
+            width={0.13}
+            position={[-0.25, 0.03, -1]}
+            placeholderSource={{ uri: newProps.bestItem.image_url }}
+            source={{ uri: newProps.bestItem.image_url }}
+          />
+          <ViroText
+            text={newProps.bestItem.name}
+            scale={[0.5, 0.5, 0.5]}
+            extrusionDepth={0.1}
+            // outerStroke={{type:"Outline", width: 0.3, color:'#000000'}}
+            position={[-0.08, 0.045, -1]}
+            style={styles.ARComponentStyle}
+          />
           <ViroText
             text={text}
             scale={[0.5, 0.5, 0.5]}
             extrusionDepth={0.1}
             // outerStroke={{type:"Outline", width: 0.3, color:'#000000'}}
-            position={[0, 0, -1]}
-            style={styles.ARComponentStyle}
+            position={[0.06, -0.015, -1]}
+            style={styles.priceText}
           />
           <ViroImage
-            height={0.18}
+            height={0.20}
             width={0.8}
             position={[0, 0.02, -1.001]}
             placeholderSource={require("../../../assets/popupbg.png")}
             source={require("../../../assets/popupbg.png")}
           />
         </>
-      :
-      null
-    }
+        :
+        null
+      }
     </ViroARScene>
   );
 
   function _onInitialized(state: any, reason: any) {
     if (state == ViroConstants.TRACKING_NORMAL) {
-      setText('Price: TRY');
+      // setText('Price: TRY');
     } else if (state == ViroConstants.TRACKING_NONE) {
       setText('');
     }

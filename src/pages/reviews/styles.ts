@@ -4,16 +4,17 @@ import { APP_COLORS } from "../../shared/styles/colors";
 
 export default StyleSheet.create({
   rootContainer: {
-    backgroundColor: "#FBFBFB",
+    // backgroundColor: "#FBFBFB",
     flex: 1,
   },
   title: {
-    padding: 20,
-    fontSize: 32,
-    textAlign: "center",
-    color: "black",
+    color: 'black',
+    fontSize: 25,
+    // fontWeight: "bold",
+    marginBottom: 10,
   },
   horizontalCard: {
+    width: Dimensions.get('window').width * 0.9,
     maxHeight: 400,
     alignSelf: "center",
     borderRadius: 20,
@@ -37,14 +38,15 @@ export default StyleSheet.create({
   },
   cardTop: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: 'flex-end'
+    // justifyContent: "space-between",
   },
   rating: {
-    flexDirection: "row",
+    flexDirection: "column",
   },
   ratingText: {
     color: APP_COLORS.lightBlue,
-    fontSize: 16,
+    fontSize: 30,
     paddingRight: 5,
   },
   reviewText: {
@@ -68,19 +70,19 @@ export default StyleSheet.create({
     width: 90,
     height: 90,
     borderRadius: 5,
-    marginRight: 10,
+    marginRight: 20,
   },
   productName: {
     fontSize: 20,
   },
   productPrice: {
     color: APP_COLORS.lightBlue,
-    fontSize: 20,
+    fontSize: 16,
   },
   roundedButton: {
     marginTop: 5,
     height: 25,
-    width: "50%",
+    width: 75,
     justifyContent: "center",
     alignItems: "center",
     paddingVertical: 8,

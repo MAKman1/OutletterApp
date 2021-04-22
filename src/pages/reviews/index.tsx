@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react'
-import { Text, View, TouchableOpacity, Image, SafeAreaView, Animated, Dimensions, LogBox } from 'react-native'
+import { Text, View, TouchableOpacity, Image, Linking, Animated, Dimensions, LogBox } from 'react-native'
 import styles from './styles'
 
 import axios from 'axios';
@@ -11,10 +11,25 @@ function Reviews(props: any): JSX.Element {
 
     const [textShown, setTextShown] = useState(true);
     const [textHeight, setTextHeight] = useState(10);
+    const [reviews, setReviews] = useState<any[]>([]);
     const heightAnim = useRef(new Animated.Value(40)).current;
 
     useEffect(() => {
         LogBox.ignoreLogs(['Animated: `useNativeDriver`']);
+        const config = {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                'Authorization': 'Token 7330a179a43e3e044e3eff28cc66f6a11905b417'
+            }
+        }
+        axios.get('https://2dc15dea62f4.ngrok.io/api/v1/review/', config)
+            .then(function (response) {
+                console.log(response.data);
+                setReviews(response.data);
+            })
+            .catch(function (error) {
+                console.warn("Error: " + JSON.stringify(error));
+            });
     }, [])
 
     useEffect(() => {
@@ -46,38 +61,68 @@ function Reviews(props: any): JSX.Element {
         setTextHeight(height);
     }, []);
 
+    function openURL(index: number) {
+        Linking.canOpenURL(reviews[index].rel_item.url).then(supported => {
+            if (supported) {
+                Linking.openURL(reviews[index].rel_item.url);
+            } else {
+                console.log("Couldn't Open" + reviews[index].rel_item.url);
+            }
+        });
+    }
+
     return (
         <View style={styles.rootContainer}>
-            <SafeAreaView style={styles.cameraOverlayTop} >
+            <View style={{ alignContent: 'flex-start', paddingLeft: 20 }}>
                 <Text style={styles.title}>Your Reviews</Text>
-            </SafeAreaView>
-            <View style={styles.horizontalCard}>
-                <View style={styles.cardTop}>
-                    <Text style={styles.reviewDate}>24/3/21</Text>
-                    <View style={styles.rating}>
-                        <Text style={styles.ratingText}>4.7</Text>
-                        <MaterialIcons color={APP_COLORS.lightBlue} size={20} name="star" />
-                    </View>
-                </View>
-                <View style={{ flexDirection: 'row', paddingBottom: 20 }}>
-                    <Image style={styles.productImage} source={require('../../assets/darthvader.jpg')} />
-                    <View style={{overflow: 'hidden', maxWidth: '50%',}}>
-                        <Text numberOfLines={1} style={styles.productName}> Darth Vader T-Shirt</Text>
-                        <Text style={styles.productPrice}> Price: 50.00 TRY</Text>
-                        <TouchableOpacity style={styles.roundedButton} onPress={() => toggleNumberOfLines()}>
-                            <Text style={{ color: 'white', fontSize: 12, fontWeight: 'bold' }}>Visit URL</Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-                <Animated.View style={{ width: '100%', height: heightAnim, alignSelf: 'center', flexDirection: 'row' }}>
-                    <TouchableOpacity activeOpacity={1} onPress={() => toggleNumberOfLines()} style={{ overflow: 'hidden' }}>
-                        <Text
-                            onLayout={onLayout}
-                            style={styles.reviewText}>{"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum"}
-                        </Text>
-                    </TouchableOpacity>
-                </Animated.View>
             </View>
+            {
+                reviews ?
+                    reviews.map((review, index) => {
+                        return (
+                            <View key={index} style={styles.horizontalCard}>
+                                <View style={styles.cardTop}>
+                                    {/* <Text style={styles.reviewDate}>24/3/21</Text> */}
+                                    <TouchableOpacity style={{ alignSelf: 'flex-end' }}>
+                                        <MaterialIcons color={APP_COLORS.labelGray} size={20} name="close" />
+                                    </TouchableOpacity>
+                                </View>
+                                <View style={{ flexDirection: 'row', }}>
+                                    <View style={{ flexDirection: 'row', paddingBottom: 20 }}>
+                                        <Image style={styles.productImage} source={{uri: review.rel_item.image_url}} />
+                                        <View style={{ overflow: 'hidden', maxWidth: 160, }}>
+                                            <Text numberOfLines={1} style={styles.productName}>{review.rel_item.name}</Text>
+                                            <Text style={styles.productPrice}>{'Price: ' + review.rel_item.price + ' TRY'}</Text>
+                                            <TouchableOpacity style={styles.roundedButton} onPress={() => openURL(index)}>
+                                                <Text style={{ color: 'white', fontSize: 12, fontWeight: 'bold' }}>Visit URL</Text>
+                                            </TouchableOpacity>
+                                        </View>
+                                    </View>
+                                    <View style={{...styles.rating, alignItems: 'flex-end', flex: 1, marginTop: 10 }}>
+                                        <Text style={styles.ratingText}>{review.rating}</Text>
+                                        <View style={{flexDirection: 'row'}}>
+                                            <MaterialIcons color={parseInt(review.rating) >= 1 ? APP_COLORS.lightBlue : APP_COLORS.backgroundGray} size={12} name="star" />
+                                            <MaterialIcons color={parseInt(review.rating) >= 2 ? APP_COLORS.lightBlue : APP_COLORS.backgroundGray} size={12} name="star" />
+                                            <MaterialIcons color={parseInt(review.rating) >= 3 ? APP_COLORS.lightBlue : APP_COLORS.backgroundGray} size={12} name="star" />
+                                            <MaterialIcons color={parseInt(review.rating) >= 4 ? APP_COLORS.lightBlue : APP_COLORS.backgroundGray} size={12} name="star" />
+                                            <MaterialIcons color={parseInt(review.rating) === 5 ? APP_COLORS.lightBlue : APP_COLORS.backgroundGray} size={12} name="star" />
+                                        </View>
+                                    </View>
+                                </View>
+                                <Animated.View style={{ width: '100%', height: heightAnim, alignSelf: 'center', flexDirection: 'row' }}>
+                                    <TouchableOpacity activeOpacity={1} onPress={() => toggleNumberOfLines()} style={{ overflow: 'hidden' }}>
+                                        <Text
+                                            onLayout={onLayout}
+                                            style={styles.reviewText}>{'"' + review.content + '"'}
+                                        </Text>
+                                    </TouchableOpacity>
+                                </Animated.View>
+                            </View>
+                        )
+                    })
+                    :
+                    null
+            }
         </View>
     )
 }
