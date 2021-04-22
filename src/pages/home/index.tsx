@@ -346,7 +346,7 @@ function Home(props: any, { navigation }: any): JSX.Element {
 		}
 
 		// console.log(JSON.stringify(data));
-		axios.post('https://2dc15dea62f4.ngrok.io/api/v1/test/', data, config)
+		axios.post('https://3e01cf7dcbd2.ngrok.io/api/v1/items/', data, config)
 			.then(function (response) {
 				console.log(JSON.stringify(response));
 				setStates(response.data);
@@ -416,8 +416,8 @@ function Home(props: any, { navigation }: any): JSX.Element {
 						<TouchableOpacity style={styles.menuItem} onPress={() => openMenuItem("likedItemsScreen")}>
 							<Text style={styles.menuText}>{"Liked Items"}</Text>
 						</TouchableOpacity>
-						<TouchableOpacity style={styles.menuItem} onPress={() => openMenuItem("writeReviewScreen")}>
-							<Text style={styles.menuText}>{"Write Review"}</Text>
+						<TouchableOpacity style={styles.menuItem} onPress={() => openMenuItem("reviewsScreen")}>
+							<Text style={styles.menuText}>{"Reviews"}</Text>
 						</TouchableOpacity>
 						{/* <TouchableOpacity style={styles.menuItem} onPress={() => openMenuItem("bestProductScreen")}>
 							<Text style={styles.menuText}>{"Best Product"}</Text>

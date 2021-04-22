@@ -93,7 +93,7 @@ function ProductFoundModal(props: {
 						<View style={{ alignContent: 'flex-start', paddingHorizontal: 20 }}>
 							<Text style={styles.popupTitle}>Segmented image</Text>
 						</View>
-						<Image style={{ height: 400, width: 400 }} source={{ uri: 'https://2dc15dea62f4.ngrok.io/' + props.queryItem.picture }} resizeMode={'contain'} />
+						<Image style={{ height: 400, width: 400 }} source={{ uri: 'https://3e01cf7dcbd2.ngrok.io' + props.queryItem.picture }} resizeMode={'contain'} />
 
 					</View>
 				{/* } */}
