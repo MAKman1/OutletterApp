@@ -37,7 +37,7 @@ function TopItem(props: any): JSX.Element {
                     <Image style={styles.productImage} source={{ uri: props.topItem.image_url }} />
                     <View>
                         <TouchableOpacity onPress={() => openItem()}>
-                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', overflow: 'hidden' }}>
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', overflow: 'hidden', maxWidth: 130 }}>
                                 <Text style={styles.productName} numberOfLines={1}>{props.topItem.name}</Text>
                             </View>
                         </TouchableOpacity>

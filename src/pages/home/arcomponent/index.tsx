@@ -13,7 +13,8 @@ function ARDisplay(props: any): JSX.Element {
   let newProps = props.arSceneNavigator.viroAppProps;
 
   useEffect(() => {
-    setText('Price: ' + newProps.bestItem.price + 'TRY');
+    if (newProps.bestItem)
+      setText('Price: ' + newProps.bestItem.price + 'TRY');
   }, [newProps.arfound])
 
 
@@ -35,7 +36,7 @@ function ARDisplay(props: any): JSX.Element {
   // rotation={markerRotation}
   return (
     <ViroARScene ref={scene} onTrackingUpdated={_onInitialized}>
-      {props.arSceneNavigator.viroAppProps.arfound ?
+      {props.arSceneNavigator.viroAppProps.arfound && props.bestItem ?
         <>
           <ViroImage
             height={0.13}
