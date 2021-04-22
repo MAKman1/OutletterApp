@@ -22,7 +22,7 @@ function Reviews(props: any): JSX.Element {
                 'Authorization': 'Token 7330a179a43e3e044e3eff28cc66f6a11905b417'
             }
         }
-        axios.get('https://2dc15dea62f4.ngrok.io/api/v1/review/', config)
+        axios.get('https://3e01cf7dcbd2.ngrok.io/api/v1/review/', config)
             .then(function (response) {
                 console.log(response.data);
                 setReviews(response.data);
@@ -71,6 +71,24 @@ function Reviews(props: any): JSX.Element {
         });
     }
 
+    function removeReview(index: number) {
+        const config = {
+            headers: {
+                'Authorization': 'Token 7330a179a43e3e044e3eff28cc66f6a11905b417'
+            }
+        }
+        axios.delete('https://3e01cf7dcbd2.ngrok.io/api/v1/review/' + reviews[index].id + '/', config)
+            .then(function (response) {
+                let newReviews = [...reviews];
+                newReviews.splice(index, 1);
+                setReviews(newReviews);
+                // console.log(WishlistItems);
+            })
+            .catch(function (error) {
+                console.warn("Error: " + JSON.stringify(error));
+            });
+    }
+
     return (
         <View style={styles.rootContainer}>
             <View style={{ alignContent: 'flex-start', paddingLeft: 20 }}>
@@ -83,13 +101,13 @@ function Reviews(props: any): JSX.Element {
                             <View key={index} style={styles.horizontalCard}>
                                 <View style={styles.cardTop}>
                                     {/* <Text style={styles.reviewDate}>24/3/21</Text> */}
-                                    <TouchableOpacity style={{ alignSelf: 'flex-end' }}>
+                                    <TouchableOpacity style={{ alignSelf: 'flex-end' }} onPress={() => removeReview(index)}>
                                         <MaterialIcons color={APP_COLORS.labelGray} size={20} name="close" />
                                     </TouchableOpacity>
                                 </View>
                                 <View style={{ flexDirection: 'row', }}>
                                     <View style={{ flexDirection: 'row', paddingBottom: 20 }}>
-                                        <Image style={styles.productImage} source={{uri: review.rel_item.image_url}} />
+                                        <Image style={styles.productImage} source={{ uri: review.rel_item.image_url }} />
                                         <View style={{ overflow: 'hidden', maxWidth: 160, }}>
                                             <Text numberOfLines={1} style={styles.productName}>{review.rel_item.name}</Text>
                                             <Text style={styles.productPrice}>{'Price: ' + review.rel_item.price + ' TRY'}</Text>
@@ -98,9 +116,9 @@ function Reviews(props: any): JSX.Element {
                                             </TouchableOpacity>
                                         </View>
                                     </View>
-                                    <View style={{...styles.rating, alignItems: 'flex-end', flex: 1, marginTop: 10 }}>
+                                    <View style={{ ...styles.rating, alignItems: 'flex-end', flex: 1, marginTop: 10 }}>
                                         <Text style={styles.ratingText}>{review.rating}</Text>
-                                        <View style={{flexDirection: 'row'}}>
+                                        <View style={{ flexDirection: 'row' }}>
                                             <MaterialIcons color={parseInt(review.rating) >= 1 ? APP_COLORS.lightBlue : APP_COLORS.backgroundGray} size={12} name="star" />
                                             <MaterialIcons color={parseInt(review.rating) >= 2 ? APP_COLORS.lightBlue : APP_COLORS.backgroundGray} size={12} name="star" />
                                             <MaterialIcons color={parseInt(review.rating) >= 3 ? APP_COLORS.lightBlue : APP_COLORS.backgroundGray} size={12} name="star" />

@@ -6,7 +6,7 @@ export default StyleSheet.create({
   rootContainer: {
     // backgroundColor: "#FFFFFF",
     flex: 1,
-    flexDirection: 'row',
+    flexDirection: 'column',
     justifyContent: 'center',
   },
   horizontalCard: {

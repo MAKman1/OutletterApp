@@ -20,7 +20,7 @@ function LikedItems(props: any): JSX.Element {
                 'Authorization': 'Token 7330a179a43e3e044e3eff28cc66f6a11905b417'
             }
         }
-        axios.get('https://2dc15dea62f4.ngrok.io/api/v1/like/', config)
+        axios.get('https://3e01cf7dcbd2.ngrok.io/api/v1/like/', config)
             .then(function (response) {
                 setLikedItems(response.data);
             })
@@ -45,7 +45,7 @@ function LikedItems(props: any): JSX.Element {
                 'Authorization': 'Token 7330a179a43e3e044e3eff28cc66f6a11905b417'
             }
         }
-        axios.delete('https://2dc15dea62f4.ngrok.io/api/v1/like/' + likedItems[index].id + '/', config)
+        axios.delete('https://3e01cf7dcbd2.ngrok.io/api/v1/like/' + likedItems[index].id + '/', config)
                 .then(function (response) {
                     let newLikedItems = [...likedItems];
                     newLikedItems.splice(index, 1);
