@@ -333,10 +333,10 @@ function Home(props: any, { navigation }: any): JSX.Element {
 				shop = 'www2.hm.com/tr_tr';
 				break;
 			case 'None':
-				shop = 'www.trendyol.com';;
+				shop = 'www.koton.com';;
 				break;
 			default:
-				shop = 'www.trendyol.com';;
+				shop = 'www.koton.com';;
 				break;
 		}
 
@@ -408,18 +408,18 @@ function Home(props: any, { navigation }: any): JSX.Element {
 					/>
 				</SafeAreaView>
 				:
-				// null
-				<ViroARSceneNavigator
-					ref={arScene}
-					autofocus={false}
-					initialScene={{
-						scene: ARDisplay,
-					}}
-					viroAppProps={
-						{ arfound, bestItem }
-					}
-					style={{ flex: 1 }}
-				/>
+				null
+				// <ViroARSceneNavigator
+				// 	ref={arScene}
+				// 	autofocus={false}
+				// 	initialScene={{
+				// 		scene: ARDisplay,
+				// 	}}
+				// 	viroAppProps={
+				// 		{ arfound, bestItem }
+				// 	}
+				// 	style={{ flex: 1 }}
+				// />
 			}
 
 			{/* Menu */}
