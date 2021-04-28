@@ -51,7 +51,7 @@ function WriteReview(props: any): JSX.Element {
 		const config = {
 			headers: {
 				'Content-Type': 'multipart/form-data',
-				'Authorization': 'Token 7330a179a43e3e044e3eff28cc66f6a11905b417'
+				'Authorization': 'Token 3b96f2e1cc132e005afba2de8cf2f391b5d3c346'
 			}
 		}
 		axios.get(SERVER_URL + "item/" + props.id, config)
@@ -93,7 +93,7 @@ function WriteReview(props: any): JSX.Element {
 		const config = {
 			headers: {
 				'Content-Type': 'multipart/form-data',
-				'Authorization': 'Token 7330a179a43e3e044e3eff28cc66f6a11905b417'
+				'Authorization': 'Token 3b96f2e1cc132e005afba2de8cf2f391b5d3c346'
 			}
 		}
 		axios.post(SERVER_URL + "review/", data, config)

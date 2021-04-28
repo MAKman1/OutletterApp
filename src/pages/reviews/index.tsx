@@ -6,6 +6,7 @@ import axios from 'axios';
 
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { APP_COLORS } from "../../shared/styles/colors";
+import { SERVER_URL } from '../../shared/constants/constants';
 
 function Reviews(props: any): JSX.Element {
 
@@ -19,10 +20,10 @@ function Reviews(props: any): JSX.Element {
         const config = {
             headers: {
                 'Content-Type': 'multipart/form-data',
-                'Authorization': 'Token 7330a179a43e3e044e3eff28cc66f6a11905b417'
+                'Authorization': 'Token 3b96f2e1cc132e005afba2de8cf2f391b5d3c346'
             }
         }
-        axios.get('https://3e01cf7dcbd2.ngrok.io/api/v1/review/', config)
+        axios.get(SERVER_URL + 'review/', config)
             .then(function (response) {
                 console.log(response.data);
                 setReviews(response.data);
@@ -74,10 +75,10 @@ function Reviews(props: any): JSX.Element {
     function removeReview(index: number) {
         const config = {
             headers: {
-                'Authorization': 'Token 7330a179a43e3e044e3eff28cc66f6a11905b417'
+                'Authorization': 'Token 3b96f2e1cc132e005afba2de8cf2f391b5d3c346'
             }
         }
-        axios.delete('https://3e01cf7dcbd2.ngrok.io/api/v1/review/' + reviews[index].id + '/', config)
+        axios.delete(SERVER_URL + 'review/' + reviews[index].id + '/', config)
             .then(function (response) {
                 let newReviews = [...reviews];
                 newReviews.splice(index, 1);

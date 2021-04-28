@@ -46,6 +46,7 @@ function Home(props: any, { navigation }: any): JSX.Element {
 	const [store, setStore] = useState("None");
 
 	const [arfound, setAr] = useState(false);
+	const [notFound, setNotFound] = useState(false);
 	const [debugModal, setDebugModal] = useState(true);
 	const [menuActive, setMenuActive] = useState(false);
 	const [iconActive, setIconActive] = useState(false);
@@ -311,9 +312,14 @@ function Home(props: any, { navigation }: any): JSX.Element {
 		}
 	}
 
-
-	async function takePictureFromARView() {
+	function resetARScene() {
 		arScene.current._resetARSession(true, true);
+		console.warn('AR RESET');
+	}
+
+
+	async function showCropView() {
+		resetARScene();
 		arScene.current._takeScreenshot('outletter_' + Date.now() + '_img', false).then((data: any) => {
 			console.log(data.success, data.url, data.errorCode);
 			setCurrentImage('file://' + data.url);
@@ -409,15 +415,20 @@ function Home(props: any, { navigation }: any): JSX.Element {
 					setQueryItem(res.query_item);
 					setSegmentedItems(res.options);
 					setLoading(false);
-					setAr(true);
+					setAr(false);
 					setNavRoute({ name: 'segmentSelectorScreen' })
 				} else {
 					setSegmentedItems([])
 					setStates(response.data);
-					setNavRoute({ name: "productFoundScreen" });
 					setLoading(false);
 					setAr(true);
 
+					if (response.data.similar_items === 0) {
+						setNotFound(true);
+					}
+					else {
+						setNavRoute({ name: "productFoundScreen" });
+					}
 				}
 			})
 			.catch(function (error) {
@@ -425,6 +436,7 @@ function Home(props: any, { navigation }: any): JSX.Element {
 				showError(" Failed to retrieve item data. Please try again.")
 				console.log("Error: " + JSON.stringify(error));
 				setLoading(false);
+				setNotFound(true);
 			});
 	}
 
@@ -449,130 +461,130 @@ function Home(props: any, { navigation }: any): JSX.Element {
 
 	return (
 		<View style={[styles.rootContainer, { backgroundColor: '#000' }]}>
-			<ViroARSceneNavigator
-				ref={arScene}
-				autofocus={false}
-				initialScene={{
-					scene: ARDisplay,
-				}}
-				viroAppProps={
-					{ arfound, bestItem }
-				}
-				style={{ flex: 1 }}
-			/>
+	<ViroARSceneNavigator
+		ref={arScene}
+		autofocus={false}
+		initialScene={{
+			scene: ARDisplay,
+		}}
+		viroAppProps={
+			{ arfound, bestItem }
+		}
+		style={{ flex: 1 }}
+	/>
 
-			{/* Menu */}
-			<Animated.View style={[styles.menuOverlay, { width: widthAnim, height: heightAnim }]}>
-				{menuActive ?
-					<LinearGradient style={styles.menuInner} useAngle={true} angle={45} colors={['#00E9D8', '#009ED9']} >
-						<TouchableOpacity style={styles.menuItem} onPress={() => openMenuItem("wishlistScreen")}>
-							<Text style={styles.menuText}>{"Wishlist"}</Text>
-						</TouchableOpacity>
-						<TouchableOpacity style={styles.menuItem} onPress={() => openMenuItem("likedItemsScreen")}>
-							<Text style={styles.menuText}>{"Liked Items"}</Text>
-						</TouchableOpacity>
-						<TouchableOpacity style={styles.menuItem} onPress={() => openMenuItem("reviewsScreen")}>
-							<Text style={styles.menuText}>{"Reviews"}</Text>
-						</TouchableOpacity>
-						{/* <TouchableOpacity style={styles.menuItem} onPress={() => openMenuItem("bestProductScreen")}>
+	{/* Menu */ }
+	<Animated.View style={[styles.menuOverlay, { width: widthAnim, height: heightAnim }]}>
+		{menuActive ?
+			<LinearGradient style={styles.menuInner} useAngle={true} angle={45} colors={['#00E9D8', '#009ED9']} >
+				<TouchableOpacity style={styles.menuItem} onPress={() => openMenuItem("wishlistScreen")}>
+					<Text style={styles.menuText}>{"Wishlist"}</Text>
+				</TouchableOpacity>
+				<TouchableOpacity style={styles.menuItem} onPress={() => openMenuItem("likedItemsScreen")}>
+					<Text style={styles.menuText}>{"Liked Items"}</Text>
+				</TouchableOpacity>
+				<TouchableOpacity style={styles.menuItem} onPress={() => openMenuItem("reviewsScreen")}>
+					<Text style={styles.menuText}>{"Reviews"}</Text>
+				</TouchableOpacity>
+				{/* <TouchableOpacity style={styles.menuItem} onPress={() => openMenuItem("bestProductScreen")}>
 							<Text style={styles.menuText}>{"Best Product"}</Text>
 						</TouchableOpacity> */}
 
-						<View style={styles.menuBottom}>
-							<TouchableOpacity style={[styles.circleButton, { marginRight: 30 }]}>
-								<Feather color={'#FFF'} size={25} name="settings" />
-							</TouchableOpacity>
-							<TouchableOpacity style={styles.circleButton}>
-								<Feather color={'#FFF'} size={25} name="power" />
-							</TouchableOpacity>
-						</View>
-					</LinearGradient>
-					: null}
-
-			</Animated.View>
-			<SafeAreaView style={styles.cameraOverlayTop} >
-				<View style={styles.topIconView}>
-					<View style={{ paddingHorizontal: 10, paddingTop: 20 }}>
-						<Hamburger
-							active={menuActive}
-							type="spinCross"
-							onPress={() => menuActive ? setMenuActive(false) : setMenuActive(true)}
-							color={"white"}
-						/>
-					</View>
-					<View style={styles.topOverlay}>
-						<Image style={{ alignSelf: 'center' }}
-							source={
-								require('../../assets/outletterLogo.png')
-							}
-						/>
-					</View>
+				<View style={styles.menuBottom}>
+					<TouchableOpacity style={[styles.circleButton, { marginRight: 30 }]}>
+						<Feather color={'#FFF'} size={25} name="settings" />
+					</TouchableOpacity>
+					<TouchableOpacity style={styles.circleButton}>
+						<Feather color={'#FFF'} size={25} name="power" />
+					</TouchableOpacity>
 				</View>
+			</LinearGradient>
+			: null}
 
-				{(!menuActive && loading) &&
-					<View style={{ marginTop: '60%', alignItems: 'center' }}>
-						<Bars size={30} color="#FFFFFF" />
+	</Animated.View>
+		<SafeAreaView style={styles.cameraOverlayTop} >
+			<View style={styles.topIconView}>
+				<View style={{ paddingHorizontal: 10, paddingTop: 20 }}>
+					<Hamburger
+						active={menuActive}
+						type="spinCross"
+						onPress={() => menuActive ? setMenuActive(false) : setMenuActive(true)}
+						color={"white"}
+					/>
+				</View>
+				<View style={styles.topOverlay}>
+					<Image style={{ alignSelf: 'center' }}
+						source={
+							require('../../assets/outletterLogo.png')
+						}
+					/>
+				</View>
+			</View>
+
+			{(!menuActive && loading) &&
+				<View style={{ marginTop: '60%', alignItems: 'center' }}>
+					<Bars size={30} color="#FFFFFF" />
+				</View>
+			}
+
+		</SafeAreaView>
+		<SafeAreaView style={styles.cameraOverlayBottom} >
+			<View style={styles.cameraOverlay}>
+				<View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+					<TouchableOpacity style={{ ...styles.bottomIcon, zIndex: 2, position: 'absolute' }} onPress={() => setIconActive(!iconActive)}>
+						<MaterialCommunity color={'#38AAFE'} size={30} name="plus" />
+					</TouchableOpacity>
+					<View>
+						<Animated.View style={{ overflow: 'hidden', bottom: iconPos, zIndex: 1, position: 'absolute' }}>
+							<TouchableOpacity style={{ ...styles.bottomIcon }} onPress={() => { toggleGender(gender); }}>
+								{
+									gender == "Male"
+										?
+										<MaterialCommunity color={'#38AAFE'} size={30} name="face" />
+										:
+										(
+											gender == "Female"
+												?
+												<MaterialCommunity color={'#F778A9'} size={30} name="face-woman" />
+												:
+												<Image style={{ margin: 'auto', alignSelf: 'center', maxWidth: 30, maxHeight: 30, }}
+													source={
+														require('../../assets/genderless.png')
+													}
+												/>
+										)
+								}
+							</TouchableOpacity>
+						</Animated.View>
+						<Animated.View style={{ overflow: 'hidden', bottom: imageIconPos, zIndex: 1 }}>
+							<TouchableOpacity style={{ ...styles.bottomIcon, zIndex: 2 }} onPress={() => uploadFromGallery()}>
+								<MaterialCommunity color={'#38AAFE'} size={30} name="image" />
+							</TouchableOpacity>
+						</Animated.View>
 					</View>
-				}
-
-			</SafeAreaView>
-			<SafeAreaView style={styles.cameraOverlayBottom} >
-				<View style={styles.cameraOverlay}>
-					<View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-						<TouchableOpacity style={{ ...styles.bottomIcon, zIndex: 2, position: 'absolute' }} onPress={() => setIconActive(!iconActive)}>
-							<MaterialCommunity color={'#38AAFE'} size={30} name="plus" />
-						</TouchableOpacity>
-						<View>
-							<Animated.View style={{ overflow: 'hidden', bottom: iconPos, zIndex: 1, position: 'absolute' }}>
-								<TouchableOpacity style={{ ...styles.bottomIcon }} onPress={() => { toggleGender(gender); }}>
-									{
-										gender == "Male"
-											?
-											<MaterialCommunity color={'#38AAFE'} size={30} name="face" />
-											:
-											(
-												gender == "Female"
-													?
-													<MaterialCommunity color={'#F778A9'} size={30} name="face-woman" />
-													:
-													<Image style={{ margin: 'auto', alignSelf: 'center', maxWidth: 30, maxHeight: 30, }}
-														source={
-															require('../../assets/genderless.png')
-														}
-													/>
-											)
-									}
-								</TouchableOpacity>
-							</Animated.View>
-							<Animated.View style={{ overflow: 'hidden', bottom: imageIconPos, zIndex: 1 }}>
-								<TouchableOpacity style={{ ...styles.bottomIcon, zIndex: 2 }} onPress={() => uploadFromGallery()}>
-									<MaterialCommunity color={'#38AAFE'} size={30} name="image" />
-								</TouchableOpacity>
-							</Animated.View>
-						</View>
-						<TouchableOpacity disabled={loading} style={styles.roundedButtonView} onPress={() => takePictureFromARView()}>
-							{/* <TouchableOpacity >
+					<TouchableOpacity disabled={loading} style={styles.roundedButtonView} onPress={() => takePictureFromARView()}>
+						{/* <TouchableOpacity >
 								<Text style={styles.roundedButtonText}>Upload Image</Text>
 							</TouchableOpacity> */}
-							<LinearGradient useAngle={true} angle={45} colors={['#00E9D8', '#009ED9']} style={styles.roundedButton}>
-								<Text style={styles.roundedButtonText}>{"Go!"}</Text>
-							</LinearGradient>
-						</TouchableOpacity>
-						<TouchableOpacity style={styles.bottomIcon} onPress={() => { setNavRoute({ name: "chooseStoreScreen" }) }}>
-							{switchStore(store)}
-						</TouchableOpacity>
-					</View>
+						<LinearGradient useAngle={true} angle={45} colors={['#00E9D8', '#009ED9']} style={styles.roundedButton}>
+							<Text style={styles.roundedButtonText}>{"Go!"}</Text>
+						</LinearGradient>
+					</TouchableOpacity>
+					<TouchableOpacity style={styles.bottomIcon} onPress={() => { setNavRoute({ name: "chooseStoreScreen" }) }}>
+						{switchStore(store)}
+					</TouchableOpacity>
 				</View>
-			</SafeAreaView>
+			</View>
+		</SafeAreaView>
 
-			<BottomSwipeableModal
-				onCollapse={() => secondRoute != null ? setSecondRoute(null) : setNavRoute(null)}
-				show={secondRoute != null || navRoute != null}
-				navigation={props.navigation}
-				height={secondRoute != null ? getModalHeight(secondRoute) : getModalHeight(navRoute)}>
-				{renderComponent(secondRoute != null ? secondRoute : navRoute)}
-			</BottomSwipeableModal>
-		</View>
+		<BottomSwipeableModal
+			onCollapse={() => secondRoute != null ? setSecondRoute(null) : setNavRoute(null)}
+			show={secondRoute != null || navRoute != null}
+			navigation={props.navigation}
+			height={secondRoute != null ? getModalHeight(secondRoute) : getModalHeight(navRoute)}>
+			{renderComponent(secondRoute != null ? secondRoute : navRoute)}
+		</BottomSwipeableModal>
+		</View >
 	)
 }
 export default Home;

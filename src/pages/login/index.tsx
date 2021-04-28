@@ -54,7 +54,7 @@ function LoginScreen({ navigation }): JSX.Element {
 							<TextInput
 								value={username}
 								onChangeText={setUsername}
-								placeholder={"Enter username"}
+								placeholder={"Enter email"}
 								placeholderTextColor={"grey"}
 								style={styles.textInput} />
 						</View>

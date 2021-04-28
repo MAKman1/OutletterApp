@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { ViroARScene, ViroText, ViroConstants, ViroImage } from '@viro-community/react-viro';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 import styles from './styles'
 
@@ -36,7 +37,7 @@ function ARDisplay(props: any): JSX.Element {
   // rotation={markerRotation}
   return (
     <ViroARScene ref={scene} onTrackingUpdated={_onInitialized}>
-      {props.arSceneNavigator.viroAppProps.arfound && props.bestItem ?
+      {props.arSceneNavigator.viroAppProps.arfound && !props.arSceneNavigator.viroAppProps.notFound ?
         <>
           <ViroImage
             height={0.13}
@@ -48,9 +49,9 @@ function ARDisplay(props: any): JSX.Element {
           <ViroText
             text={newProps.bestItem.name}
             scale={[0.5, 0.5, 0.5]}
-            extrusionDepth={0.1}
+            extrusionDepth={0.01}
             // outerStroke={{type:"Outline", width: 0.3, color:'#000000'}}
-            position={[-0.08, 0.045, -1]}
+            position={[0.08, 0.045, -1]}
             style={styles.ARComponentStyle}
           />
           <ViroText
@@ -70,7 +71,33 @@ function ARDisplay(props: any): JSX.Element {
           />
         </>
         :
-        null
+        props.arSceneNavigator.viroAppProps.notFound ?
+          <>
+            <ViroText
+              text={'Product  Not  Found'}
+              scale={[0.5, 0.5, 0.5]}
+              extrusionDepth={0.01}
+              position={[0, 0, -1]}
+              style={styles.ARComponentStyle}
+            />
+            <ViroImage
+              height={0.13}
+              width={0.13}
+              position={[0, -0.12, -1]}
+              placeholderSource={require('../../../assets/reset.png')}
+              source={require('../../../assets/reset.png')}
+              onClick={() => props.arSceneNavigator.viroAppProps.resetARScene()}
+            />
+            <ViroImage
+              height={0.20}
+              width={0.8}
+              position={[0, 0.02, -1.001]}
+              placeholderSource={require("../../../assets/popupbg.png")}
+              source={require("../../../assets/popupbg.png")}
+            />
+          </>
+          :
+          null
       }
     </ViroARScene>
   );

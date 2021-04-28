@@ -8,6 +8,7 @@ import axios from 'axios';
 
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { APP_COLORS } from "../../shared/styles/colors";
+import { SERVER_URL } from '../../shared/constants/constants';
 
 
 function LikedItems(props: any): JSX.Element {
@@ -17,10 +18,10 @@ function LikedItems(props: any): JSX.Element {
         const config = {
             headers: {
                 'Content-Type': 'multipart/form-data',
-                'Authorization': 'Token 7330a179a43e3e044e3eff28cc66f6a11905b417'
+                'Authorization': 'Token 3b96f2e1cc132e005afba2de8cf2f391b5d3c346'
             }
         }
-        axios.get('https://3e01cf7dcbd2.ngrok.io/api/v1/like/', config)
+        axios.get(SERVER_URL + 'like/', config)
             .then(function (response) {
                 setLikedItems(response.data);
             })
@@ -42,10 +43,10 @@ function LikedItems(props: any): JSX.Element {
     function removeItem(index: number) {
         const config = {
             headers: {
-                'Authorization': 'Token 7330a179a43e3e044e3eff28cc66f6a11905b417'
+                'Authorization': 'Token 3b96f2e1cc132e005afba2de8cf2f391b5d3c346'
             }
         }
-        axios.delete('https://3e01cf7dcbd2.ngrok.io/api/v1/like/' + likedItems[index].id + '/', config)
+        axios.delete(SERVER_URL + 'like/' + likedItems[index].id + '/', config)
             .then(function (response) {
                 let newLikedItems = [...likedItems];
                 newLikedItems.splice(index, 1);

@@ -5,6 +5,7 @@ import styles from './styles'
 import axios from 'axios';
 
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import { SERVER_URL } from '../../shared/constants/constants';
 import { APP_COLORS } from "../../shared/styles/colors";
 
 function BestProduct(props: {
@@ -20,10 +21,10 @@ function BestProduct(props: {
     useEffect(() => {
         const config = {
             headers: {
-                'Authorization': 'Token 7330a179a43e3e044e3eff28cc66f6a11905b417'
+                'Authorization': 'Token 3b96f2e1cc132e005afba2de8cf2f391b5d3c346'
             }
         }
-        axios.get('https://3e01cf7dcbd2.ngrok.io/api/v1/like/', config)
+        axios.get(SERVER_URL + 'like/', config)
             .then(function (response) {
                 let likedItems = response.data;
                 if (likedItems) {
@@ -34,7 +35,7 @@ function BestProduct(props: {
                 console.warn("Error: " + JSON.stringify(error));
             });
 
-        axios.get('https://3e01cf7dcbd2.ngrok.io/api/v1/wish/', config)
+        axios.get(SERVER_URL + 'wish/', config)
             .then(function (response) {
                 let wishedItem = response.data;
                 if (wishedItem) {
@@ -63,10 +64,10 @@ function BestProduct(props: {
             const config = {
                 headers: {
                     'Content-Type': 'multipart/form-data',
-                    'Authorization': 'Token 7330a179a43e3e044e3eff28cc66f6a11905b417'
+                    'Authorization': 'Token 3b96f2e1cc132e005afba2de8cf2f391b5d3c346'
                 }
             }
-            axios.post('https://3e01cf7dcbd2.ngrok.io/api/v1/like/', data, config)
+            axios.post(SERVER_URL + 'like/', data, config)
                 .then(function (response) {
                     setlikeAmount(likeAmount + 1);
                     setLiked(true);
@@ -84,10 +85,10 @@ function BestProduct(props: {
             const config = {
                 headers: {
                     'Content-Type': 'multipart/form-data',
-                    'Authorization': 'Token 7330a179a43e3e044e3eff28cc66f6a11905b417'
+                    'Authorization': 'Token 3b96f2e1cc132e005afba2de8cf2f391b5d3c346'
                 }
             }
-            axios.post('https://3e01cf7dcbd2.ngrok.io/api/v1/wish/', data, config)
+            axios.post(SERVER_URL + 'wish/', data, config)
                 .then(function (response) {
                     setWishAmount(wishAmount + 1);
                     setWished(true);
