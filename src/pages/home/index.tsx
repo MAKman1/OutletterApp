@@ -235,7 +235,6 @@ function Home(props: any, { navigation }: any): JSX.Element {
 		if (item != null) {
 			// let url = SERVER_URL + '/api/v1/'
 			let url = 'http://outletters.southcentralus.cloudapp.azure.com:8080/api/v1/'
-			console.warn(queryItemRef.current)
 			axios.get(url + 'items/', {
 				params: {
 					id: queryItemRef.current.id,
