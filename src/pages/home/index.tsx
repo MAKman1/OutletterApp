@@ -48,6 +48,7 @@ function Home(props: any, { navigation }: any): JSX.Element {
 	const [store, setStore] = useState("None");
 
 	const [arfound, setAr] = useState(false);
+	const [notFound, setNotFound] = useState(false);
 	const [debugModal, setDebugModal] = useState(true);
 	const [menuActive, setMenuActive] = useState(false);
 	const [iconActive, setIconActive] = useState(false);
@@ -268,9 +269,14 @@ function Home(props: any, { navigation }: any): JSX.Element {
 		}
 	}
 
+	function resetARScene() {
+		arScene.current._resetARSession(true, true);
+		console.warn('AR RESET');
+	}
+
 
 	async function showCropView() {
-		arScene.current._resetARSession(true, true);
+		resetARScene();
 		arScene.current._takeScreenshot('outletter_' + Date.now() + '_img', false).then((data: any) => {
 			console.log(data.success, data.url, data.errorCode);
 			setCurrentImage('file://' + data.url);
@@ -283,6 +289,7 @@ function Home(props: any, { navigation }: any): JSX.Element {
 	async function uploadCroppedImage() {
 		// let image = await cropViewRef.current.saveImage(true, 90);
 		setShowCrop(false);
+		setNotFound(false);
 		uploadImage(currentImage);
 	}
 
@@ -369,11 +376,14 @@ function Home(props: any, { navigation }: any): JSX.Element {
 				setNavRoute({ name: "productFoundScreen" });
 				setLoading(false);
 				setAr(true);
+				if (response.data.similar_items  === 0) {
+					setNotFound(true);
+				}
 			})
 			.catch(function (error) {
 				resetStates();
-				console.warn("Error: " + JSON.stringify(error));
 				setLoading(false);
+				setNotFound(true);
 			});
 	}
 
@@ -416,7 +426,7 @@ function Home(props: any, { navigation }: any): JSX.Element {
 						scene: ARDisplay,
 					}}
 					viroAppProps={
-						{ arfound, bestItem }
+						{ arfound, notFound, bestItem, resetARScene }
 					}
 					style={{ flex: 1 }}
 				/>
