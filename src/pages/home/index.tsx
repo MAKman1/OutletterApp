@@ -373,11 +373,13 @@ function Home(props: any, { navigation }: any): JSX.Element {
 			.then(function (response) {
 				console.log(JSON.stringify(response));
 				setStates(response.data);
-				setNavRoute({ name: "productFoundScreen" });
 				setLoading(false);
 				setAr(true);
 				if (response.data.similar_items  === 0) {
 					setNotFound(true);
+				}
+				else {
+					setNavRoute({ name: "productFoundScreen" });
 				}
 			})
 			.catch(function (error) {

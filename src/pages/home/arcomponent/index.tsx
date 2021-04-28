@@ -86,7 +86,7 @@ function ARDisplay(props: any): JSX.Element {
               position={[0, -0.12, -1]}
               placeholderSource={require('../../../assets/reset.png')}
               source={require('../../../assets/reset.png')}
-              onClick={() => console.warn('Reset')}
+              onClick={() => props.arSceneNavigator.viroAppProps.resetARScene()}
             />
             <ViroImage
               height={0.20}
