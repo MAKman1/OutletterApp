@@ -81,6 +81,7 @@ function RegisterScreen({ navigation }): JSX.Element {
 								value={name}
 								onChangeText={setName}
 								placeholder={"Name"}
+								placeholderTextColor={"grey"}
 								style={styles.textInput} />
 						</View>
 						<View style={styles.inputView}>
@@ -89,6 +90,7 @@ function RegisterScreen({ navigation }): JSX.Element {
 								value={email}
 								onChangeText={setEmail}
 								placeholder={"E-mail"}
+								placeholderTextColor={"grey"}
 								style={styles.textInput} />
 						</View>
 
@@ -99,6 +101,7 @@ function RegisterScreen({ navigation }): JSX.Element {
 									value={age}
 									onChangeText={setAge}
 									placeholder={"Age"}
+									placeholderTextColor={"grey"}
 									style={styles.textInput} />
 							</View>
 							<View style={[styles.inputView, { flex: 1 }]}>
@@ -107,6 +110,7 @@ function RegisterScreen({ navigation }): JSX.Element {
 									value={gender}
 									onChangeText={setGender}
 									placeholder={"Gender"}
+									placeholderTextColor={"grey"}
 									style={styles.textInput} />
 							</View>
 						</View>
@@ -116,6 +120,7 @@ function RegisterScreen({ navigation }): JSX.Element {
 								value={location}
 								onChangeText={setLocation}
 								placeholder={"Location"}
+								placeholderTextColor={"grey"}
 								style={styles.textInput} />
 						</View>
 						<View style={styles.inputView}>
@@ -125,6 +130,7 @@ function RegisterScreen({ navigation }): JSX.Element {
 								secureTextEntry={true}
 								onChangeText={setPassword}
 								placeholder={"Password"}
+								placeholderTextColor={"grey"}
 								style={styles.textInput} />
 						</View>
 

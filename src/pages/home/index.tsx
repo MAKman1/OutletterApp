@@ -31,15 +31,13 @@ import LikedItems from '../liked-items';
 import Wishlist from '../wishlist/index';
 import SelectedItem from '../selectedItem/index'
 
-import { CropView } from 'react-native-image-crop-tools';
 import { SERVER_URL } from '../../shared/constants/constants';
+import SegmentationSelector from '../segmentation-selector';
 
 
 function Home(props: any, { navigation }: any): JSX.Element {
 	const cameraRef = useRef(null);
 	const arScene = useRef(null);
-	const cropViewRef = useRef(null);
-
 
 	const genders = ["Male", "Female", "Other"];
 	const stores = ["None", "Koton", "LCWaikiki", "Boyner", "Defacto", "Trendyol", "H&M"];
@@ -53,6 +51,9 @@ function Home(props: any, { navigation }: any): JSX.Element {
 	const [iconActive, setIconActive] = useState(false);
 
 	const [queryItem, setQueryItem] = useState<any>({});
+	const queryItemRef = useRef<any>();
+	queryItemRef.current = queryItem;
+
 	const [similarItems, setSimilarItems] = useState<any[]>([]);
 	const [bestItem, setBestItem] = useState<any>({});
 
@@ -60,8 +61,9 @@ function Home(props: any, { navigation }: any): JSX.Element {
 	const [navRoute, setNavRoute] = useState(null);
 	const [secondRoute, setSecondRoute] = useState(null);
 
-	const [showCrop, setShowCrop] = useState(false);
 	const [currentImage, setCurrentImage] = useState('https://i.pinimg.com/736x/0b/0c/d5/0b0cd5d09cd50a1c11c630b908ba48a3.jpg');
+
+	const [segmentedItems, setSegmentedItems] = useState([]);
 
 	// const [uploadedImage, setUploadedImage] = useState('../../assets/lcLogo.png');
 
@@ -146,8 +148,9 @@ function Home(props: any, { navigation }: any): JSX.Element {
 	}, [iconActive])
 
 	const getModalHeight = (navRoute: any) => {
-		if (navRoute == null)
+		if (navRoute == null) {
 			return 0.7;
+		}
 
 		switch (navRoute.name) {
 			case "productFoundScreen":
@@ -162,6 +165,8 @@ function Home(props: any, { navigation }: any): JSX.Element {
 				return 0.8
 			case "chooseStoreScreen":
 				return 0.55
+			case "segmentSelectorScreen":
+				return 0.95
 			default:
 				return 0.7
 		}
@@ -214,12 +219,51 @@ function Home(props: any, { navigation }: any): JSX.Element {
 						{store == s ? <MaterialIcons style={{ textAlignVertical: 'center' }} color={'#04B3FF'} size={30} name="check" /> : null}
 					</TouchableOpacity>)
 				})
+			case "segmentSelectorScreen":
+				return <SegmentationSelector segmentationList={segmentedItems} onItemSelected={(index: number) => onItemSelected(index)} />
 			default:
 				return <ActivityIndicator />
 		}
 	}
 
+	function onItemSelected(index: number) {
+		setNavRoute(null);
+		setAr(false);
+		setLoading(true);
+
+		let item: any = segmentedItems[index];
+		if (item != null) {
+			// let url = SERVER_URL + '/api/v1/'
+			let url = 'http://outletters.southcentralus.cloudapp.azure.com:8080/api/v1/'
+			console.warn(queryItemRef.current)
+			axios.get(url + 'items/', {
+				params: {
+					id: queryItemRef.current.id,
+					image_name: item.image_name,
+					label: item.label,
+				}
+			})
+				.then(function (response) {
+					setStates(response.data);
+					setNavRoute({ name: "productFoundScreen" });
+					setLoading(false);
+					setAr(true);
+				})
+				.catch(function (error) {
+					resetStates();
+					showError(" Failed to retrieve item data. Please try again.")
+					console.log("Error: " + JSON.stringify(error));
+					setLoading(false);
+				});
+		}
+	}
+
+	function showError(error: string) {
+
+	}
+
 	function resetStates() {
+		setSegmentedItems([])
 		setQueryItem({});
 		setSimilarItems([]);
 		setBestItem({});
@@ -269,21 +313,15 @@ function Home(props: any, { navigation }: any): JSX.Element {
 	}
 
 
-	async function showCropView() {
+	async function takePictureFromARView() {
 		arScene.current._resetARSession(true, true);
 		arScene.current._takeScreenshot('outletter_' + Date.now() + '_img', false).then((data: any) => {
 			console.log(data.success, data.url, data.errorCode);
 			setCurrentImage('file://' + data.url);
-			setShowCrop(true);
+			uploadImage('file://' + data.url);
 		}).catch((error: any) => {
 			console.log('error' + JSON.stringify(error));
 		});
-	}
-
-	async function uploadCroppedImage() {
-		// let image = await cropViewRef.current.saveImage(true, 90);
-		setShowCrop(false);
-		uploadImage(currentImage);
 	}
 
 	async function uploadImage(image: any) {
@@ -362,17 +400,31 @@ function Home(props: any, { navigation }: any): JSX.Element {
 		}
 
 		// console.log(JSON.stringify(data));
-		axios.post(SERVER_URL + 'items/', data, config)
+		// let url = SERVER_URL + '/api/v1/'
+		let url = 'http://outletters.southcentralus.cloudapp.azure.com:8080/api/v1/'
+		axios.post(url + 'items/', data, config)
 			.then(function (response) {
-				console.log(JSON.stringify(response));
-				setStates(response.data);
-				setNavRoute({ name: "productFoundScreen" });
-				setLoading(false);
-				setAr(true);
+				let res = response.data;
+
+				if (res.n) {
+					setQueryItem(res.query_item);
+					setSegmentedItems(res.options);
+					setLoading(false);
+					setAr(true);
+					setNavRoute({ name: 'segmentSelectorScreen' })
+				} else {
+					setSegmentedItems([])
+					setStates(response.data);
+					setNavRoute({ name: "productFoundScreen" });
+					setLoading(false);
+					setAr(true);
+
+				}
 			})
 			.catch(function (error) {
 				resetStates();
-				console.warn("Error: " + JSON.stringify(error));
+				showError(" Failed to retrieve item data. Please try again.")
+				console.log("Error: " + JSON.stringify(error));
 				setLoading(false);
 			});
 	}
@@ -391,36 +443,24 @@ function Home(props: any, { navigation }: any): JSX.Element {
 			if (response.uri) {
 				console.log(response.uri)
 				setCurrentImage(response.uri);
-				setShowCrop(true);
+				uploadImage(response.uri);
 			}
 		});
 	}
 
 	return (
 		<View style={[styles.rootContainer, { backgroundColor: '#000' }]}>
-			{showCrop ?
-				<SafeAreaView style={styles.cropOuter}>
-					<CropView
-						sourceUrl={currentImage}
-						style={styles.cropView}
-						ref={cropViewRef}
-						onImageCrop={(res) => setCurrentImage(res.uri)}
-					/>
-				</SafeAreaView>
-				:
-				// null
-				<ViroARSceneNavigator
-					ref={arScene}
-					autofocus={false}
-					initialScene={{
-						scene: ARDisplay,
-					}}
-					viroAppProps={
-						{ arfound, bestItem }
-					}
-					style={{ flex: 1 }}
-				/>
-			}
+			<ViroARSceneNavigator
+				ref={arScene}
+				autofocus={false}
+				initialScene={{
+					scene: ARDisplay,
+				}}
+				viroAppProps={
+					{ arfound, bestItem }
+				}
+				style={{ flex: 1 }}
+			/>
 
 			{/* Menu */}
 			<Animated.View style={[styles.menuOverlay, { width: widthAnim, height: heightAnim }]}>
@@ -480,45 +520,38 @@ function Home(props: any, { navigation }: any): JSX.Element {
 			<SafeAreaView style={styles.cameraOverlayBottom} >
 				<View style={styles.cameraOverlay}>
 					<View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-						{!showCrop ?
-							<>
-								<TouchableOpacity style={{ ...styles.bottomIcon, zIndex: 2, position: 'absolute' }} onPress={() => setIconActive(!iconActive)}>
-									<MaterialCommunity color={'#38AAFE'} size={30} name="plus" />
-								</TouchableOpacity>
-								<View>
-									<Animated.View style={{ overflow: 'hidden', bottom: iconPos, zIndex: 1, position: 'absolute' }}>
-										<TouchableOpacity style={{ ...styles.bottomIcon }} onPress={() => { toggleGender(gender); }}>
-											{
-												gender == "Male"
+						<TouchableOpacity style={{ ...styles.bottomIcon, zIndex: 2, position: 'absolute' }} onPress={() => setIconActive(!iconActive)}>
+							<MaterialCommunity color={'#38AAFE'} size={30} name="plus" />
+						</TouchableOpacity>
+						<View>
+							<Animated.View style={{ overflow: 'hidden', bottom: iconPos, zIndex: 1, position: 'absolute' }}>
+								<TouchableOpacity style={{ ...styles.bottomIcon }} onPress={() => { toggleGender(gender); }}>
+									{
+										gender == "Male"
+											?
+											<MaterialCommunity color={'#38AAFE'} size={30} name="face" />
+											:
+											(
+												gender == "Female"
 													?
-													<MaterialCommunity color={'#38AAFE'} size={30} name="face" />
+													<MaterialCommunity color={'#F778A9'} size={30} name="face-woman" />
 													:
-													(
-														gender == "Female"
-															?
-															<MaterialCommunity color={'#F778A9'} size={30} name="face-woman" />
-															:
-															<Image style={{ margin: 'auto', alignSelf: 'center', maxWidth: 30, maxHeight: 30, }}
-																source={
-																	require('../../assets/genderless.png')
-																}
-															/>
-													)
-											}
-										</TouchableOpacity>
-									</Animated.View>
-									<Animated.View style={{ overflow: 'hidden', bottom: imageIconPos, zIndex: 1 }}>
-										<TouchableOpacity style={{ ...styles.bottomIcon, zIndex: 2 }} onPress={() => uploadFromGallery()}>
-											<MaterialCommunity color={'#38AAFE'} size={30} name="image" />
-										</TouchableOpacity>
-									</Animated.View>
-								</View>
-							</>
-
-							:
-							null
-						}
-						<TouchableOpacity disabled={loading} style={[styles.roundedButtonView, showCrop ? { marginLeft: 50 } : null]} onPress={() => { showCrop ? uploadCroppedImage() : showCropView() }}>
+													<Image style={{ margin: 'auto', alignSelf: 'center', maxWidth: 30, maxHeight: 30, }}
+														source={
+															require('../../assets/genderless.png')
+														}
+													/>
+											)
+									}
+								</TouchableOpacity>
+							</Animated.View>
+							<Animated.View style={{ overflow: 'hidden', bottom: imageIconPos, zIndex: 1 }}>
+								<TouchableOpacity style={{ ...styles.bottomIcon, zIndex: 2 }} onPress={() => uploadFromGallery()}>
+									<MaterialCommunity color={'#38AAFE'} size={30} name="image" />
+								</TouchableOpacity>
+							</Animated.View>
+						</View>
+						<TouchableOpacity disabled={loading} style={styles.roundedButtonView} onPress={() => takePictureFromARView()}>
 							{/* <TouchableOpacity >
 								<Text style={styles.roundedButtonText}>Upload Image</Text>
 							</TouchableOpacity> */}
@@ -526,17 +559,9 @@ function Home(props: any, { navigation }: any): JSX.Element {
 								<Text style={styles.roundedButtonText}>{"Go!"}</Text>
 							</LinearGradient>
 						</TouchableOpacity>
-						{!showCrop ?
-							<TouchableOpacity style={styles.bottomIcon} onPress={() => { setNavRoute({ name: "chooseStoreScreen" }) }}>
-								{
-									switchStore(store)
-								}
-							</TouchableOpacity>
-							:
-							<TouchableOpacity style={styles.bottomIcon} onPress={() => setShowCrop(false)}>
-								<MaterialCommunity color={'black'} size={30} name="close" />
-							</TouchableOpacity>
-						}
+						<TouchableOpacity style={styles.bottomIcon} onPress={() => { setNavRoute({ name: "chooseStoreScreen" }) }}>
+							{switchStore(store)}
+						</TouchableOpacity>
 					</View>
 				</View>
 			</SafeAreaView>

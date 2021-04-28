@@ -46,7 +46,7 @@ function BottomSwipeableModal(props: {
 			Animated.spring(
 				heightAnim,
 				{
-					toValue: (props.height ? (fullHeight * props.height) : 0),
+					toValue: (props.height ? (fullHeight * props.height) : (fullHeight * 0.7)),
 					duration: 1500
 				}
 			).start();

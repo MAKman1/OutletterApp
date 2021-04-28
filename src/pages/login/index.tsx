@@ -55,6 +55,7 @@ function LoginScreen({ navigation }): JSX.Element {
 								value={username}
 								onChangeText={setUsername}
 								placeholder={"Enter username"}
+								placeholderTextColor={"grey"}
 								style={styles.textInput} />
 						</View>
 						<View style={styles.inputView}>
@@ -64,6 +65,7 @@ function LoginScreen({ navigation }): JSX.Element {
 								secureTextEntry={true}
 								onChangeText={setPassword}
 								placeholder={"Enter password"}
+								placeholderTextColor={"grey"}
 								style={styles.textInput} />
 						</View>
 
