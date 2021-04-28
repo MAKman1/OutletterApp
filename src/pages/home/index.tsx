@@ -267,6 +267,7 @@ function Home(props: any, { navigation }: any): JSX.Element {
 		setQueryItem({});
 		setSimilarItems([]);
 		setBestItem({});
+		setAr(false)
 	}
 
 	function setStates(data: any) {
@@ -314,11 +315,10 @@ function Home(props: any, { navigation }: any): JSX.Element {
 
 	function resetARScene() {
 		arScene.current._resetARSession(true, true);
-		console.warn('AR RESET');
 	}
 
 
-	async function showCropView() {
+	async function takePictureFromARView() {
 		resetARScene();
 		arScene.current._takeScreenshot('outletter_' + Date.now() + '_img', false).then((data: any) => {
 			console.log(data.success, data.url, data.errorCode);
