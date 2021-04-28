@@ -67,8 +67,8 @@ export default StyleSheet.create({
     elevation: 5,
   },
   productImage: {
-    width: 90,
-    height: 90,
+    width: 80,
+    height: 80,
     borderRadius: 5,
     marginRight: 20,
   },

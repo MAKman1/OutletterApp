@@ -108,7 +108,7 @@ function Reviews(props: any): JSX.Element {
                                 <View style={{ flexDirection: 'row', }}>
                                     <View style={{ flexDirection: 'row', paddingBottom: 20 }}>
                                         <Image style={styles.productImage} source={{ uri: review.rel_item.image_url }} />
-                                        <View style={{ overflow: 'hidden', maxWidth: 160, }}>
+                                        <View style={{ overflow: 'hidden', maxWidth: 150, }}>
                                             <Text numberOfLines={1} style={styles.productName}>{review.rel_item.name}</Text>
                                             <Text style={styles.productPrice}>{'Price: ' + review.rel_item.price + ' TRY'}</Text>
                                             <TouchableOpacity style={styles.roundedButton} onPress={() => openURL(index)}>
