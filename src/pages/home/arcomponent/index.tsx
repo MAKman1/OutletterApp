@@ -14,7 +14,7 @@ function ARDisplay(props: any): JSX.Element {
 
   useEffect(() => {
     if (newProps.bestItem)
-      setText('Price: ' + newProps.bestItem.price + 'TRY');
+      setText('Price: 999TRY'); //+ newProps.bestItem.price + 'TRY');
   }, [newProps.arfound])
 
 
@@ -36,21 +36,21 @@ function ARDisplay(props: any): JSX.Element {
   // rotation={markerRotation}
   return (
     <ViroARScene ref={scene} onTrackingUpdated={_onInitialized}>
-      {props.arSceneNavigator.viroAppProps.arfound && props.bestItem ?
+      {!props.arSceneNavigator.viroAppProps.arfound ? //&& props.bestItem ?
         <>
           <ViroImage
             height={0.13}
             width={0.13}
             position={[-0.25, 0.03, -1]}
-            placeholderSource={{ uri: newProps.bestItem.image_url }}
-            source={{ uri: newProps.bestItem.image_url }}
+            placeholderSource={ require('../../../assets/darthvader.jpg')}//uri: newProps.bestItem.image_url }}
+            source={require('../../../assets/darthvader.jpg')} //{ uri: newProps.bestItem.image_url }}
           />
           <ViroText
-            text={newProps.bestItem.name}
+            text={ 'Darth Vader Tshirt' }//newProps.bestItem.name}
             scale={[0.5, 0.5, 0.5]}
-            extrusionDepth={0.1}
+            extrusionDepth={0.01}
             // outerStroke={{type:"Outline", width: 0.3, color:'#000000'}}
-            position={[-0.08, 0.045, -1]}
+            position={[0.08, 0.045, -1]}
             style={styles.ARComponentStyle}
           />
           <ViroText
