@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react'
-import { Text, View, TouchableOpacity, Image, ScrollView, ActivityIndicator, Linking, Dimensions, Animated, LogBox } from 'react-native'
+import { Text, View, TouchableOpacity, Image, ScrollView, ActivityIndicator, Linking, Dimensions, Animated, LogBox, Platform } from 'react-native'
 import styles from './styles'
 
 import SafeAreaView from 'react-native-safe-area-view';
@@ -63,7 +63,7 @@ function Home(props: any, { navigation }: any): JSX.Element {
 	const [navRoute, setNavRoute] = useState(null);
 	const [secondRoute, setSecondRoute] = useState(null);
 
-	const [currentImage, setCurrentImage] = useState('https://i.pinimg.com/736x/0b/0c/d5/0b0cd5d09cd50a1c11c630b908ba48a3.jpg');
+	const [currentImage, setCurrentImage] = useState(null);
 
 	const [segmentedItems, setSegmentedItems] = useState([]);
 
@@ -181,7 +181,11 @@ function Home(props: any, { navigation }: any): JSX.Element {
 
 		switch (navRoute.name) {
 			case "selectedItemScreen":
-				return <SelectedItem id={navRoute.props} />
+				return <SelectedItem id={navRoute.props}
+					onReviewPressed={(id: any) => {
+						setSecondRoute({ name: "writeReviewScreen", props: id })
+					}}
+				/>
 			case "wishlistScreen":
 				return <Wishlist
 					onItemPressed={(item: any) => {
@@ -315,6 +319,7 @@ function Home(props: any, { navigation }: any): JSX.Element {
 	}
 
 	function resetARScene() {
+		setNotFound(false);
 		arScene.current._resetARSession(true, true);
 	}
 
@@ -385,70 +390,72 @@ function Home(props: any, { navigation }: any): JSX.Element {
 		}
 
 		//Resize Image
-		ImageResizer.createResizedImage(image, 800, 800, 'JPEG', 100, 0, undefined, false, { mode: "contain", onlyScaleDown: true })
+		let resizedImage = await ImageResizer.createResizedImage(image, 800, 800, 'JPEG', 100, 0, undefined, false, { mode: "contain", onlyScaleDown: true })
 			.then(resizedImage => {
-				var data = new FormData();
-				data.append("picture", {
-					// uri: 'file://' + image.url,
-					uri: resizedImage.path,
-					name: 'uploaded_image_' + Date.now() + '.jpg',
-					type: 'image/*'
-				})
-				// data.append("picture", 'file://' + image.url)
-				// data.append("picture", Platform.OS === "android" ? image.uri : image.uri.replace("file://", ""));
-				// data.append("picture", image.uri.replace("file:///", "file://"));
-				data.append("gender", postGender);
-				data.append("shop", shop);
-				data.append("debug", debugModal);
+				return resizedImage;
 
-
-				const config = {
-					headers: {
-						'Content-Type': 'multipart/form-data'
-					}
-				}
-
-				// console.log(JSON.stringify(data));
-				// let url = SERVER_URL + '/api/v1/'
-				let url = 'http://outletters.southcentralus.cloudapp.azure.com:8080/api/v1/'
-				axios.post(url + 'items/', data, config)
-					.then(function (response) {
-						let res = response.data;
-
-						if (res.n) {
-							setQueryItem(res.query_item);
-							setSegmentedItems(res.options);
-							setLoading(false);
-							setAr(false);
-							setNavRoute({ name: 'segmentSelectorScreen' })
-						} else {
-							setSegmentedItems([])
-							setStates(response.data);
-							setLoading(false);
-							setAr(true);
-
-							if (response.data.similar_items === 0) {
-								setNotFound(true);
-							}
-							else {
-								setNavRoute({ name: "productFoundScreen" });
-							}
-						}
-					})
-					.catch(function (error) {
-						resetStates();
-						showError(" Failed to retrieve item data. Please try again.")
-						console.log("Error: " + JSON.stringify(error));
-						setLoading(false);
-						setNotFound(true);
-					});
 			})
 			.catch(err => {
 				console.log(err);
+				return null;
 			});
+		if (resizedImage == null)
+			return;
+
+		var data = new FormData();
+		data.append("picture", {
+			uri: resizedImage.uri,
+			name: 'uploaded_image_' + Date.now() + '.jpg',
+			type: 'image/*'
+		})
+		data.append("gender", postGender);
+		data.append("shop", shop);
+		data.append("debug", debugModal);
 
 
-		// 
+		const config = {
+			headers: {
+				'Content-Type': 'multipart/form-data'
+			},
+		}
+
+		// console.log(JSON.stringify(data));
+		// let url = SERVER_URL + '/api/v1/'
+		let url = 'http://outletters.southcentralus.cloudapp.azure.com:8080/api/v1/'
+		axios.post(url + 'items/', data, config)
+			.then(function (response) {
+				let res = response.data;
+
+				if (res.n) {
+					setQueryItem(res.query_item);
+					setSegmentedItems(res.options);
+					setLoading(false);
+					setAr(false);
+					setNavRoute({ name: 'segmentSelectorScreen' })
+				} else {
+					setSegmentedItems([])
+					setStates(response.data);
+					setLoading(false);
+
+
+					if (response.data.similar_items && response.data.similar_items > 0) {
+						setNavRoute({ name: "productFoundScreen" });
+						setAr(true);
+						setNotFound(false);
+					}
+					else {
+						setNotFound(true);
+						setAr(false);
+					}
+				}
+			})
+			.catch(function (error) {
+				resetStates();
+				showError(" Failed to retrieve item data. Please try again.")
+				console.log("Error: " + JSON.stringify(error));
+				setLoading(false);
+				setNotFound(true);
+			});
 	}
 
 	function openMenuItem(pageName: any) {
@@ -479,7 +486,7 @@ function Home(props: any, { navigation }: any): JSX.Element {
 					scene: ARDisplay,
 				}}
 				viroAppProps={
-					{ arfound, bestItem }
+					{ arfound, bestItem, notFound, setNavRoute, resetARScene }
 				}
 				style={{ flex: 1 }}
 			/>

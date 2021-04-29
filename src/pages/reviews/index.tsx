@@ -17,6 +17,10 @@ function Reviews(props: any): JSX.Element {
 
     useEffect(() => {
         LogBox.ignoreLogs(['Animated: `useNativeDriver`']);
+        getReviews();
+    }, [])
+
+    function getReviews() {
         const config = {
             headers: {
                 'Content-Type': 'multipart/form-data',
@@ -31,7 +35,7 @@ function Reviews(props: any): JSX.Element {
             .catch(function (error) {
                 console.warn("Error: " + JSON.stringify(error));
             });
-    }, [])
+    }
 
     useEffect(() => {
         if (textShown) {
