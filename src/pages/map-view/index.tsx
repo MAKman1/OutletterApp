@@ -1,23 +1,57 @@
-import React, { useEffect, useState, useRef, useCallback } from 'react'
-import { Text, View, TouchableOpacity, Share, Animated, Dimensions, Linking, ActivityIndicator, Platform, Image } from 'react-native'
+import React, { useEffect, useState, useRef, useCallback, useLayoutEffect } from 'react'
+import { Text, View, TouchableOpacity, Share, Animated, Dimensions, Linking, ActivityIndicator, Platform, Image, Alert } from 'react-native'
 import styles from './styles'
 import Geolocation from 'react-native-geolocation-service';
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import { request, PERMISSIONS, RESULTS, requestMultiple } from 'react-native-permissions';
 import RoundedButton from '../../shared/components/buttons/rounded-button';
 import mapStyle from '../../shared/constants/mapStyle';
+import axios from 'axios';
+
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import { showMessage, hideMessage } from "react-native-flash-message";
 
 function MapViewScreen(props: {
-	locationList: any[],
+	brand: string,
 }): JSX.Element {
 
 	const [location, setLocation] = useState(null);
 	const [locationNeededText, setLocationNeededText] = useState(false);
+	const [locationList, setLocationList] = useState([]);
 
 
-	useEffect(() => {
+	useLayoutEffect(() => {
 		getLocationPermission();
 	}, [])
+
+	const getLocations = (location: any) => {
+		let url = 'https://maps.googleapis.com/maps/api/place/textsearch/json'
+		axios.get(url, {
+			params: {
+				query: "" + props.brand,
+				location: "" + location.latitude + "," + location.longitude,
+				radius: 30000,
+				fields: "formatted_address,name,geometry/location",
+				key: "AIzaSyBMpXvQQ1NIBO5Px2WSIFKKRGwo8edIqgs"
+			}
+		})
+			.then(function (response) {
+				let res = response.data;
+				let locations = res.results.map((c: any) => {
+					return (
+						{
+							latitude: c.geometry.location.lat,
+							longitude: c.geometry.location.lng,
+							address: c.formatted_address
+						}
+					)
+				})
+				setLocationList(locations)
+			})
+			.catch(function (error) {
+				Alert.alert("Failed to retrieve locations nearby. Please try again later.")
+			});
+	}
 
 	const getLocationPermission = async () => {
 
@@ -53,17 +87,19 @@ function MapViewScreen(props: {
 	const findCoordinates = () => {
 		Geolocation.getCurrentPosition(
 			(position) => {
-				setLocation({
+				let location = {
 					latitude: position.coords.latitude,
 					longitude: position.coords.longitude,
-					latitudeDelta: 0.0922,
-					longitudeDelta: 0.0421,
-				})
+					latitudeDelta: 0.25,
+					longitudeDelta: 0.25,
+				};
+				setLocation(location);
+				getLocations(location)
 			},
 			(error) => {
 				console.warn("Failed to retrieve location")
 			},
-			{ enableHighAccuracy: true, timeout: 3000, maximumAge: 5000 }
+			{ enableHighAccuracy: true, timeout: 10000, maximumAge: 50000 }
 		);
 	};
 
@@ -79,30 +115,49 @@ function MapViewScreen(props: {
 				:
 				(
 					location != null ?
-						<MapView
-							provider={PROVIDER_GOOGLE}
-							mapType={"standard"}
-							customMapStyle={mapStyle}
-							style={styles.map}
-							region={location}
-							zoomControlEnabled
-							loadingEnabled
-							showsCompass
-						>
-							<Marker tracksViewChanges={false} coordinate={{ latitude: location.latitude, longitude: location.longitude }}>
-								<View style={styles.markerView}>
-									<View style={styles.markerCircle} />
-									<Image source={require('@assets/location-pin.png')} style={styles.locationPin} />
-								</View>
-							</Marker>
+						<View style={{ flexDirection: 'column', flex: 1 }}>
+							<View style={styles.topView}>
+								<Text style={styles.topTitle}>{"Nearby " + props.brand.toUpperCase() + " stores"}</Text>
+							</View>
+							<MapView
+								provider={PROVIDER_GOOGLE}
+								mapType={"standard"}
+								customMapStyle={mapStyle}
+								style={styles.map}
+								region={location}
+								zoomControlEnabled
+								loadingEnabled
+								showsCompass
+							>
 
-						</MapView>
+								<Marker tracksViewChanges={false} coordinate={{ latitude: location.latitude, longitude: location.longitude }}>
+									<View style={styles.markerView}>
+										<View style={styles.markerCircle} />
+										<Image source={require('../../assets/location-pin.png')} style={styles.locationPin} />
+									</View>
+								</Marker>
+								{locationList.length ?
+									locationList.map((l, index) => (
+										<Marker
+											key={index}
+											onPress={() => showMessage({
+												message: "Address: " + l.address,
+												type: "info",
+											})
+											} tracksViewChanges={false} coordinate={{ latitude: l.latitude, longitude: l.longitude }}>
+											<Ionicons name={"location"} size={40} color={"#FB0000"} />
+										</Marker>
+									))
+									: null
+								}
+							</MapView>
+						</View>
 						:
 						<ActivityIndicator style={styles.map} />
 
 				)
 			}
-		</View>
+		</View >
 	)
 }
 export default MapViewScreen;

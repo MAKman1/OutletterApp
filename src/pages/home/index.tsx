@@ -62,7 +62,7 @@ function Home(props: any, { navigation }: any): JSX.Element {
 
 	const [loading, setLoading] = useState(false);
 	const [navRoute, setNavRoute] = useState(null);
-	const [secondRoute, setSecondRoute] = useState(null);
+	const [secondRoute, setSecondRoute] = useState({name: 'mapViewScreen'});
 
 	const [currentImage, setCurrentImage] = useState(null);
 
@@ -231,7 +231,7 @@ function Home(props: any, { navigation }: any): JSX.Element {
 			case "segmentSelectorScreen":
 				return <SegmentationSelector segmentationList={segmentedItems} onItemSelected={(index: number) => onItemSelected(index)} />
 			case "mapViewScreen":
-				<MapViewScreen locationList={[]} />
+				return <MapViewScreen brand={"defacto"} />
 			default:
 				return <ActivityIndicator />
 		}
@@ -482,9 +482,13 @@ function Home(props: any, { navigation }: any): JSX.Element {
 		});
 	}
 
+	async function openMapForItem(item: any) {
+		setSecondRoute({ name: "mapViewScreen" })
+	}
+
 	return (
 		<View style={[styles.rootContainer, { backgroundColor: '#000' }]}>
-			<ViroARSceneNavigator
+			{/* <ViroARSceneNavigator
 				ref={arScene}
 				autofocus={false}
 				initialScene={{
@@ -494,7 +498,7 @@ function Home(props: any, { navigation }: any): JSX.Element {
 					{ arfound, bestItem, notFound, setNavRoute, resetARScene }
 				}
 				style={{ flex: 1 }}
-			/>
+			/> */}
 
 			{/* Menu */}
 			<Animated.View style={[styles.menuOverlay, { width: widthAnim, height: heightAnim }]}>

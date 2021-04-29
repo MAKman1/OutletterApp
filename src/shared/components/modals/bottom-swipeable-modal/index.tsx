@@ -8,6 +8,7 @@ import MaterialCommunity from 'react-native-vector-icons/MaterialCommunityIcons'
 import Feather from 'react-native-vector-icons/Feather';
 import { Bubbles, Bars } from 'react-native-loader';
 import { APP_COLORS } from '../../../styles/colors';
+import FlashMessage from "react-native-flash-message";
 
 
 
@@ -36,7 +37,7 @@ function BottomSwipeableModal(props: {
 		if (props.children) {
 			setLoading(true);
 			setTimeout(() => {
-				setLoading( false)
+				setLoading(false)
 			}, 1000);
 		}
 	}, [props.children])
@@ -107,6 +108,7 @@ function BottomSwipeableModal(props: {
 
 				</ScrollView>
 			</Animated.View>
+			<FlashMessage position="top" />
 		</Modal>
 
 	)

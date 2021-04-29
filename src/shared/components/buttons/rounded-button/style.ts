@@ -1,5 +1,4 @@
 import { StyleSheet } from "react-native";
-import { APP_COLORS } from "@shared/styles/colors";
 
 export default StyleSheet.create({
   button: {
@@ -9,7 +8,7 @@ export default StyleSheet.create({
     alignItems: "center",
     borderRadius: 10,
 
-    shadowColor: APP_COLORS.primaryDark,
+    shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 2,

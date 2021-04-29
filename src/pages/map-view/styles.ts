@@ -5,7 +5,8 @@ import { APP_COLORS } from "../../shared/styles/colors";
 export default StyleSheet.create({
   rootContainer: {
     width: Dimensions.get("window").width,
-    // backgroundColor: "#FFFFFF",
+    height: Dimensions.get("window").height * 0.8,
+    backgroundColor: "#FFFFFF",
     flex: 1,
     flexDirection: "column",
     justifyContent: "center",
@@ -30,7 +31,8 @@ export default StyleSheet.create({
     top: 0,
   },
   map: {
-    ...StyleSheet.absoluteFillObject,
+    flex: 1,
+    borderRadius: 20,
   },
   permissionView: {
     justifyContent: "center",
@@ -43,5 +45,32 @@ export default StyleSheet.create({
     textAlign: "center",
     marginHorizontal: 10,
     marginBottom: 20,
+  },
+  topView: {
+    position: "absolute",
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+    paddingTop: 10,
+    bottom: 0,
+    zIndex: 999,
+    backgroundColor: "#FFF",
+    shadowColor: "#000",
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: -10,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+
+    elevation: 5,
+  },
+  topTitle: {
+    fontWeight: "bold",
+    fontSize: 22,
+    color: "#696969",
   },
 });

@@ -26,6 +26,7 @@
     "react-native": "^0.63.3",
     "react-native-actionsheet": "^2.4.2",
     "react-native-camera": "^3.40.0",
+    "react-native-flash-message": "^0.1.23",
     "react-native-geolocation-service": "*",
     "react-native-gesture-handler": "^1.9.0",
     "react-native-hamburger": "^0.0.2",
