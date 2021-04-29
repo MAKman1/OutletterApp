@@ -68,7 +68,7 @@ function Home(props: any, { navigation }: any): JSX.Element {
 	const [segmentedItems, setSegmentedItems] = useState([]);
 
 	// const [uploadedImage, setUploadedImage] = useState('../../assets/lcLogo.png');
-
+	const [ARCount, setARCount] = useState(1);
 
 	//Animations
 	const widthAnim = useRef(new Animated.Value(0)).current;
@@ -325,14 +325,15 @@ function Home(props: any, { navigation }: any): JSX.Element {
 
 
 	async function takePictureFromARView() {
-		resetARScene();
-		arScene.current._takeScreenshot('outletter_' + Date.now() + '_img', false).then((data: any) => {
-			console.log(data.success, data.url, data.errorCode);
-			setCurrentImage('file://' + data.url);
-			uploadImage('file://' + data.url);
-		}).catch((error: any) => {
-			console.log('error' + JSON.stringify(error));
-		});
+		setAr(!arfound);
+		// resetARScene();
+		// arScene.current._takeScreenshot('outletter_' + Date.now() + '_img', false).then((data: any) => {
+		// 	console.log(data.success, data.url, data.errorCode);
+		// 	setCurrentImage('file://' + data.url);
+		// 	uploadImage('file://' + data.url);
+		// }).catch((error: any) => {
+		// 	console.log('error' + JSON.stringify(error));
+		// });
 	}
 
 	async function uploadImage(image: any) {
@@ -486,7 +487,7 @@ function Home(props: any, { navigation }: any): JSX.Element {
 					scene: ARDisplay,
 				}}
 				viroAppProps={
-					{ arfound, bestItem, notFound, setNavRoute, resetARScene }
+					{ arfound, bestItem, notFound, setNavRoute, resetARScene, ARCount }
 				}
 				style={{ flex: 1 }}
 			/>
