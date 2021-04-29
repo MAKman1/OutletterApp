@@ -34,6 +34,7 @@ import SelectedItem from '../selectedItem/index'
 import { SERVER_URL } from '../../shared/constants/constants';
 import SegmentationSelector from '../segmentation-selector';
 import ImageResizer from 'react-native-image-resizer';
+import MapViewScreen from '../map-view';
 
 
 function Home(props: any, { navigation }: any): JSX.Element {
@@ -169,6 +170,8 @@ function Home(props: any, { navigation }: any): JSX.Element {
 				return 0.55
 			case "segmentSelectorScreen":
 				return 0.95
+			case "mapViewScreen":
+				return 0.9
 			default:
 				return 0.7
 		}
@@ -227,6 +230,8 @@ function Home(props: any, { navigation }: any): JSX.Element {
 				})
 			case "segmentSelectorScreen":
 				return <SegmentationSelector segmentationList={segmentedItems} onItemSelected={(index: number) => onItemSelected(index)} />
+			case "mapViewScreen":
+				<MapViewScreen locationList={[]} />
 			default:
 				return <ActivityIndicator />
 		}
