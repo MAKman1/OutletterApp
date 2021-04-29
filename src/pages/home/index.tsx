@@ -62,7 +62,7 @@ function Home(props: any, { navigation }: any): JSX.Element {
 
 	const [loading, setLoading] = useState(false);
 	const [navRoute, setNavRoute] = useState(null);
-	const [secondRoute, setSecondRoute] = useState({name: 'mapViewScreen'});
+	const [secondRoute, setSecondRoute] = useState(null);
 
 	const [currentImage, setCurrentImage] = useState(null);
 
@@ -488,7 +488,7 @@ function Home(props: any, { navigation }: any): JSX.Element {
 
 	return (
 		<View style={[styles.rootContainer, { backgroundColor: '#000' }]}>
-			{/* <ViroARSceneNavigator
+			<ViroARSceneNavigator
 				ref={arScene}
 				autofocus={false}
 				initialScene={{
@@ -498,7 +498,7 @@ function Home(props: any, { navigation }: any): JSX.Element {
 					{ arfound, bestItem, notFound, setNavRoute, resetARScene }
 				}
 				style={{ flex: 1 }}
-			/> */}
+			/>
 
 			{/* Menu */}
 			<Animated.View style={[styles.menuOverlay, { width: widthAnim, height: heightAnim }]}>
