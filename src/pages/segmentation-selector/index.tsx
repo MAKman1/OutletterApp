@@ -45,7 +45,7 @@ function SegmentationSelector(props: {
 					source={{ uri: item.image, cache: "force-cache" }}
 					style={styles.cardImage}
 					indicator={ActivityIndicator} />
-				<Text style={styles.cardNumber}>{item.name}</Text>
+				{/* <Text style={styles.cardNumber}>{item.name}</Text> */}
 			</TouchableOpacity>
 		);
 	}
