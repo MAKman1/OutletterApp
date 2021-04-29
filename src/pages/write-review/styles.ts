@@ -72,9 +72,9 @@ export default StyleSheet.create({
     fontSize: 16,
   },
   rootContainer: {
-    backgroundColor: "#F7F7F7",
-	flex: 1,
-	paddingBottom: 50
+    // backgroundColor: "#F7F7F7",
+    flex: 1,
+    paddingBottom: 50
   },
   title: {
     padding: 20,
@@ -133,9 +133,10 @@ export default StyleSheet.create({
   reviewTitle: {
     color: "#494949",
     fontSize: 30,
-    fontWeight: "bold",
-	marginLeft: 25,
-	marginBottom: 10
+    // fontWeight: "bold",
+    // marginLeft: 25,
+    marginBottom: 10,
+    textAlign: "center",
   },
   revOuter: {
     backgroundColor: "#FFF",

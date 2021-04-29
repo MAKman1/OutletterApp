@@ -10,13 +10,36 @@ import { SERVER_URL } from '../../shared/constants/constants';
 
 
 function BestProduct(props: any): JSX.Element {
-    const [liked, setLiked] = useState(false);
-    const [wished, setWished] = useState(false);
+    const [liked, setLiked] = useState(true);
+    const [wished, setWished] = useState(true);
     const [likeAmount, setlikeAmount] = useState(0);
     const [wishAmount, setWishAmount] = useState(0);
     const [selectedItem, setSelectedItem] = useState<any>({})
 
     useEffect(() => {
+        getItem();
+    }, [])
+
+    function getItem() {
+        const config = {
+            headers: {
+                'Authorization': 'Token 3b96f2e1cc132e005afba2de8cf2f391b5d3c346'
+            }
+        }
+        axios.get(SERVER_URL + 'item/' + props.id + '/', config)
+            .then(function (response) {
+                setSelectedItem(response.data);
+                setWishAmount(response.data.item_wish_count);
+                setlikeAmount(response.data.item_likes_count);
+                getLikedItems();
+                getWishedItems();
+            })
+            .catch(function (error) {
+                // console.warn("Error: " + JSON.stringify(error));
+            });
+    }
+
+    function getLikedItems() {
         const config = {
             headers: {
                 'Authorization': 'Token 3b96f2e1cc132e005afba2de8cf2f391b5d3c346'
@@ -26,35 +49,31 @@ function BestProduct(props: any): JSX.Element {
             .then(function (response) {
                 let likedItems = response.data;
                 if (likedItems) {
-                    setLiked(likedItems.some((item: any) => item.id === selectedItem.id));
+                    setLiked(likedItems.rel_item.some((item: any) => item.id === selectedItem.id));
                 }
             })
             .catch(function (error) {
-                console.warn("Error: " + JSON.stringify(error));
+                // console.warn("Error: " + JSON.stringify(error));
             });
+    }
 
+    function getWishedItems() {
+        const config = {
+            headers: {
+                'Authorization': 'Token 3b96f2e1cc132e005afba2de8cf2f391b5d3c346'
+            }
+        }
         axios.get(SERVER_URL + 'wish/', config)
             .then(function (response) {
                 let wishedItem = response.data;
                 if (wishedItem) {
-                    setWished(wishedItem.some((item: any) => item.id === selectedItem.id));
+                    setWished(wishedItem.rel_item.some((item: any) => item.id === selectedItem.id));
                 }
             })
             .catch(function (error) {
-                console.warn("Error: " + JSON.stringify(error));
+                // console.warn("Error: " + JSON.stringify(error));
             });
-
-        axios.get(SERVER_URL + 'item/' + props.id + '/', config)
-            .then(function (response) {
-                console.log(response.data)
-                setSelectedItem(response.data);
-                setWishAmount(response.data.item_wish_count);
-                setlikeAmount(response.data.item_likes_count)
-            })
-            .catch(function (error) {
-                console.warn("Error: " + JSON.stringify(error));
-            });
-    }, [])
+    }
 
     function openURL() {
         Linking.canOpenURL(selectedItem.url).then(supported => {
@@ -118,6 +137,11 @@ function BestProduct(props: any): JSX.Element {
         }
     }
 
+    const openReviews = (id: any) => {
+        props.onReviewPressed(id);
+    }
+
+
     return (
         <View style={styles.rootContainer}>
             <View style={styles.horizontalCard}>
@@ -141,11 +165,11 @@ function BestProduct(props: any): JSX.Element {
                         </Text>
                     </View>
                     <View style={styles.optionContainer}>
-                        <TouchableOpacity style={styles.optionIcons}>
+                        <TouchableOpacity style={styles.optionIcons} onPress={() => openReviews(selectedItem.id)}>
                             <MaterialIcons color={'black'} size={25} name="edit" />
                         </TouchableOpacity>
                         <Text style={styles.optionText}>
-                            {selectedItem.item_reviews? selectedItem.item_reviews.length + ' Reviews' : '0 + Reviews' }
+                            {selectedItem.item_reviews ? selectedItem.item_reviews.length + ' Reviews' : '0 + Reviews'}
                         </Text>
                     </View>
                     <View style={styles.optionContainer}>

@@ -37,7 +37,7 @@ function ARDisplay(props: any): JSX.Element {
   // rotation={markerRotation}
   return (
     <ViroARScene ref={scene} onTrackingUpdated={_onInitialized}>
-      {props.arSceneNavigator.viroAppProps.arfound && !props.arSceneNavigator.viroAppProps.notFound ?
+      {props.arSceneNavigator.viroAppProps.arfound ?
         <>
           <ViroImage
             height={0.13}
@@ -45,6 +45,7 @@ function ARDisplay(props: any): JSX.Element {
             position={[-0.25, 0.03, -1]}
             placeholderSource={{ uri: newProps.bestItem.image_url }}
             source={{ uri: newProps.bestItem.image_url }}
+            onClick={() => props.arSceneNavigator.viroAppProps.setNavRoute({ name: "productFoundScreen" })}
           />
           <ViroText
             text={newProps.bestItem.name}
@@ -53,6 +54,7 @@ function ARDisplay(props: any): JSX.Element {
             // outerStroke={{type:"Outline", width: 0.3, color:'#000000'}}
             position={[0.08, 0.045, -1]}
             style={styles.ARComponentStyle}
+            onClick={() => props.arSceneNavigator.viroAppProps.setNavRoute({ name: "productFoundScreen" })}
           />
           <ViroText
             text={text}
@@ -61,6 +63,7 @@ function ARDisplay(props: any): JSX.Element {
             // outerStroke={{type:"Outline", width: 0.3, color:'#000000'}}
             position={[0.06, -0.015, -1]}
             style={styles.priceText}
+            onClick={() => props.arSceneNavigator.viroAppProps.setNavRoute({ name: "productFoundScreen" })}
           />
           <ViroImage
             height={0.20}
@@ -68,9 +71,13 @@ function ARDisplay(props: any): JSX.Element {
             position={[0, 0.02, -1.001]}
             placeholderSource={require("../../../assets/popupbg.png")}
             source={require("../../../assets/popupbg.png")}
+            onClick={() => props.arSceneNavigator.viroAppProps.setNavRoute({ name: "productFoundScreen" })}
           />
         </>
         :
+        null
+      }
+      {
         props.arSceneNavigator.viroAppProps.notFound ?
           <>
             <ViroText
