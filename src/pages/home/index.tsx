@@ -66,9 +66,9 @@ function Home(props: any, { navigation }: any): JSX.Element {
 	const [currentImage, setCurrentImage] = useState(null);
 
 	const [segmentedItems, setSegmentedItems] = useState([]);
+	const [arItems, setArItems] = useState<any[]>([]);
 
 	// const [uploadedImage, setUploadedImage] = useState('../../assets/lcLogo.png');
-	const [ARCount, setARCount] = useState(1);
 
 	//Animations
 	const widthAnim = useRef(new Animated.Value(0)).current;
@@ -279,6 +279,7 @@ function Home(props: any, { navigation }: any): JSX.Element {
 		setQueryItem(data.query_item);
 		setSimilarItems(data.similar_items);
 		setBestItem(data.similar_items[0]);
+		setArItems([...arItems, data.similar_items[0]]);
 	}
 
 	function toggleGender(gender: string) {
@@ -325,15 +326,14 @@ function Home(props: any, { navigation }: any): JSX.Element {
 
 
 	async function takePictureFromARView() {
-		setAr(!arfound);
 		// resetARScene();
-		// arScene.current._takeScreenshot('outletter_' + Date.now() + '_img', false).then((data: any) => {
-		// 	console.log(data.success, data.url, data.errorCode);
-		// 	setCurrentImage('file://' + data.url);
-		// 	uploadImage('file://' + data.url);
-		// }).catch((error: any) => {
-		// 	console.log('error' + JSON.stringify(error));
-		// });
+		arScene.current._takeScreenshot('outletter_' + Date.now() + '_img', false).then((data: any) => {
+			console.log(data.success, data.url, data.errorCode);
+			setCurrentImage('file://' + data.url);
+			uploadImage('file://' + data.url);
+		}).catch((error: any) => {
+			console.log('error' + JSON.stringify(error));
+		});
 	}
 
 	async function uploadImage(image: any) {
@@ -487,7 +487,7 @@ function Home(props: any, { navigation }: any): JSX.Element {
 					scene: ARDisplay,
 				}}
 				viroAppProps={
-					{ arfound, bestItem, notFound, setNavRoute, resetARScene, ARCount }
+					{ arfound, bestItem, notFound, setNavRoute, resetARScene, arItems }
 				}
 				style={{ flex: 1 }}
 			/>
