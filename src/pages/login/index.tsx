@@ -10,8 +10,8 @@ import { Cache } from '../../shared/libs/cache';
 
 function LoginScreen({ navigation }): JSX.Element {
 
-	const [username, setUsername] = useState('');
-	const [password, setPassword] = useState('');
+	const [username, setUsername] = useState('admin@outletter.tk');
+	const [password, setPassword] = useState('password');
 
 	useEffect(() => {
 	}, [])
@@ -76,13 +76,10 @@ function LoginScreen({ navigation }): JSX.Element {
 						</TouchableOpacity>
 
 
-						<Text style={styles.subText}>{"Or create an account as:"}</Text>
+						<Text style={styles.subText}>{"Or create an account:"}</Text>
 						<View style={{ flexDirection: 'row', marginBottom: 50 }}>
 							<TouchableOpacity style={styles.smallButton} onPress={() => navigation.navigate("Register")}>
-								<Text style={styles.smallButtonText}>{"Customer"}</Text>
-							</TouchableOpacity>
-							<TouchableOpacity style={styles.smallButton} onPress={() => navigation.navigate("Register")}>
-								<Text style={styles.smallButtonText}>{"Shop owner"}</Text>
+								<Text style={styles.smallButtonText}>{"Create Account"}</Text>
 							</TouchableOpacity>
 						</View>
 					</View>
