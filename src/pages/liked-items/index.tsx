@@ -74,14 +74,14 @@ function LikedItems(props: any): JSX.Element {
                         likedItems.map((item, index) => {
                             return (
                                 <View key={index} style={styles.horizontalCard}>
-                                    <TouchableOpacity style={{ alignSelf: 'flex-end', marginBottom: -20 }} onPress={() => removeItem(index)}>
+                                    <TouchableOpacity style={{ alignSelf: 'flex-end', marginBottom: -20, zIndex: 1000}} onPress={() => removeItem(index)}>
                                         <MaterialIcons color={APP_COLORS.labelGray} size={20} name="close" />
                                     </TouchableOpacity>
-                                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                    <View style={{ flexDirection: 'row', alignItems: 'center'}}>
                                         <Image style={styles.productImage} source={{ uri: item.rel_item.image_url }} />
                                         <View>
                                             <TouchableOpacity onPress={() => openItem(item.rel_item.id)}>
-                                                <View style={{ overflow: 'hidden', maxWidth: 200 }}>
+                                                <View style={{ overflow: 'hidden', maxWidth: 200, paddingRight: 40 }}>
                                                     <Text style={styles.productName} numberOfLines={1}>{item.rel_item.name}</Text>
                                                 </View>
                                             </TouchableOpacity>

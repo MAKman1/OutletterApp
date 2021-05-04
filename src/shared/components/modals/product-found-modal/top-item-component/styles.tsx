@@ -15,7 +15,8 @@ export default StyleSheet.create({
   },
   horizontalCard: {
     height: 110,
-    width: Dimensions.get('window').width - 130,
+	width: Dimensions.get('window').width - 130,
+	justifyContent: 'center',
     borderRadius: 20,
     padding: 15,
     margin: 15,

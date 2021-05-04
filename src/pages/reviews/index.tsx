@@ -106,7 +106,7 @@ function Reviews(props: any): JSX.Element {
                             <View key={index} style={styles.horizontalCard}>
                                 <View style={styles.cardTop}>
                                     {/* <Text style={styles.reviewDate}>24/3/21</Text> */}
-                                    <TouchableOpacity style={{ alignSelf: 'flex-end' }} onPress={() => removeReview(index)}>
+                                    <TouchableOpacity style={{ alignSelf: 'flex-end', zIndex: 1000 }} onPress={() => removeReview(index)}>
                                         <MaterialIcons color={APP_COLORS.labelGray} size={20} name="close" />
                                     </TouchableOpacity>
                                 </View>

@@ -22,6 +22,9 @@ import SafeAreaView from 'react-native-safe-area-view';
 
 declare const global: { HermesInternal: null | {} };
 
+import { LogBox } from 'react-native';
+LogBox.ignoreLogs(['Warning: ...']);
+
 const App = () => {
 	return (
 		<AppNavigator />
