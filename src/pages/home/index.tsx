@@ -67,9 +67,9 @@ function Home(props: any, { navigation }: any): JSX.Element {
 	const [currentImage, setCurrentImage] = useState(null);
 
 	const [segmentedItems, setSegmentedItems] = useState([]);
+	const [arItems, setArItems] = useState<any[]>([]);
 
 	// const [uploadedImage, setUploadedImage] = useState('../../assets/lcLogo.png');
-
 
 	//Animations
 	const widthAnim = useRef(new Animated.Value(0)).current;
@@ -284,6 +284,7 @@ function Home(props: any, { navigation }: any): JSX.Element {
 		setQueryItem(data.query_item);
 		setSimilarItems(data.similar_items);
 		setBestItem(data.similar_items[0]);
+		setArItems([...arItems, data.similar_items[0]]);
 	}
 
 	function toggleGender(gender: string) {
@@ -495,7 +496,7 @@ function Home(props: any, { navigation }: any): JSX.Element {
 					scene: ARDisplay,
 				}}
 				viroAppProps={
-					{ arfound, bestItem, notFound, setNavRoute, resetARScene }
+					{ arfound, bestItem, notFound, setNavRoute, resetARScene, arItems }
 				}
 				style={{ flex: 1 }}
 			/>
