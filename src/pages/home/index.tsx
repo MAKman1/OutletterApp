@@ -330,7 +330,7 @@ function Home(props: any, { navigation }: any): JSX.Element {
 
 
 	async function takePictureFromARView() {
-		resetARScene();
+		// resetARScene();
 		arScene.current._takeScreenshot('outletter_' + Date.now() + '_img', false).then((data: any) => {
 			console.log(data.success, data.url, data.errorCode);
 			setCurrentImage('file://' + data.url);
@@ -546,8 +546,12 @@ function Home(props: any, { navigation }: any): JSX.Element {
 							}
 						/>
 					</View>
+					<View style={{ paddingHorizontal: 10, paddingTop: 20 }}>
+						<TouchableOpacity style={{ ...styles.refreshIcon }} onPress={() => resetARScene()}>
+							<MaterialCommunity color={'#38AAFE'} size={30} name="refresh" />
+						</TouchableOpacity>
+					</View>
 				</View>
-
 				{(!menuActive && loading) &&
 					<View style={{ marginTop: '60%', alignItems: 'center' }}>
 						<Bars size={30} color="#FFFFFF" />
