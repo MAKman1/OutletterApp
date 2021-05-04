@@ -277,7 +277,7 @@ export default StyleSheet.create({
   topOverlay: {
     flex: 1,
     paddingTop: 20,
-    paddingLeft: 10,
+    paddingLeft: 60,
     paddingRight: 50,
     justifyContent: "flex-start",
     alignItems: "center",
@@ -288,6 +288,15 @@ export default StyleSheet.create({
     paddingTop: 10,
     // justifyContent: "flex-start",
     // alignItems: 'flex-start',
+  },
+  refreshIcon: {
+    borderRadius: 40,
+    backgroundColor: "white",
+    padding: 5,
+    maxWidth: 40,
+    maxHeight: 40,
+    alignContent: "center",
+    justifyContent: "center",
   },
   bottomIcon: {
     borderRadius: 50,
